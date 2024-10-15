@@ -10,21 +10,27 @@ void UAJH_LoginWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	CR_Btn_CreateRoom->OnClicked.AddDynamic(this, &UAJH_LoginWidget::CR_OnClickCreateRoom);
+	gi = GetGameInstance<UAJH_SherlockGameInstance>();
+	Btn_findSessions->OnClicked.AddDynamic(this, &UAJH_LoginWidget::OnClickedFindSessionsButton);
+	
 }
 
-void UAJH_LoginWidget::CR_OnClickCreateRoom()
+void UAJH_LoginWidget::OnClickedFindSessionsButton()
 {
-	// 방 이름
-	FString roomName = CR_Edit_RoomName->GetText().ToString();
-	// 최대 인원 수
-	int32 playerCount = 3;
-
-	// GameInstance 를 가져온다
-	auto* gameInstance = Cast<UAJH_SherlockGameInstance>(GetWorld()->GetGameInstance());
-	if (gameInstance)
+	if (gi != nullptr)
 	{
-		gameInstance->CreateMySession(roomName, playerCount); // 방 생성
+		// 누를때 닉네임과 캐릭터 선택값을 저장하기
+		gi->UserNickName = Edit_hostName->GetText().ToString();
+		gi->FindMySession();
 	}
+}
 
+void UAJH_LoginWidget::OnClickedResetButton()
+{
+	// 지금현재있는 방들 삭제 하고
+	// 내가 속해있는 세션도 나가고
+	gi->ExitMySession();
+	// 룸만들기
+	//gi->CreateMySession();
+	gi->OnDestroyAllSessions();
 }

@@ -14,15 +14,26 @@ class SHERLOCKPROJECT_API UAJH_LoginWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+    virtual void NativeConstruct() override;
+
 public:
-	virtual void NativeConstruct() override;
+	
+    UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UEditableText* Edit_hostName;
 
-	UPROPERTY(meta=(BindWidget))
-	class UButton* CR_Btn_CreateRoom;
-	UPROPERTY(meta=(BindWidget))
-	class UEditableText* CR_Edit_RoomName;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UButton* Btn_findSessions;
 
+	UPROPERTY(BlueprintReadOnly)
+	class UAJH_SherlockGameInstance* gi;
+
+	//UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	//class UButton* ResetButton;
+	
 	UFUNCTION()
-	void CR_OnClickCreateRoom();
+	void OnClickedFindSessionsButton();
+	UFUNCTION()
+	void OnClickedResetButton();
 	
 };

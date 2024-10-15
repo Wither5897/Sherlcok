@@ -18,27 +18,40 @@ class SHERLOCKPROJECT_API UAJH_SherlockGameInstance : public UGameInstance
 public:
 	virtual void Init() override;
 
-	// 온라인 세션 인터페이스를 기억하고 싶다.
 	IOnlineSessionPtr sessionInterface;
+	//세션에 관련된 모든 컨트롤을 하는 기본클래스
 
-	FString MySessionName = TEXT("CRIME_SCENE");
+	void CreateMySession();		// 요청한 결과를 받기 위한 함수
+	void FindMySession();
+	void JoinMySession(int32 roomNumber);
+	void ExitMySession();
+	void SetSessionName(FString name, FString ClickedroomName_, FString ClickedhostName_, int32 ClickedplayerCount_);
+	FORCEINLINE FString GetSessionName() { return mySessionName.ToString(); }
 
-	// 방생성 요청
-	void CreateMySession(FString roomName, int32 playerCount); // 요청한 결과를 받기 위한 함수
-	// 방생성 응답
-	void OnCreatedSession(FName sessionName, bool bWasSuccessful);
+	void CreateOrFindMySession();
 
-	// 찾을 방의 목록
-	TSharedPtr<FOnlineSessionSearch> SessionSearch;
-	// 방 찾기 요청
-	void FindOtherSessions();
-	// 방 찾기 응답
-	void OnMyFindSessionsCompleteDelegates(bool bWasSuccessful);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	FString ClickedroomName = FString("Crime_Scene");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	FString ClickedhostName= FString("Crime_Host");;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	int32 ClickedplayerCount=10;
 
-	// 스팀으로 한글이름 방을 만들어서 조회하면 한글이 깨지는 이슈발생!!
-	// Base64 인코딩으로 해결하고자함!
-	FString StringBase64Encode(const FString& str);
-
-	FString StringBase64Decode(const FString& str);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	FString UserNickName="None";
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	int32 meshNum;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	TArray<FName> AllSessionNames;
+	void OnDestroyAllSessions();
+private:
+	FName mySessionName = FName("first Session");
+	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 
+	
+	void OnCreatedSession(FName sessionName, bool bWasSuccessful);	//서버에 세션생성을 요청하기 위한 함수
+	void OnFoundSession(bool bwasSuccessful);
+	void OnJoinedSession(FName SesssionName, EOnJoinSessionCompleteResult::Type result);
+	void OnDestroyedSesssion(FName sessionName, bool bwasSuccessful);
 
 };
