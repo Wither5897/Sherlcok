@@ -28,6 +28,13 @@ public:
 	// 방생성 응답
 	void OnCreatedSession(FName sessionName, bool bWasSuccessful);
 
+	// 찾을 방의 목록
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	// 방 찾기 요청
+	void FindOtherSessions();
+	// 방 찾기 응답
+	void OnMyFindSessionsCompleteDelegates(bool bWasSuccessful);
+
 	// 스팀으로 한글이름 방을 만들어서 조회하면 한글이 깨지는 이슈발생!!
 	// Base64 인코딩으로 해결하고자함!
 	FString StringBase64Encode(const FString& str);

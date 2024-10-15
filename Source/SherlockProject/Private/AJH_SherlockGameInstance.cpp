@@ -7,6 +7,7 @@
 #include "SherlockProject.h"
 #include "Online/OnlineSessionNames.h"
 #include "string"
+#include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
 
 void UAJH_SherlockGameInstance::Init()
 {
@@ -17,6 +18,8 @@ void UAJH_SherlockGameInstance::Init()
 		sessionInterface = subSystem->GetSessionInterface();
 		// 방생성 요청 -> 응답
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnCreatedSession);
+		// 방찾기 요청 -> 콜백함수 등록
+		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnMyFindSessionsCompleteDelegates);
 	}
 
 	FTimerHandle handle;
@@ -63,6 +66,49 @@ void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuc
 	else
 	{
 		PRINTLOG(TEXT("OnCreatedSession is Failed!!!"));
+	}
+}
+
+void UAJH_SherlockGameInstance::FindOtherSessions()
+{
+	SessionSearch = MakeShareable(new FOnlineSessionSearch);
+
+	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	SessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL";
+	SessionSearch->MaxSearchResults = 40;
+
+	sessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+}
+
+void UAJH_SherlockGameInstance::OnMyFindSessionsCompleteDelegates(bool bWasSuccessful)
+{
+	if (bWasSuccessful)
+	{
+		TArray<FOnlineSessionSearchResult> results = SessionSearch->SearchResults;
+
+		for (auto ret : results)
+		{
+			if (ret.IsValid() == false)
+			{
+				continue;
+			}
+
+			FString roomName;
+			FString hostName;
+			int32 maxPlayerCount;
+			int32 currentPlayerCount;
+			int32 pingMS;
+			// 방 이름
+			ret.Session.SessionSettings.Get(FName("ROOM_NAME"), roomName);
+			// 호스트 이름
+			ret.Session.SessionSettings.Get(FName("HOST_NAME"), hostName);
+			// 최대 플레이어 수
+			maxPlayerCount = ret.Session.SessionSettings.NumPublicConnections;
+			// 입장한 플레이어 수(최대 - 남은)
+			currentPlayerCount = maxPlayerCount - ret.Session.NumOpenPublicConnections;
+			// 핑 정보
+			pingMS = ret.PingInMs;
+		}
 	}
 }
 
