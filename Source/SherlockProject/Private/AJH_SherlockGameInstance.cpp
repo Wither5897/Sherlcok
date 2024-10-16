@@ -54,7 +54,7 @@ void UAJH_SherlockGameInstance::CreateMySession()
 	SessionSettings->bUsesPresence = true;
 	SessionSettings->bShouldAdvertise = true; //다른사람이 세션검색할경우 노출되도록 ( 검색이 가능하도록 )
 	SessionSettings->bUseLobbiesIfAvailable = true;  //로비의 사용여부
-	SessionSettings->NumPublicConnections = 10;
+	SessionSettings->NumPublicConnections = 3;
 
 	FName SessionName = FName(*FString::Printf(TEXT("MySession_%d"), FDateTime::Now().GetTicks()));
 
@@ -96,7 +96,7 @@ void UAJH_SherlockGameInstance::FindMySession()
 	sessionSearch = MakeShareable(new FOnlineSessionSearch());
 	check(sessionSearch);
 	sessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
-	sessionSearch->MaxSearchResults = 10;
+	sessionSearch->MaxSearchResults = 3;
 	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
@@ -125,7 +125,7 @@ void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful)
 			FString roomName;
 			Result.Session.SessionSettings.Get(FName("Room Name"), roomName);
 
-			if (roomName == FString("YJRoom"))
+			if (roomName == FString("Crime_Scene"))
 			{
 				if (GEngine)
 				{
@@ -228,7 +228,7 @@ void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwas
 
 		if (pc != nullptr)
 		{
-			pc->ClientTravel(FString("/Game/Maps/LobbyLevel"), ETravelType::TRAVEL_Absolute);
+			pc->ClientTravel(FString("/Game/Jin/Maps/LobbyMap"), ETravelType::TRAVEL_Absolute);
 			// 
 		}
 	}

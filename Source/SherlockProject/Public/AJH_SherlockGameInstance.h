@@ -35,7 +35,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	FString ClickedhostName= FString("Crime_Host");;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
-	int32 ClickedplayerCount=10;
+	int32 ClickedplayerCount=4;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	FString UserNickName="None";
