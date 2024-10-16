@@ -7,79 +7,244 @@
 #include "SherlockProject.h"
 #include "Online/OnlineSessionNames.h"
 #include "string"
+#include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
 
 void UAJH_SherlockGameInstance::Init()
 {
 	Super::Init();
 
-	if (auto* subSystem = IOnlineSubsystem::Get())
+	sessionInterface = IOnlineSubsystem::Get()->GetSessionInterface();
+
+	if (sessionInterface != nullptr)
 	{
-		sessionInterface = subSystem->GetSessionInterface();
-		// 방생성 요청 -> 응답
+		//서버쪽에서 Delegate 으로 이벤트 값을 받을 함수를 연결
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnCreatedSession);
+
+		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnFoundSession);
+
+		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnJoinedSession);
+
+		sessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnDestroyedSesssion);
 	}
 
-	FTimerHandle handle;
-	GetWorld()->GetTimerManager().SetTimer(handle, [&]() {
-		CreateMySession(MySessionName, 3);
-	}, 3, false);
 }
 
-void UAJH_SherlockGameInstance::CreateMySession(FString roomName, int32 playerCount)
+void UAJH_SherlockGameInstance::SetSessionName(FString name, FString ClickedroomName_, FString ClickedhostName_, int32 ClickedplayerCount_)
 {
-	FOnlineSessionSettings settings;
+	mySessionName = FName(*name);
+	ClickedroomName = ClickedroomName_;
+	ClickedhostName = ClickedhostName_;
+	ClickedplayerCount = ClickedplayerCount_;
+}
 
-	settings.bIsDedicated = false; // 전용 서버 사용 안함
-	// LAN 선으로 매치하는가?
-	FName subsysName = IOnlineSubsystem::Get()->GetSubsystemName();
-	settings.bIsLANMatch = subsysName == "NULL";
-	settings.bShouldAdvertise = true; // 초대 기능 사용
-	settings.bUsesPresence = true; // 유저의 상태 정보 (온라인/자리비움 등등) 사용 여부
-	settings.bAllowJoinInProgress = true; // 중간 난입 허용
-	settings.bAllowJoinViaPresence = true; // 중간 난입 허용
-	settings.NumPublicConnections = playerCount; // 최대 인원수
+void UAJH_SherlockGameInstance::CreateMySession()
+{
+	if (!sessionInterface.IsValid())
+	{
+		return;
+	}
 
-	// 커스텀 정보
-	settings.Set(FName("ROOM_NAME"), StringBase64Encode(roomName), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	settings.Set(FName("HOST_NAME"), StringBase64Encode(MySessionName), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings());
+	SessionSettings->bIsDedicated = false; // 데디케이트 서버 사용안함
+	SessionSettings->bAllowInvites = true; //초대기능 사용
+	SessionSettings->bAllowJoinInProgress = true; // 진행중에도 들어오는것을 사용
+	SessionSettings->bAllowJoinViaPresence = true;
+	SessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
+	// 접속하는 방법이 랜 경유 , 스팀서버 경유 두가지 있는데 랜 경유이면 null 문자열 반환, 스팀이면 steam 문자열 반환
+	SessionSettings->bUsesPresence = true;
+	SessionSettings->bShouldAdvertise = true; //다른사람이 세션검색할경우 노출되도록 ( 검색이 가능하도록 )
+	SessionSettings->bUseLobbiesIfAvailable = true;  //로비의 사용여부
+	SessionSettings->NumPublicConnections = 3;
 
-	FUniqueNetIdPtr netID = GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+	FName SessionName = FName(*FString::Printf(TEXT("MySession_%d"), FDateTime::Now().GetTicks()));
 
-	sessionInterface->CreateSession(*netID, FName(MySessionName), settings);
+	//커스텀 설정값을 추가하기
+	SessionSettings->Set(FName("Room Name"), ClickedroomName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
-	PRINTLOG(TEXT("Create Session Start roomNamd : %s / hostName : %s"), *roomName, *MySessionName);
+	//SessionSettings->Set(FName("Host Name"),ClickedhostName,EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+
+	sessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), SessionName, *SessionSettings);
+	AllSessionNames.Add(SessionName);
+	//서버에  이런 세팅값으로 만들어달라는 요청 ( 호출시점 에 session이 완성된게 아님 )
+	UE_LOG(LogTemp, Warning, TEXT("Try to create Session"));
+	UE_LOG(LogTemp, Warning, TEXT("current platform : %s"), *IOnlineSubsystem::Get()->GetSubsystemName().ToString());
 }
 
 void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuccessful)
 {
-	if (bWasSuccessful)
-	{
-		PRINTLOG(TEXT("OnCreatedSession is Success~~~~~"));
+	UE_LOG(LogTemp, Warning, TEXT("Session Name: %s"), *sessionName.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Session create: %s"), bWasSuccessful ? *FString("Success!") : *FString("Fail"));
 
-		// 서버가 여행을 떠나고싶다.
-		//GetWorld()->ServerTravel(TEXT(" "));
+	//멀티플레이를 할 맵으로 이동한다. 맵의 경로 작성해주기
+	///Script/Engine.World'/Game/Maps/BattleMap.BattleMap' 에서 상대 경로 만 넣어주면 됨
+	///Script/Engine.World'/Game/Master/AlphaMap_.AlphaMap_'
+	//GetWorld()->ServerTravel("/Game/Master/AlphaMap_?Listen", true);
+	GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap?Listen", true);
+	//지금현재 리슨서버이기때문에  ?listen 으로 설정 
+}
+
+void UAJH_SherlockGameInstance::FindMySession()
+{
+	if (!sessionInterface.IsValid())
+	{
+		return;
+	}
+
+	// 세션 검색 조건을 설정하기
+	sessionSearch = MakeShareable(new FOnlineSessionSearch());
+	check(sessionSearch);
+	sessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
+	sessionSearch->MaxSearchResults = 3;
+	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
+
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+	// 서버에 세션 검색을 요청하기
+	sessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), sessionSearch.ToSharedRef());
+}
+
+void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful)
+{
+	if (!sessionInterface.IsValid()) return;
+
+	if (!sessionSearch)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("sessionSearch Null"));
 	}
 	else
 	{
-		PRINTLOG(TEXT("OnCreatedSession is Failed!!!"));
+		TArray<FOnlineSessionSearchResult> results = sessionSearch->SearchResults;
+
+		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), results.Num());
+
+		// 어차피 방은 1개
+		// 있으면 참여 , 없으면 만들기
+		for (auto Result : results)
+		{
+			FString roomName;
+			Result.Session.SessionSettings.Get(FName("Room Name"), roomName);
+
+			if (roomName == FString("Crime_Scene"))
+			{
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(
+						-1,
+						15.f,
+						FColor::Cyan,
+						FString::Printf(TEXT("Joining Match Type: %s"), *roomName)
+					);
+				}
+				if (!sessionInterface.IsValid()) return;
+				FName SessionName = FName(*FString::Printf(TEXT("MySession_%d"), FDateTime::Now().GetTicks()));
+				const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+				sessionInterface->JoinSession(*LocalPlayer->GetPreferredUniqueNetId(), SessionName, Result);
+				return;
+			}
+		}
+
+		CreateMySession();
+
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Find Results: %s"), bwasSuccessful ? *FString("Success!") : *FString("Failed..."));
+}
+
+void UAJH_SherlockGameInstance::JoinMySession(int32 roomNumber)
+{
+	if (!sessionInterface.IsValid()) return;
+
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+
+	TArray<FOnlineSessionSearchResult> results = sessionSearch->SearchResults;
+
+	const FOnlineSessionSearchResult* realSession = &results[roomNumber];
+
+	sessionInterface->JoinSession(*LocalPlayer->GetPreferredUniqueNetId(), mySessionName, *realSession);
+}
+
+void UAJH_SherlockGameInstance::OnJoinedSession(FName SesssionName, EOnJoinSessionCompleteResult::Type result)
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		15.f,
+		FColor::Cyan,
+		FString::Printf(TEXT("Joined Session: %s"), *SesssionName.ToString())
+	);
+
+	if (!sessionInterface.IsValid())
+	{
+		return;
+	}
+
+	switch (result)
+	{
+	case EOnJoinSessionCompleteResult::Success:
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Join Success!"));
+
+		APlayerController* pc = GetWorld()->GetFirstPlayerController();
+		FString url;
+		sessionInterface->GetResolvedConnectString(SesssionName, url, NAME_GamePort);
+		UE_LOG(LogTemp, Warning, TEXT("url: %s"), *url);
+
+		pc->ClientTravel(url, ETravelType::TRAVEL_Absolute);
+
+		break;
+	}
+	case EOnJoinSessionCompleteResult::SessionIsFull:
+		UE_LOG(LogTemp, Warning, TEXT("Session is full..."));
+		break;
+	case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+		UE_LOG(LogTemp, Warning, TEXT("Session Does Not Exist..."));
+		break;
+	case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+		UE_LOG(LogTemp, Warning, TEXT("Could Not Retrieve Address..."));
+		break;
+	case EOnJoinSessionCompleteResult::AlreadyInSession:
+		UE_LOG(LogTemp, Warning, TEXT("You are already in this session..."));
+		break;
+	case EOnJoinSessionCompleteResult::UnknownError:
+		UE_LOG(LogTemp, Warning, TEXT("Unknown Error occurred!"));
+		break;
+	default:
+		break;
 	}
 }
 
-FString UAJH_SherlockGameInstance::StringBase64Encode(const FString& str)
+void UAJH_SherlockGameInstance::ExitMySession()
 {
-	// Set 할 때 : FString -> UTF8 (std::string) -> TArray<uint8> -> base64 로 Encode
-	std::string utf8String = TCHAR_TO_UTF8(*str);
-	TArray<uint8> arrayData = TArray<uint8>((uint8*)(utf8String.c_str()),
-		utf8String.length());
-	return FBase64::Encode(arrayData);
+	sessionInterface->DestroySession(mySessionName);
 }
 
-FString UAJH_SherlockGameInstance::StringBase64Decode(const FString& str)
+void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwasSuccessful)
 {
-	// Get 할 때 : base64 로 Decode -> TArray<uint8> -> TCHAR
-	TArray<uint8> arrayData;
-	FBase64::Decode(str, arrayData);
-	std::string ut8String((char*)(arrayData.GetData()), arrayData.Num());
-	return UTF8_TO_TCHAR(ut8String.c_str());
+	UE_LOG(LogTemp, Warning, TEXT("Destory Session: %s"), bwasSuccessful ? *FString("Success!") : *FString("Failed..."));
+
+	if (bwasSuccessful)
+	{
+		APlayerController* pc = GetWorld()->GetFirstPlayerController();
+
+		if (pc != nullptr)
+		{
+			pc->ClientTravel(FString("/Game/Jin/Maps/LobbyMap"), ETravelType::TRAVEL_Absolute);
+			// 
+		}
+	}
+}
+
+void UAJH_SherlockGameInstance::OnDestroyAllSessions()
+{
+	for (const FName& SessionName : AllSessionNames)
+	{
+		sessionInterface->DestroySession(SessionName);
+	}
+}
+
+void UAJH_SherlockGameInstance::CreateOrFindMySession()
+{
+	// 버튼클릭해서
+	// 검색한다음 없음 만들고 , 있으면 있는방으로 들어가기
+	FindMySession();
 }
