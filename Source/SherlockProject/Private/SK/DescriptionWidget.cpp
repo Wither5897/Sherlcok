@@ -18,7 +18,7 @@ void UDescriptionWidget::WhenItemClicked(int32 value)
 	switch (value)
 	{
 	case 1:
-		text = FText::FromString("바닥에 튀어 있는 혈흔 자국");
+		text = FText::FromString("Blood");
 		SetDescriptionText(text);
 		break;
 	case 2:
@@ -42,11 +42,11 @@ void UDescriptionWidget::WhenItemClicked(int32 value)
 		SetDescriptionText(text);
 		break;
 	case 7:
-		text = FText::FromString("자고싶다");
+		text = FText::FromString("테스트 7");
 		SetDescriptionText(text);
 		break;
 	case 8:
-		text = FText::FromString("잠깐 쉬었다 올까");
+		text = FText::FromString("테스트 8");
 		SetDescriptionText(text);
 		break;
 	default:

@@ -23,13 +23,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void WhenFindItem();
 
-	UPROPERTY()
-	class UDescriptionWidget* DescriptionUI;
-
 	UPROPERTY(Meta = (BindWidget))
 	class UImage* QuestionMark;
 
 	UPROPERTY(Meta = ( BindWidget ))
 	class UImage* Evidence;
 
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FLinearColor> ItemColor;
+
+	UPROPERTY()
+	class UInventoryWidget* Inven;
+
+	UPROPERTY()
+	class UDescriptionWidget* DescriptionUI;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ItemButton;
+
+	UFUNCTION()
+	void ItemButtonClicked();
 };
