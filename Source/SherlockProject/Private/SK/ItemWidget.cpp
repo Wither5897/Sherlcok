@@ -12,7 +12,7 @@ void UItemWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	// UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), );
-	GetMyNumber() - 1;
+	// GetMyNumber() - 1;
 }
 
 int32 UItemWidget::GetMyNumber()
