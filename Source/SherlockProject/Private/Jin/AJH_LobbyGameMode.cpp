@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Jin/AJH_LobbyGameMode.h"
 #include "AJH_LoginWidget.h"
 #include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/ComboBoxString.h"
 #include "Components/EditableText.h"
 #include "ThirdParty/Steamworks/Steamv157/sdk/public/steam/steam_api.h"
 
@@ -23,7 +22,7 @@ void AAJH_LobbyGameMode::BeginPlay()
 			LoginUI->AddToViewport();
 			GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
 
-			// ½ºÆÀ¼­¹ö Á¢¼ÓÀÌ¶ó¸é
+			// ìŠ¤íŒ€ì„œë²„ ì ‘ì†ì´ë¼ë©´
 
 			if (IOnlineSubsystem::Get()->GetSubsystemName() == "STEAM")
 			{
@@ -38,6 +37,7 @@ void AAJH_LobbyGameMode::BeginPlay()
 			else
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,"No Steam login");
+				// LoginUI->Edit_hostName->SetHintText(FText::FromString(TEXT("ë‹‰ë„¤ìž„ ìž…ë ¥ì°½")));
 			}
 		}
 	}

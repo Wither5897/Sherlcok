@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "AJH_LoginWidget.h"
@@ -12,6 +12,7 @@ void UAJH_LoginWidget::NativeConstruct()
 
 	gi = GetGameInstance<UAJH_SherlockGameInstance>();
 	Btn_findSessions->OnClicked.AddDynamic(this, &UAJH_LoginWidget::OnClickedFindSessionsButton);
+	//Edit_hostName->OnTextChanged.AddDynamic(this, &UAJH_LoginWidget::OnMyTextChanged);
 	
 }
 
@@ -19,7 +20,7 @@ void UAJH_LoginWidget::OnClickedFindSessionsButton()
 {
 	if (gi != nullptr)
 	{
-		// ´©¸¦¶§ ´Ð³×ÀÓ°ú Ä³¸¯ÅÍ ¼±ÅÃ°ªÀ» ÀúÀåÇÏ±â
+		// ëˆ„ë¥¼ë•Œ ë‹‰ë„¤ìž„ê³¼ ìºë¦­í„° ì„ íƒê°’ì„ ì €ìž¥í•˜ê¸°
 		gi->UserNickName = Edit_hostName->GetText().ToString();
 		gi->FindMySession();
 	}
@@ -27,10 +28,17 @@ void UAJH_LoginWidget::OnClickedFindSessionsButton()
 
 void UAJH_LoginWidget::OnClickedResetButton()
 {
-	// Áö±ÝÇöÀçÀÖ´Â ¹æµé »èÁ¦ ÇÏ°í
-	// ³»°¡ ¼ÓÇØÀÖ´Â ¼¼¼Çµµ ³ª°¡°í
+	// ì§€ê¸ˆí˜„ìž¬ìžˆëŠ” ë°©ë“¤ ì‚­ì œ í•˜ê³ 
+	// ë‚´ê°€ ì†í•´ìžˆëŠ” ì„¸ì…˜ë„ ë‚˜ê°€ê³ 
 	gi->ExitMySession();
-	// ·ë¸¸µé±â
-	//gi->CreateMySession();
+	// ë£¸ë§Œë“¤ê¸°
 	gi->OnDestroyAllSessions();
+}
+
+void UAJH_LoginWidget::OnMyTextChanged(const FText& InText)
+{
+	if ( !InText.IsEmpty() )
+	{
+		Edit_hostName->SetText(InText);
+	}
 }

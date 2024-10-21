@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -35,5 +35,7 @@ public:
 	void OnClickedFindSessionsButton();
 	UFUNCTION()
 	void OnClickedResetButton();
+	UFUNCTION()
+	void OnMyTextChanged(const FText& InText);
 	
 };
