@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -19,9 +19,9 @@ public:
 	virtual void Init() override;
 
 	IOnlineSessionPtr sessionInterface;
-	//¼¼¼Ç¿¡ °ü·ÃµÈ ¸ğµç ÄÁÆ®·ÑÀ» ÇÏ´Â ±âº»Å¬·¡½º
+	//ì„¸ì…˜ì— ê´€ë ¨ëœ ëª¨ë“  ì»¨íŠ¸ë¡¤ì„ í•˜ëŠ” ê¸°ë³¸í´ë˜ìŠ¤
 
-	void CreateMySession();		// ¿äÃ»ÇÑ °á°ú¸¦ ¹Ş±â À§ÇÑ ÇÔ¼ö
+	void CreateMySession();		// ìš”ì²­í•œ ê²°ê³¼ë¥¼ ë°›ê¸° ìœ„í•œ í•¨ìˆ˜
 	void FindMySession();
 	void JoinMySession(int32 roomNumber);
 	void ExitMySession();
@@ -31,9 +31,10 @@ public:
 	void CreateOrFindMySession();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
-	FString ClickedroomName = FString("Crime_Scene");
+	// FString ClickedroomName = FString("Crime_Scene");
+	FString ClickedroomName = FString("CUBIC");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
-	FString ClickedhostName= FString("Crime_Host");;
+	FString ClickedhostName= FString("Crime_Host");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	int32 ClickedplayerCount=4;
 
@@ -47,9 +48,9 @@ public:
 	void OnDestroyAllSessions();
 private:
 	FName mySessionName = FName("first Session");
-	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch ´Â 
+	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch ëŠ” 
 	
-	void OnCreatedSession(FName sessionName, bool bWasSuccessful);	//¼­¹ö¿¡ ¼¼¼Ç»ı¼ºÀ» ¿äÃ»ÇÏ±â À§ÇÑ ÇÔ¼ö
+	void OnCreatedSession(FName sessionName, bool bWasSuccessful);	//ì„œë²„ì— ì„¸ì…˜ìƒì„±ì„ ìš”ì²­í•˜ê¸° ìœ„í•œ í•¨ìˆ˜
 	void OnFoundSession(bool bwasSuccessful);
 	void OnJoinedSession(FName SesssionName, EOnJoinSessionCompleteResult::Type result);
 	void OnDestroyedSesssion(FName sessionName, bool bwasSuccessful);

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "AJH_SherlockGameInstance.h"
@@ -17,7 +17,7 @@ void UAJH_SherlockGameInstance::Init()
 
 	if (sessionInterface != nullptr)
 	{
-		//¼­¹öÂÊ¿¡¼­ Delegate À¸·Î ÀÌº¥Æ® °ªÀ» ¹ŞÀ» ÇÔ¼ö¸¦ ¿¬°á
+		//ì„œë²„ìª½ì—ì„œ Delegate ìœ¼ë¡œ ì´ë²¤íŠ¸ ê°’ì„ ë°›ì„ í•¨ìˆ˜ë¥¼ ì—°ê²°
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnCreatedSession);
 
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnFoundSession);
@@ -45,29 +45,27 @@ void UAJH_SherlockGameInstance::CreateMySession()
 	}
 
 	TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings());
-	SessionSettings->bIsDedicated = false; // µ¥µğÄÉÀÌÆ® ¼­¹ö »ç¿ë¾ÈÇÔ
-	SessionSettings->bAllowInvites = true; //ÃÊ´ë±â´É »ç¿ë
-	SessionSettings->bAllowJoinInProgress = true; // ÁøÇàÁß¿¡µµ µé¾î¿À´Â°ÍÀ» »ç¿ë
+	SessionSettings->bIsDedicated = false; // ë°ë””ì¼€ì´íŠ¸ ì„œë²„ ì‚¬ìš©ì•ˆí•¨
+	SessionSettings->bAllowInvites = true; //ì´ˆëŒ€ê¸°ëŠ¥ ì‚¬ìš©
+	SessionSettings->bAllowJoinInProgress = true; // ì§„í–‰ì¤‘ì—ë„ ë“¤ì–´ì˜¤ëŠ”ê²ƒì„ ì‚¬ìš©
 	SessionSettings->bAllowJoinViaPresence = true;
 	SessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
-	// Á¢¼ÓÇÏ´Â ¹æ¹ıÀÌ ·£ °æÀ¯ , ½ºÆÀ¼­¹ö °æÀ¯ µÎ°¡Áö ÀÖ´Âµ¥ ·£ °æÀ¯ÀÌ¸é null ¹®ÀÚ¿­ ¹İÈ¯, ½ºÆÀÀÌ¸é steam ¹®ÀÚ¿­ ¹İÈ¯
+	// ì ‘ì†í•˜ëŠ” ë°©ë²•ì´ ëœ ê²½ìœ  , ìŠ¤íŒ€ì„œë²„ ê²½ìœ  ë‘ê°€ì§€ ìˆëŠ”ë° ëœ ê²½ìœ ì´ë©´ null ë¬¸ìì—´ ë°˜í™˜, ìŠ¤íŒ€ì´ë©´ steam ë¬¸ìì—´ ë°˜í™˜
 	SessionSettings->bUsesPresence = true;
-	SessionSettings->bShouldAdvertise = true; //´Ù¸¥»ç¶÷ÀÌ ¼¼¼Ç°Ë»öÇÒ°æ¿ì ³ëÃâµÇµµ·Ï ( °Ë»öÀÌ °¡´ÉÇÏµµ·Ï )
-	SessionSettings->bUseLobbiesIfAvailable = true;  //·ÎºñÀÇ »ç¿ë¿©ºÎ
+	SessionSettings->bShouldAdvertise = true; //ë‹¤ë¥¸ì‚¬ëŒì´ ì„¸ì…˜ê²€ìƒ‰í• ê²½ìš° ë…¸ì¶œë˜ë„ë¡ ( ê²€ìƒ‰ì´ ê°€ëŠ¥í•˜ë„ë¡ )
+	SessionSettings->bUseLobbiesIfAvailable = true;  //ë¡œë¹„ì˜ ì‚¬ìš©ì—¬ë¶€
 	SessionSettings->NumPublicConnections = 3;
 
 	FName SessionName = FName(*FString::Printf(TEXT("MySession_%d"), FDateTime::Now().GetTicks()));
 
-	//Ä¿½ºÅÒ ¼³Á¤°ªÀ» Ãß°¡ÇÏ±â
+	//ì»¤ìŠ¤í…€ ì„¤ì •ê°’ì„ ì¶”ê°€í•˜ê¸°
 	SessionSettings->Set(FName("Room Name"), ClickedroomName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-
-	//SessionSettings->Set(FName("Host Name"),ClickedhostName,EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 
 	sessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), SessionName, *SessionSettings);
 	AllSessionNames.Add(SessionName);
-	//¼­¹ö¿¡  ÀÌ·± ¼¼ÆÃ°ªÀ¸·Î ¸¸µé¾î´Ş¶ó´Â ¿äÃ» ( È£Ãâ½ÃÁ¡ ¿¡ sessionÀÌ ¿Ï¼ºµÈ°Ô ¾Æ´Ô )
+	//ì„œë²„ì—  ì´ëŸ° ì„¸íŒ…ê°’ìœ¼ë¡œ ë§Œë“¤ì–´ë‹¬ë¼ëŠ” ìš”ì²­ ( í˜¸ì¶œì‹œì  ì— session ì´ ì™„ì„±ëœê²Œ ì•„ë‹˜ )
 	UE_LOG(LogTemp, Warning, TEXT("Try to create Session"));
 	UE_LOG(LogTemp, Warning, TEXT("current platform : %s"), *IOnlineSubsystem::Get()->GetSubsystemName().ToString());
 }
@@ -77,12 +75,9 @@ void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuc
 	UE_LOG(LogTemp, Warning, TEXT("Session Name: %s"), *sessionName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("Session create: %s"), bWasSuccessful ? *FString("Success!") : *FString("Fail"));
 
-	//¸ÖÆ¼ÇÃ·¹ÀÌ¸¦ ÇÒ ¸ÊÀ¸·Î ÀÌµ¿ÇÑ´Ù. ¸ÊÀÇ °æ·Î ÀÛ¼ºÇØÁÖ±â
-	///Script/Engine.World'/Game/Maps/BattleMap.BattleMap' ¿¡¼­ »ó´ë °æ·Î ¸¸ ³Ö¾îÁÖ¸é µÊ
-	///Script/Engine.World'/Game/Master/AlphaMap_.AlphaMap_'
-	//GetWorld()->ServerTravel("/Game/Master/AlphaMap_?Listen", true);
+	//ë©€í‹°í”Œë ˆì´ë¥¼ í•  ë§µìœ¼ë¡œ ì´ë™í•œë‹¤. ë§µì˜ ê²½ë¡œ ì‘ì„±í•´ì£¼ê¸°
 	GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap?Listen", true);
-	//Áö±İÇöÀç ¸®½¼¼­¹öÀÌ±â¶§¹®¿¡  ?listen À¸·Î ¼³Á¤ 
+	//ì§€ê¸ˆí˜„ì¬ ë¦¬ìŠ¨ì„œë²„ì´ê¸°ë•Œë¬¸ì—  ?listen ìœ¼ë¡œ ì„¤ì • 
 }
 
 void UAJH_SherlockGameInstance::FindMySession()
@@ -92,7 +87,7 @@ void UAJH_SherlockGameInstance::FindMySession()
 		return;
 	}
 
-	// ¼¼¼Ç °Ë»ö Á¶°ÇÀ» ¼³Á¤ÇÏ±â
+	// ì„¸ì…˜ ê²€ìƒ‰ ì¡°ê±´ì„ ì„¤ì •í•˜ê¸°
 	sessionSearch = MakeShareable(new FOnlineSessionSearch());
 	check(sessionSearch);
 	sessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
@@ -100,7 +95,7 @@ void UAJH_SherlockGameInstance::FindMySession()
 	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
-	// ¼­¹ö¿¡ ¼¼¼Ç °Ë»öÀ» ¿äÃ»ÇÏ±â
+	// ì„œë²„ì— ì„¸ì…˜ ê²€ìƒ‰ì„ ìš”ì²­í•˜ê¸°
 	sessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), sessionSearch.ToSharedRef());
 }
 
@@ -118,14 +113,14 @@ void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful)
 
 		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), results.Num());
 
-		// ¾îÂ÷ÇÇ ¹æÀº 1°³
-		// ÀÖÀ¸¸é Âü¿© , ¾øÀ¸¸é ¸¸µé±â
+		// ì–´ì°¨í”¼ ë°©ì€ 1ê°œ
+		// ìˆìœ¼ë©´ ì°¸ì—¬ , ì—†ìœ¼ë©´ ë§Œë“¤ê¸°
 		for (auto Result : results)
 		{
 			FString roomName;
 			Result.Session.SessionSettings.Get(FName("Room Name"), roomName);
 
-			if (roomName == FString("Crime_Scene"))
+			if (roomName == FString("CUBIC")) // Crime_Scene
 			{
 				if (GEngine)
 				{
@@ -229,7 +224,6 @@ void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwas
 		if (pc != nullptr)
 		{
 			pc->ClientTravel(FString("/Game/Jin/Maps/LobbyMap"), ETravelType::TRAVEL_Absolute);
-			// 
 		}
 	}
 }
@@ -244,7 +238,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 
 void UAJH_SherlockGameInstance::CreateOrFindMySession()
 {
-	// ¹öÆ°Å¬¸¯ÇØ¼­
-	// °Ë»öÇÑ´ÙÀ½ ¾øÀ½ ¸¸µé°í , ÀÖÀ¸¸é ÀÖ´Â¹æÀ¸·Î µé¾î°¡±â
+	// ë²„íŠ¼í´ë¦­í•´ì„œ
+	// ê²€ìƒ‰í•œë‹¤ìŒ ì—†ìŒ ë§Œë“¤ê³  , ìˆìœ¼ë©´ ìˆëŠ”ë°©ìœ¼ë¡œ ë“¤ì–´ê°€ê¸°
 	FindMySession();
 }
