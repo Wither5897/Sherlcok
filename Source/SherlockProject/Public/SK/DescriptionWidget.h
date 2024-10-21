@@ -27,4 +27,9 @@ public:
 	void SetDescriptionText(FText NewText);
 
 	void SetUIVisibility();
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BackButton;
+	UFUNCTION()
+	void BackButtonClicked();
 };

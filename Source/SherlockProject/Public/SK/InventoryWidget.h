@@ -46,14 +46,22 @@ public:
 	class UTextBlock* EvidencePage;
 
 	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* CaseRecordScreen;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* ShowEvidenceButton;
 
 	UFUNCTION()
 	void ShowEvidenceButtonClicked();
 
 	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* CaseGuessScreen;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* ShowNoteButton;
 
 	UFUNCTION()
 	void ShowNoteButtonClicked();
+
+
 };

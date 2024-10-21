@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "ItemWidget.generated.h"
+#include "NoteItemWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SHERLOCKPROJECT_API UItemWidget : public UUserWidget
+class SHERLOCKPROJECT_API UNoteItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -43,13 +43,4 @@ public:
 
 	UFUNCTION()
 	void ItemButtonClicked();
-
-	UPROPERTY(meta = (BindWidget))
-	class UImage* Player1Light;
-
-	UPROPERTY(meta = (BindWidget))
-	class UImage* Player2Light;
-
-	UPROPERTY(meta = (BindWidget))
-	class UImage* Player3Light;
 };
