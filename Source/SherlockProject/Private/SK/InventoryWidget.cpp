@@ -24,6 +24,11 @@ void UInventoryWidget::NativeConstruct()
 	PageUpButton->OnClicked.AddDynamic(this, &UInventoryWidget::PageUpButtonClicked);
 	ShowEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::ShowEvidenceButtonClicked);
 	ShowNoteButton->OnClicked.AddDynamic(this, &UInventoryWidget::ShowNoteButtonClicked);
+	SuspectButton->OnClicked.AddDynamic(this, &UInventoryWidget::SuspectButtonClicked);
+	WeaponButton->OnClicked.AddDynamic(this, &UInventoryWidget::WeaponButtonClicked);
+	MainEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::MainEvidenceButtonClicked);
+	SpecialThingButton->OnClicked.AddDynamic(this, &UInventoryWidget::SpecialThingButtonClicked);
+	
 }
 
 void UInventoryWidget::PageDownButtonClicked()
@@ -66,4 +71,36 @@ void UInventoryWidget::ShowNoteButtonClicked()
 	}
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UInventoryWidget::SuspectButtonClicked()
+{
+	if ( SavedTexture.IsAlmostBlack() ) {
+		return;
+	}
+	SuspectButton->SetBackgroundColor(SavedTexture);
+}
+
+void UInventoryWidget::WeaponButtonClicked()
+{
+	if ( SavedTexture.IsAlmostBlack() ) {
+		return;
+	}
+	WeaponButton->SetBackgroundColor(SavedTexture);
+}
+
+void UInventoryWidget::MainEvidenceButtonClicked()
+{
+	if ( SavedTexture.IsAlmostBlack() ) {
+		return;
+	}
+	MainEvidenceButton->SetBackgroundColor(SavedTexture);
+}
+
+void UInventoryWidget::SpecialThingButtonClicked()
+{
+	if ( SavedTexture.IsAlmostBlack() ) {
+		return;
+	}
+	SpecialThingButton->SetBackgroundColor(SavedTexture);
 }

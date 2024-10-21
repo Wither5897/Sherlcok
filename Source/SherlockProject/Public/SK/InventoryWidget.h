@@ -32,13 +32,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* PageDownButton;
-
 	UFUNCTION()
 	void PageDownButtonClicked();
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* PageUpButton;
-
 	UFUNCTION()
 	void PageUpButtonClicked();
 
@@ -53,15 +51,33 @@ public:
 
 	UFUNCTION()
 	void ShowEvidenceButtonClicked();
-
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* CaseGuessScreen;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ShowNoteButton;
-
 	UFUNCTION()
 	void ShowNoteButtonClicked();
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SuspectButton;
+	UFUNCTION()
+	void SuspectButtonClicked();
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* WeaponButton;
+	UFUNCTION()
+	void WeaponButtonClicked();
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* MainEvidenceButton;
+	UFUNCTION()
+	void MainEvidenceButtonClicked();
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SpecialThingButton;
+	UFUNCTION()
+	void SpecialThingButtonClicked();
+
+	FLinearColor SavedTexture;
 };
