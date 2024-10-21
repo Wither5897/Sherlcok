@@ -43,4 +43,7 @@ public:
 
 	UFUNCTION()
 	void ItemButtonClicked();
+
+	UPROPERTY(EditDefaultsOnly)
+	FLinearColor SavedTexture;
 };

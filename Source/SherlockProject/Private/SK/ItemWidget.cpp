@@ -48,6 +48,4 @@ void UItemWidget::ItemButtonClicked()
 	if ( Inven->DescriptionUI ) {
 		Inven->DescriptionUI->WhenItemClicked(GetMyNumber());
 	}
-	int32 MyNumber = GetMyNumber();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("My Number: %d"), MyNumber));
 }
