@@ -80,4 +80,11 @@ public:
 	void SpecialThingButtonClicked();
 
 	FLinearColor SavedTexture;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ResetButton;
+	UFUNCTION()
+	void ResetButtonClicked();
+
+	FLinearColor InitColor;
 };
