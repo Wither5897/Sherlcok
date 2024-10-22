@@ -28,7 +28,9 @@ void UInventoryWidget::NativeConstruct()
 	WeaponButton->OnClicked.AddDynamic(this, &UInventoryWidget::WeaponButtonClicked);
 	MainEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::MainEvidenceButtonClicked);
 	SpecialThingButton->OnClicked.AddDynamic(this, &UInventoryWidget::SpecialThingButtonClicked);
+	ResetButton->OnClicked.AddDynamic(this, &UInventoryWidget::ResetButtonClicked);
 	
+	InitColor = SuspectButton->GetBackgroundColor();
 }
 
 void UInventoryWidget::PageDownButtonClicked()
@@ -103,4 +105,12 @@ void UInventoryWidget::SpecialThingButtonClicked()
 		return;
 	}
 	SpecialThingButton->SetBackgroundColor(SavedTexture);
+}
+
+void UInventoryWidget::ResetButtonClicked()
+{
+	SuspectButton->SetBackgroundColor(InitColor);
+	WeaponButton->SetBackgroundColor(InitColor);
+	MainEvidenceButton->SetBackgroundColor(InitColor);
+	SpecialThingButton->SetBackgroundColor(InitColor);
 }
