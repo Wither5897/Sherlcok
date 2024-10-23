@@ -6,6 +6,8 @@
 #include "Components/WidgetSwitcher.h"
 #include "AJH_SherlockGameInstance.h"
 #include "Net/UnrealNetwork.h"
+#include "GameFramework/PlayerController.h"
+#include "Jin/AJH_DevelopMapGameMode.h"
 
 void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 {
@@ -29,16 +31,25 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 {
-	if ( gi != nullptr )
+	APlayerController* pc = GetWorld()->GetFirstPlayerController();
+	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	if ( gi != nullptr&& pc->IsLocalPlayerController())
 	{
-		GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel?Listen", true);
+		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
+		pc->ClientTravel(FString("/Game/Jin/Maps/SampleLevel"), ETravelType::TRAVEL_Absolute);
+		// gm->ServerTravelToLevel("/Game/Jin/Maps/SampleLevel");
 	}
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 {
-	if ( gi != nullptr )
+	APlayerController* pc = GetWorld()->GetFirstPlayerController();
+	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	if ( gi != nullptr && pc->IsLocalPlayerController() )
 	{
-		GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap?Listen", true);
+		// GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap", true);
+		// pc->ClientTravel(FString("/Game/Jin/Maps/MyDevelopMap"), ETravelType::TRAVEL_Absolute);
+		//gm->ServerTravelToLevel("/Game/Jin/Maps/MyDevelopMap");
+		gi->FindMySession();
 	}
 }
