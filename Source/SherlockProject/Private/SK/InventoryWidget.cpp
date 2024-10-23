@@ -89,7 +89,6 @@ void UInventoryWidget::SuspectButtonClicked()
 	if ( !SavedTexture ) {
 		return;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	SuspectImage->SetBrushFromTexture(SavedTexture);
 }
 
@@ -99,7 +98,6 @@ void UInventoryWidget::WeaponButtonClicked()
 	if ( !SavedTexture ) {
 		return;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	WeaponImage->SetBrushFromTexture(SavedTexture);
 }
 
@@ -109,7 +107,6 @@ void UInventoryWidget::MainEvidenceButtonClicked()
 	if ( !SavedTexture) {
 		return;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
 }
 
@@ -119,7 +116,6 @@ void UInventoryWidget::SpecialThingButtonClicked()
 	if ( !SavedTexture) {
 		return;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
 }
 
