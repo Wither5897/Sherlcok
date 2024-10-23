@@ -8,6 +8,10 @@
 #include "Online/OnlineSessionNames.h"
 #include "string"
 #include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
+#include "Jin/AJH_UserNameTagWidget.h"
+#include "Components/WidgetComponent.h"
+#include "GameFramework/Character.h"
+#include "Jin/AJH_UserNameWidgetComponent.h"
 
 void UAJH_SherlockGameInstance::Init()
 {
@@ -241,4 +245,16 @@ void UAJH_SherlockGameInstance::CreateOrFindMySession()
 	// 버튼클릭해서
 	// 검색한다음 없음 만들고 , 있으면 있는방으로 들어가기
 	FindMySession();
+}
+
+void UAJH_SherlockGameInstance::UserNickNameToCharacter(ACharacter* player)
+{
+	if ( player )
+	{
+		UAJH_UserNameWidgetComponent* NameWidgetComp = player->FindComponentByClass<UAJH_UserNameWidgetComponent>();
+		if ( NameWidgetComp )
+		{
+			NameWidgetComp->SetUserName(UserNickName);
+		}
+	}
 }
