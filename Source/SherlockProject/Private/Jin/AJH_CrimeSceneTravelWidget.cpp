@@ -50,6 +50,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap", true);
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MyDevelopMap"), ETravelType::TRAVEL_Absolute);
 		//gm->ServerTravelToLevel("/Game/Jin/Maps/MyDevelopMap");
-		gi->FindMySession();
+		//gi->FindMySession();
+		pc->ClientTravel(FString("192.168.0.40:7777/Game/Jin/Maps/MyDevelopMap"), ETravelType::TRAVEL_Absolute);
 	}
 }
