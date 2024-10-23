@@ -5,10 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Components/ArrowComponent.h"
+#include "Components/ChildActorComponent.h"
+#include "EvidenceActor.h"
+#include "KHH_InteractionWidget.h"
+#include "Components/TimelineComponent.h"
 #include "TP_ThirdPersonCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
+class UArrowComponent;
+class UChildActorComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -20,6 +27,7 @@ class ATP_ThirdPersonCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -27,6 +35,15 @@ class ATP_ThirdPersonCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	UArrowComponent* EvidenceArrow;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	UChildActorComponent* ChildActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	TSubclassOf<AEvidenceActor> EvidenceActor;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -47,13 +64,30 @@ class ATP_ThirdPersonCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* IA_Zoom;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = ( AllowPrivateAccess = "true" ))
+	UInputAction* IA_Interaction;
+
+	//widget====================================================================================================
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UKHH_InteractionWidget> interactionUIsetting;
+
+	UPROPERTY()
+	class UKHH_InteractionWidget* interactionUI;
+
+	//====================================================================================================
+	
+	FVector Startlocation;
+	FVector EndArrowlocation;
+
+	// =============================
+
 public:
 	ATP_ThirdPersonCharacter();
 
 	void OnMyActionZoomIn();
 	void OnMyActionZoomOut();
 	
-
 protected:
 
 	/** Called for movement input */
@@ -78,5 +112,22 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	float TargetFOV = 90;
+
+
+	void Interaction();
+	
+	void PerformLineTrace();
+
+	//APlayerController* PlayerController;
+
+	FHitResult OutHit;
+	FVector start;
+	FVector End;
+	ECollisionChannel traceChannel;
+	FCollisionQueryParams Params;
+	bool bHit = false;
+	bool bPick = false;
+
+	float tracedis = 300;
 };
 
