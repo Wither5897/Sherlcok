@@ -85,7 +85,7 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	//ChildActor->SetVisibility(false);
 
 	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
-	EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
+	//EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
 
 	if ( interactionUI )
 	{
@@ -104,7 +104,8 @@ void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
-
+	
+	PerformLineTrace();
 	PerformHighLight();
 }
 
@@ -197,22 +198,28 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 
 void ATP_ThirdPersonCharacter::HighlightActor()
 {
-	EvidenceActor->StaticMesh->SetRenderCustomDepth(true);
-	EvidenceActor->StaticMesh->SetCustomDepthStencilValue(2);
-
+	if ( EvidenceActor && EvidenceActor->StaticMesh )
+	{
+		EvidenceActor->StaticMesh->SetRenderCustomDepth(true);
+		EvidenceActor->StaticMesh->SetCustomDepthStencilValue(2);
+	}
 }
 
 void ATP_ThirdPersonCharacter::UnHighlightActor()
 {
-	if ( EvidenceActor->StaticMesh == nullptr ) return;
-	EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
+	if ( EvidenceActor && EvidenceActor->StaticMesh )
+	{
+		EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
+	}
 }
 
 void ATP_ThirdPersonCharacter::PerformHighLight()
 {
-	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
+	if ( bHit )
 	{
-		if ( OutHit.GetActor() == EvidenceActor )
+		EvidenceActor = Cast<AEvidenceActor>(OutHit.GetActor());
+
+		if ( EvidenceActor && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
 		{
 			HighlightActor();
 		}
@@ -230,7 +237,7 @@ void ATP_ThirdPersonCharacter::PerformHighLight()
 void ATP_ThirdPersonCharacter::Interaction()
 {
 	auto* pc = Cast<APlayerController>(GetController());
-	PerformLineTrace();
+	//PerformLineTrace();
 	if ( !interactionUI ) {
 		return;
 	}
