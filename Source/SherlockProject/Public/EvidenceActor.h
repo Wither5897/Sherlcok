@@ -24,8 +24,9 @@ protected:
 public:	
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
-
-	UStaticMeshComponent* StaticMesh;
+	
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY()
 	class UEvidenceActorComp* Comp;

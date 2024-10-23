@@ -90,6 +90,7 @@ void UInventoryWidget::SuspectButtonClicked()
 		return;
 	}
 	SuspectImage->SetBrushFromTexture(SavedTexture);
+	SavedTexture = nullptr;
 }
 
 void UInventoryWidget::WeaponButtonClicked()
@@ -99,6 +100,7 @@ void UInventoryWidget::WeaponButtonClicked()
 		return;
 	}
 	WeaponImage->SetBrushFromTexture(SavedTexture);
+	SavedTexture = nullptr;
 }
 
 void UInventoryWidget::MainEvidenceButtonClicked()
@@ -108,6 +110,7 @@ void UInventoryWidget::MainEvidenceButtonClicked()
 		return;
 	}
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
+	SavedTexture = nullptr;
 }
 
 void UInventoryWidget::SpecialThingButtonClicked()
@@ -117,6 +120,7 @@ void UInventoryWidget::SpecialThingButtonClicked()
 		return;
 	}
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
+	SavedTexture = nullptr;
 }
 
 void UInventoryWidget::ResetButtonClicked()
