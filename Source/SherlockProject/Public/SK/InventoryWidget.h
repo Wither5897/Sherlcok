@@ -18,8 +18,6 @@ public:
 
 	virtual void NativeConstruct() override;
 
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DescriptionUIFactory; 
 
@@ -105,8 +103,6 @@ public:
 	class UMultiLineEditableText* SpecialThingTextField;
 
 	bool bIsDoubleClick = false;
-
-	float currentTime = 0;
 
 	void InitDoubleClick();
 

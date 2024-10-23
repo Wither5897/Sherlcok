@@ -44,7 +44,7 @@ void UItemWidget::WhenFindItem()
 
 void UItemWidget::ItemButtonClicked()
 {
-	WhenFindItem();
+	// WhenFindItem();
 	if ( Inven->DescriptionUI ) {
 		Inven->DescriptionUI->WhenItemClicked(GetMyNumber());
 	}

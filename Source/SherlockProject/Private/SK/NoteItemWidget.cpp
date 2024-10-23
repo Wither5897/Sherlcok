@@ -40,6 +40,6 @@ void UNoteItemWidget::ItemButtonClicked()
 {
 	if ( GetMyNumber() <= 6 ) {
 		Inven->SavedTexture = ItemColor[GetMyNumber() - 1];
-		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("My Number: %d, Display Name: %s"), GetMyNumber() - 1, *UKismetSystemLibrary::GetDisplayName(Inven->SavedTexture)));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("My Number: %d, Display Name: %s"), GetMyNumber() - 1, *UKismetSystemLibrary::GetDisplayName(Inven->SavedTexture)));
 	}
 }

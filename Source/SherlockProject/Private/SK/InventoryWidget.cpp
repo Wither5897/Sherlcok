@@ -41,11 +41,6 @@ void UInventoryWidget::NativeConstruct()
 	InitTexture = nullptr;
 }
 
-void UInventoryWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	currentTime += InDeltaTime;
-}
-
 void UInventoryWidget::PageDownButtonClicked()
 {
 	if ( EvidencePage->GetText().ToString() == "1" ) {
@@ -91,42 +86,41 @@ void UInventoryWidget::ShowNoteButtonClicked()
 void UInventoryWidget::SuspectButtonClicked()
 {
 	DoubleClick(SuspectTextField);
-	if ( SavedTexture ) {
+	if ( !SavedTexture ) {
 		return;
 	}
-	SuspectImage->SetBrushFromTexture(SavedTexture);
-	// SuspectImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
+	SuspectImage->SetBrushFromTexture(SavedTexture);
 }
 
 void UInventoryWidget::WeaponButtonClicked()
 {
 	DoubleClick(WeaponTextField);
-	if ( SavedTexture ) {
+	if ( !SavedTexture ) {
 		return;
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	WeaponImage->SetBrushFromTexture(SavedTexture);
-	WeaponImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::MainEvidenceButtonClicked()
 {
 	DoubleClick(MainEvidenceTextField);
-	if ( SavedTexture) {
+	if ( !SavedTexture) {
 		return;
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
-	MainEvidenceImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::SpecialThingButtonClicked()
 {
 	DoubleClick(SpecialThingTextField);
-	if ( SavedTexture) {
+	if ( !SavedTexture) {
 		return;
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
-	SpecialThingImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::ResetButtonClicked()
