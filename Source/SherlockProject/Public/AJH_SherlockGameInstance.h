@@ -42,6 +42,7 @@ public:
 	FString UserNickName="None";
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	int32 meshNum;
+	void UserNickNameToCharacter(ACharacter* player);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	TArray<FName> AllSessionNames;
