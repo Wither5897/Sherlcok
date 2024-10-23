@@ -18,6 +18,8 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DescriptionUIFactory; 
 
@@ -79,12 +81,47 @@ public:
 	UFUNCTION()
 	void SpecialThingButtonClicked();
 
-	FLinearColor SavedTexture;
+	UPROPERTY()
+	class UTexture2D* SavedTexture;
+
+	UPROPERTY()
+	class UTexture2D* InitTexture;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ResetButton;
 	UFUNCTION()
 	void ResetButtonClicked();
 
-	FLinearColor InitColor;
+	UPROPERTY(meta = (BindWidget))
+	class UMultiLineEditableText* SuspectTextField;
+
+	UPROPERTY(meta = (BindWidget))
+	class UMultiLineEditableText* WeaponTextField;
+
+	UPROPERTY(meta = (BindWidget))
+	class UMultiLineEditableText* MainEvidenceTextField;
+
+	UPROPERTY(meta = (BindWidget))
+	class UMultiLineEditableText* SpecialThingTextField;
+
+	bool bIsDoubleClick = false;
+
+	float currentTime = 0;
+
+	void InitDoubleClick();
+
+	void DoubleClick(class UMultiLineEditableText* textbox);
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* SuspectImage;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* WeaponImage;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* MainEvidenceImage;
+
+	UPROPERTY(meta = ( BindWidget ))
+	class UImage* SpecialThingImage;
+
 };

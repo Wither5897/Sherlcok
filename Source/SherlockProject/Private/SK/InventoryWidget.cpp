@@ -7,6 +7,9 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
+#include "Components/MultiLineEditableText.h"
+#include "Components/Image.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -20,6 +23,11 @@ void UInventoryWidget::NativeConstruct()
 	EvidencePage->SetText(FText::FromString("1"));
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Hidden);
 
+	SuspectTextField->SetVisibility(ESlateVisibility::Hidden);
+	WeaponTextField->SetVisibility(ESlateVisibility::Hidden);
+	MainEvidenceTextField->SetVisibility(ESlateVisibility::Hidden);
+	SpecialThingTextField->SetVisibility(ESlateVisibility::Hidden);
+
 	PageDownButton->OnClicked.AddDynamic(this, &UInventoryWidget::PageDownButtonClicked);
 	PageUpButton->OnClicked.AddDynamic(this, &UInventoryWidget::PageUpButtonClicked);
 	ShowEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::ShowEvidenceButtonClicked);
@@ -29,8 +37,13 @@ void UInventoryWidget::NativeConstruct()
 	MainEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::MainEvidenceButtonClicked);
 	SpecialThingButton->OnClicked.AddDynamic(this, &UInventoryWidget::SpecialThingButtonClicked);
 	ResetButton->OnClicked.AddDynamic(this, &UInventoryWidget::ResetButtonClicked);
-	
-	InitColor = SuspectButton->GetBackgroundColor();
+
+	InitTexture = nullptr;
+}
+
+void UInventoryWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	currentTime += InDeltaTime;
 }
 
 void UInventoryWidget::PageDownButtonClicked()
@@ -77,40 +90,67 @@ void UInventoryWidget::ShowNoteButtonClicked()
 
 void UInventoryWidget::SuspectButtonClicked()
 {
-	if ( SavedTexture.IsAlmostBlack() ) {
+	DoubleClick(SuspectTextField);
+	if ( SavedTexture ) {
 		return;
 	}
-	SuspectButton->SetBackgroundColor(SavedTexture);
+	SuspectImage->SetBrushFromTexture(SavedTexture);
+	// SuspectImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Display Name: %s"), *UKismetSystemLibrary::GetDisplayName(SavedTexture)));
 }
 
 void UInventoryWidget::WeaponButtonClicked()
 {
-	if ( SavedTexture.IsAlmostBlack() ) {
+	DoubleClick(WeaponTextField);
+	if ( SavedTexture ) {
 		return;
 	}
-	WeaponButton->SetBackgroundColor(SavedTexture);
+	WeaponImage->SetBrushFromTexture(SavedTexture);
+	WeaponImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::MainEvidenceButtonClicked()
 {
-	if ( SavedTexture.IsAlmostBlack() ) {
+	DoubleClick(MainEvidenceTextField);
+	if ( SavedTexture) {
 		return;
 	}
-	MainEvidenceButton->SetBackgroundColor(SavedTexture);
+	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
+	MainEvidenceImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::SpecialThingButtonClicked()
 {
-	if ( SavedTexture.IsAlmostBlack() ) {
+	DoubleClick(SpecialThingTextField);
+	if ( SavedTexture) {
 		return;
 	}
-	SpecialThingButton->SetBackgroundColor(SavedTexture);
+	SpecialThingImage->SetBrushFromTexture(SavedTexture);
+	SpecialThingImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UInventoryWidget::ResetButtonClicked()
 {
-	SuspectButton->SetBackgroundColor(InitColor);
-	WeaponButton->SetBackgroundColor(InitColor);
-	MainEvidenceButton->SetBackgroundColor(InitColor);
-	SpecialThingButton->SetBackgroundColor(InitColor);
+	SuspectImage->SetBrushFromTexture(InitTexture);
+	WeaponImage->SetBrushFromTexture(InitTexture);
+	MainEvidenceImage->SetBrushFromTexture(InitTexture);
+	SpecialThingImage->SetBrushFromTexture(InitTexture);
+}
+
+void UInventoryWidget::InitDoubleClick()
+{
+	bIsDoubleClick = false;
+}
+
+void UInventoryWidget::DoubleClick(class UMultiLineEditableText* textbox)
+{
+	if ( bIsDoubleClick ) {
+		bIsDoubleClick = false;
+		textbox->SetVisibility(ESlateVisibility::Visible);
+		textbox->SetKeyboardFocus();
+		return;
+	}
+	bIsDoubleClick = true;
+	FTimerHandle handle;
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UInventoryWidget::InitDoubleClick, 0.3f);
 }

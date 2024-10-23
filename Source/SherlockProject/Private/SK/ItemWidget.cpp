@@ -20,8 +20,8 @@ void UItemWidget::NativeConstruct()
 		DescriptionUI = Inven->DescriptionUI;
 	}
 
-	if ( GetMyNumber() >= 1 ) {
-		Evidence->SetColorAndOpacity(ItemColor[( GetMyNumber() - 1 ) % 8]);
+	if ( GetMyNumber() <= 6 ) {
+		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 	}
 	Player1Light->SetVisibility(ESlateVisibility::Hidden);
 	Player2Light->SetVisibility(ESlateVisibility::Hidden);

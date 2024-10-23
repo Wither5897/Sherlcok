@@ -4,6 +4,7 @@
 #include "SK/DescriptionWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 
 void UDescriptionWidget::NativeConstruct()
 {	
@@ -19,31 +20,33 @@ void UDescriptionWidget::WhenItemClicked(int32 value)
 {
 	SetVisibility(ESlateVisibility::Visible);
 	FText text;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("value: %d"), value));
+	if ( value <= 6 ) {
+		RealEvidence->SetBrushFromTexture(RealEvidenceArray[value - 1]);
+	}
 	switch (value)
 	{
 	case 1:
-		text = FText::FromString(FString::Printf(TEXT("텍스트의 길이가 어느정도까지 가능한지 테스트 하는 용도로 작성하고 있는 중입니다. 근데 이거 옵션을 킬 수 있었던거 같은데 어디에 있더라 이거 빨리 찾아보고 적용해야겠는데, 슬슬 적을 말이 없어지고 있다. 벌써 10시가 다 되어가는데 시간 버그인가 아니면 내가 버그인가 나는 벌레인가 벌레가맞는거 같기도 하고")));
+		text = FText::FromString(FString::Printf(TEXT("공사 현장에서 사용하던 곡괭이. 날에 피가 묻은 채로 시체 주변에 함께 있었다. 피해자의 손목을 잘랐을 때 사용한 것으로 추정된다.")));
 		SetDescriptionText(text);
 		break;
 	case 2:
-		text = FText::FromString(FString::Printf(TEXT("나는 집에 가고 싶다")));
+		text = FText::FromString(FString::Printf(TEXT("시체를 덮고 있는 포대 위에서 발견된 볼펜. 사건 현장 주변 모 자동차 영업사원이 홍보용으로 나눠주었다고 한다. 조사 결과 공사장 인부들은 볼펜을 모두 가지고 있었으나, 시체 최초 발견자인 이씨만 볼펜을 가지고 있지 않았다.")));
 		SetDescriptionText(text);
 		break;
 	case 3:
-		text = FText::FromString(FString::Printf(TEXT("배고프다")));
+		text = FText::FromString(FString::Printf(TEXT("시체의 손목에는 있어야할 양 손이 보이지 않는다. 아직 현장에서 발견 되지 않았다.")));
 		SetDescriptionText(text);
 		break;
 	case 4: 
-		text = FText::FromString(FString::Printf(TEXT("오늘은 뭘 먹을까")));
+		text = FText::FromString(FString::Printf(TEXT("시체의 목에서 발견된 족적. 시체 최초 발견자 이 씨가 신던 슬리퍼의 바닥과 유사하다.")));
 		SetDescriptionText(text);
 		break;
 	case 5:
-		text = FText::FromString(FString::Printf(TEXT("잠이온다")));
+		text = FText::FromString(FString::Printf(TEXT("피해자의 주머니에서 발견된 현금. 현금이 없어지지 않은 것으로 보아 강도의 범행은 아니라고 추정된다.")));
 		SetDescriptionText(text);
 		break;
 	case 6:
-		text = FText::FromString(FString::Printf(TEXT("...")));
+		text = FText::FromString(FString::Printf(TEXT("시체가 있던 공간에서 떨어진 곳에서 발견된 핏자국. 잔인한 사건 현장에 비해 핏자국이 별로 없고, 동맥 파열에 의한 비산흔이 없는 것으로 보아 과다 출혈로 인한 사망은 아닐 것이다.")));
 		SetDescriptionText(text);
 		break;
 	case 7:

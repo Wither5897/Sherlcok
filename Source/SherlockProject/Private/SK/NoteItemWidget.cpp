@@ -18,8 +18,8 @@ void UNoteItemWidget::NativeConstruct()
 		DescriptionUI = Inven->DescriptionUI;
 	}
 
-	if ( GetMyNumber() >= 1 ) {
-		Evidence->SetColorAndOpacity(ItemColor[( GetMyNumber() - 1 ) % 8]);
+	if ( GetMyNumber() <= 6 ) {
+		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 	}
 
 	ItemButton->OnClicked.AddDynamic(this, &UNoteItemWidget::ItemButtonClicked);
@@ -38,5 +38,8 @@ void UNoteItemWidget::WhenFindItem()
 
 void UNoteItemWidget::ItemButtonClicked()
 {
-	Inven->SavedTexture = ItemColor[( GetMyNumber() - 1 ) % 8];
+	if ( GetMyNumber() <= 6 ) {
+		Inven->SavedTexture = ItemColor[GetMyNumber() - 1];
+		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("My Number: %d, Display Name: %s"), GetMyNumber() - 1, *UKismetSystemLibrary::GetDisplayName(Inven->SavedTexture)));
+	}
 }

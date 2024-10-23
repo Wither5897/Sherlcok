@@ -30,7 +30,7 @@ public:
 	class UImage* Evidence;
 
 	UPROPERTY(EditDefaultsOnly)
-	TArray<FLinearColor> ItemColor;
+	TArray<class UTexture2D*> ItemColor;
 
 	UPROPERTY()
 	class UInventoryWidget* Inven;

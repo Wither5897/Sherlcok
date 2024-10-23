@@ -32,4 +32,11 @@ public:
 	class UButton* BackButton;
 	UFUNCTION()
 	void BackButtonClicked();
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<class UTexture2D*> RealEvidenceArray;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* RealEvidence;
+
 };
