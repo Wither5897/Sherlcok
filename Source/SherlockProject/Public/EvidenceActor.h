@@ -8,15 +8,14 @@
 #include "EvidenceActor.generated.h"
 
 UCLASS()
-class SHERLOCKPROJECT_API AEvidenceActor : public AActor, public IHighLightInterface
+class SHERLOCKPROJECT_API AEvidenceActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	AEvidenceActor();
-	virtual void HighlightActor() override;
-	virtual void UnHighlightActor() override;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,14 +23,8 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 	UStaticMeshComponent* StaticMesh;
-
-	APlayerController* PlayerController;
-
-	//void PerformLineTrace();
-
-	float TraceDistance = 200;
 
 };

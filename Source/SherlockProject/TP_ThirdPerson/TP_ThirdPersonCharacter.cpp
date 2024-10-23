@@ -11,11 +11,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "EvidenceActor.h"
-//#include "Components/ChildActorComponent.h"
 #include "KHH_InteractionWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TimelineComponent.h"
 #include "Components/WidgetSwitcher.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -57,10 +57,10 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Arrow, ChildActor
-	EvidenceArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("EvidenceArrow"));
-	EvidenceArrow->SetupAttachment(FollowCamera);
-	EvidenceArrow->ArrowLength = 22;
-	EvidenceArrow->SetRelativeLocation(FVector( 0, -35, 0 ));
+	//EvidenceArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("EvidenceArrow"));
+	//EvidenceArrow->SetupAttachment(FollowCamera);
+	//EvidenceArrow->ArrowLength = 22;
+	//EvidenceArrow->SetRelativeLocation(FVector( 0, -35, 0 ));
 
 	//ChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("ChildActor"));
 	//ChildActor->SetupAttachment(FollowCamera);
@@ -79,6 +79,39 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomIn()
 void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 {
 	TargetFOV = 90;
+}
+
+void ATP_ThirdPersonCharacter::HighlightActor()
+{
+	EvidenceActor->StaticMesh->SetRenderCustomDepth(true);
+	EvidenceActor->StaticMesh->SetCustomDepthStencilValue(2);
+
+}
+
+void ATP_ThirdPersonCharacter::UnHighlightActor()
+{
+	if ( EvidenceActor->StaticMesh == nullptr ) return;
+	EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
+}
+
+
+void ATP_ThirdPersonCharacter::PerformHighLight()
+{
+	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("Interactiveobj")) )
+	{
+		if ( OutHit.GetActor() == EvidenceActor )
+		{
+			HighlightActor();
+		}
+		else
+		{
+			UnHighlightActor();
+		}
+	}
+	else
+	{
+		UnHighlightActor();
+	}
 }
 
 void ATP_ThirdPersonCharacter::Interaction()
@@ -144,10 +177,11 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	//ChildActor->SetVisibility(false);
 
 	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
-	interactionUI->AddToViewport();
+	EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
 
 	if ( interactionUI )
 	{
+		interactionUI->AddToViewport();
 		interactionUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
@@ -155,9 +189,9 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
 	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
+
+	PerformHighLight();
 }
 
 void ATP_ThirdPersonCharacter::PerformLineTrace()
@@ -170,7 +204,7 @@ void ATP_ThirdPersonCharacter::PerformLineTrace()
 
 	bHit = GetWorld()->LineTraceSingleByChannel(OutHit, start, End, traceChannel, Params);
 
-	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 5.0f, 0, 1.0f);
+	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +239,6 @@ void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
 
 		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
-
 	}
 	else
 	{

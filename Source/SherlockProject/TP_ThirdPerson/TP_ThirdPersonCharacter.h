@@ -10,6 +10,7 @@
 #include "EvidenceActor.h"
 #include "KHH_InteractionWidget.h"
 #include "Components/TimelineComponent.h"
+#include "HighLightInterface.h"
 #include "TP_ThirdPersonCharacter.generated.h"
 
 class USpringArmComponent;
@@ -23,7 +24,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ATP_ThirdPersonCharacter : public ACharacter
+class ATP_ThirdPersonCharacter : public ACharacter, public IHighLightInterface
 {
 	GENERATED_BODY()
 
@@ -36,14 +37,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	UArrowComponent* EvidenceArrow;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	//UArrowComponent* EvidenceArrow;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	UChildActorComponent* ChildActor;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	//UChildActorComponent* ChildActor;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	TSubclassOf<AEvidenceActor> EvidenceActor;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
+	//TSubclassOf<AEvidenceActor> EvidenceActor;
+
+	UPROPERTY()
+	class AEvidenceActor* EvidenceActor;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -87,6 +91,11 @@ public:
 
 	void OnMyActionZoomIn();
 	void OnMyActionZoomOut();
+
+	virtual void HighlightActor() override;
+	virtual void UnHighlightActor() override;
+
+	void PerformHighLight();
 	
 protected:
 
