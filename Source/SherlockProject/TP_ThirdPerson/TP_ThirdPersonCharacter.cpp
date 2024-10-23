@@ -10,6 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "EvidenceActor.h"
+//#include "Components/ChildActorComponent.h"
+#include "KHH_InteractionWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/TimelineComponent.h"
+#include "Components/WidgetSwitcher.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -50,6 +56,17 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Arrow, ChildActor
+	EvidenceArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("EvidenceArrow"));
+	EvidenceArrow->SetupAttachment(FollowCamera);
+	EvidenceArrow->ArrowLength = 22;
+	EvidenceArrow->SetRelativeLocation(FVector( 0, -35, 0 ));
+
+	//ChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("ChildActor"));
+	//ChildActor->SetupAttachment(FollowCamera);
+	//ChildActor->SetRelativeLocation(FVector(70, 0, 0));
+	//ChildActor->SetChildActorClass(EvidenceActor);
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -64,25 +81,105 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 	TargetFOV = 90;
 }
 
+void ATP_ThirdPersonCharacter::Interaction()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	PerformLineTrace();
+
+	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("Interactiveobj")) )
+	{
+		if ( !bPick )
+		{
+			//Startlocation = ChildActor->GetRelativeLocation();
+			//EndArrowlocation = EvidenceArrow->GetRelativeLocation();
+			if ( interactionUI )
+			{
+				interactionUI->SetVisibility(ESlateVisibility::Visible);
+
+				if ( OutHit.GetActor()->ActorHasTag(TEXT("obj1")) )
+				{
+					interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(0);
+				}
+				if ( OutHit.GetActor()->ActorHasTag(TEXT("obj2")) )
+				{
+					interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(1);
+				}
+			}
+
+			if ( PlayerController )
+			{
+				PlayerController->bShowMouseCursor = true;
+				FInputModeGameAndUI InputMode;
+				InputMode.SetHideCursorDuringCapture(false);
+				PlayerController->SetInputMode(InputMode);
+			}
+			GetCharacterMovement()->DisableMovement();
+		}
+		else
+		{
+			if ( interactionUI )
+			{
+				interactionUI->SetVisibility(ESlateVisibility::Hidden);
+			}
+
+			if ( PlayerController )
+			{
+				PlayerController->bShowMouseCursor = false;
+				FInputModeGameOnly InputMode;
+				PlayerController->SetInputMode(InputMode);
+			}
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		}
+		bPick = !bPick;
+	}
+}
+
 void ATP_ThirdPersonCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	//PlayerController = Cast<APlayerController>(GetController());
+
+	//ChildActor->SetVisibility(false);
+
+	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
+	interactionUI->AddToViewport();
+
+	if ( interactionUI )
+	{
+		interactionUI->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
 }
 
-//////////////////////////////////////////////////////////////////////////
+void ATP_ThirdPersonCharacter::PerformLineTrace()
+{
+	start = FollowCamera->GetComponentLocation();
+	End = start + FollowCamera->GetForwardVector() * tracedis;
+	traceChannel = ECC_Visibility;
+	Params;
+	Params.AddIgnoredActor(this);
+
+	bHit = GetWorld()->LineTraceSingleByChannel(OutHit, start, End, traceChannel, Params);
+
+	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 5.0f, 0, 1.0f);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Input
 
 void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	if ( APlayerController* PlayerController= Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -102,8 +199,13 @@ void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Look);
+
+
 		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnMyActionZoomIn);
 		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
+
+		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
+
 	}
 	else
 	{
