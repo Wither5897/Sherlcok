@@ -16,6 +16,7 @@ void UNoteItemWidget::NativeConstruct()
 	Inven = Cast<UInventoryWidget>(UKismetSystemLibrary::GetOuterObject(OuterObject));
 	if ( Inven ) {
 		DescriptionUI = Inven->DescriptionUI;
+		Inven->NoteItemArray.Add(this);
 	}
 
 	if ( GetMyNumber() <= 6 ) {

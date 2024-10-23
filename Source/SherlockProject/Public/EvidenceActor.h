@@ -27,4 +27,6 @@ public:
 
 	UStaticMeshComponent* StaticMesh;
 
+	UPROPERTY()
+	class UEvidenceActorComp* Comp;
 };

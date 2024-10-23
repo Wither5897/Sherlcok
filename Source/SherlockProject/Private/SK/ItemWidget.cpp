@@ -18,6 +18,7 @@ void UItemWidget::NativeConstruct()
 	Inven = Cast<UInventoryWidget>(UKismetSystemLibrary::GetOuterObject(OuterObject));
 	if ( Inven ) {
 		DescriptionUI = Inven->DescriptionUI;
+		Inven->ItemArray.Add(this);
 	}
 
 	if ( GetMyNumber() <= 6 ) {

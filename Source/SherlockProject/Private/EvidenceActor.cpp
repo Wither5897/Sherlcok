@@ -4,6 +4,7 @@
 #include "EvidenceActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "SK/EvidenceActorComp.h"
 
 
 // Sets default values
@@ -21,12 +22,15 @@ AEvidenceActor::AEvidenceActor()
         StaticMesh->SetStaticMesh(Cube.Object);
     }
     StaticMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+    Comp = CreateDefaultSubobject<UEvidenceActorComp>(TEXT("EvidenceActorComp"));
 }
 
 // Called when the game starts or when spawned
 void AEvidenceActor::BeginPlay()
 {
 	Super::BeginPlay();
+    
     //PlayerController = GetWorld()->GetFirstPlayerController();
 }
 

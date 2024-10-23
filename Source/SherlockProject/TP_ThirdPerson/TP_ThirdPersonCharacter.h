@@ -37,15 +37,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	//UArrowComponent* EvidenceArrow;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	//UChildActorComponent* ChildActor;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ( AllowPrivateAccess = "true" ))
-	//TSubclassOf<AEvidenceActor> EvidenceActor;
-
 	UPROPERTY()
 	class AEvidenceActor* EvidenceActor;
 	
@@ -71,6 +62,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = ( AllowPrivateAccess = "true" ))
 	UInputAction* IA_Interaction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = ( AllowPrivateAccess = "true" ))
+	UInputAction* IA_OpenInventory;
+
 	//widget====================================================================================================
 
 	UPROPERTY(EditDefaultsOnly, Category = UI)
@@ -78,6 +72,12 @@ public:
 
 	UPROPERTY()
 	class UKHH_InteractionWidget* interactionUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> InventoryUIFactory;
+
+	UPROPERTY()
+	class UInventoryWidget* InventoryUI;
 
 	//====================================================================================================
 	
@@ -122,12 +122,11 @@ public:
 
 	float TargetFOV = 90;
 
-
 	void Interaction();
 	
 	void PerformLineTrace();
 
-	//APlayerController* PlayerController;
+	void OpenInventory();
 
 	FHitResult OutHit;
 	FVector start;
@@ -137,6 +136,6 @@ public:
 	bool bHit = false;
 	bool bPick = false;
 
-	float tracedis = 300;
+	float tracedis = 200;
 };
 

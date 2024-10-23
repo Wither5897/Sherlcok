@@ -120,4 +120,11 @@ public:
 	UPROPERTY(meta = ( BindWidget ))
 	class UImage* SpecialThingImage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<class UItemWidget*> ItemArray;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<class UNoteItemWidget*> NoteItemArray;
+
+
 };

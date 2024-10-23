@@ -16,6 +16,10 @@
 #include "Components/TimelineComponent.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/GameplayStatics.h"
+#include "SK/InventoryWidget.h"
+#include "SK/EvidenceActorComp.h"
+#include "SK/ItemWidget.h"
+#include "SK/NoteItemWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -26,7 +30,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -71,6 +75,116 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void ATP_ThirdPersonCharacter::BeginPlay()
+{
+	// Call the base class  
+	Super::BeginPlay();
+
+	//PlayerController = Cast<APlayerController>(GetController());
+
+	//ChildActor->SetVisibility(false);
+
+	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
+	EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
+
+	if ( interactionUI )
+	{
+		interactionUI->AddToViewport();
+		interactionUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	InventoryUI = Cast<UInventoryWidget>(CreateWidget(GetWorld(), InventoryUIFactory));
+	if ( InventoryUI ) {
+		InventoryUI->AddToViewport();
+		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
+void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
+
+	PerformHighLight();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Input
+
+void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	// Add Input Mapping Context
+	if ( APlayerController* PlayerController = Cast<APlayerController>(GetController()) )
+	{
+		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()) )
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+
+	// Set up action bindings
+	if ( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent) ) {
+
+		// Jumping
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Move);
+
+		// Looking
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Look);
+
+
+		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnMyActionZoomIn);
+		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
+
+		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
+
+		EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OpenInventory);
+	}
+	else
+	{
+		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+void ATP_ThirdPersonCharacter::Move(const FInputActionValue& Value)
+{
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if ( Controller != nullptr )
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
+}
+
+void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value)
+{
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	if ( Controller != nullptr )
+	{
+		// add yaw and pitch input to controller
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
 void ATP_ThirdPersonCharacter::OnMyActionZoomIn()
 {
 	TargetFOV = 60;
@@ -94,10 +208,9 @@ void ATP_ThirdPersonCharacter::UnHighlightActor()
 	EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
 }
 
-
 void ATP_ThirdPersonCharacter::PerformHighLight()
 {
-	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("Interactiveobj")) )
+	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
 	{
 		if ( OutHit.GetActor() == EvidenceActor )
 		{
@@ -116,82 +229,39 @@ void ATP_ThirdPersonCharacter::PerformHighLight()
 
 void ATP_ThirdPersonCharacter::Interaction()
 {
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	auto* pc = Cast<APlayerController>(GetController());
 	PerformLineTrace();
-
-	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("Interactiveobj")) )
-	{
-		if ( !bPick )
-		{
-			//Startlocation = ChildActor->GetRelativeLocation();
-			//EndArrowlocation = EvidenceArrow->GetRelativeLocation();
-			if ( interactionUI )
-			{
-				interactionUI->SetVisibility(ESlateVisibility::Visible);
-
-				if ( OutHit.GetActor()->ActorHasTag(TEXT("obj1")) )
-				{
-					interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(0);
-				}
-				if ( OutHit.GetActor()->ActorHasTag(TEXT("obj2")) )
-				{
-					interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(1);
-				}
+	if ( !interactionUI ) {
+		return;
+	}
+	if ( !pc ) {
+		return;
+	}
+	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
+		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
+		if ( !bPick ){
+			interactionUI->SetVisibility(ESlateVisibility::Visible);
+			if ( !actor->Comp ) {
+				return;
 			}
+			int32 actorNum = actor->Comp->GetTagNum();
+			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem();
+			InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
 
-			if ( PlayerController )
-			{
-				PlayerController->bShowMouseCursor = true;
-				FInputModeGameAndUI InputMode;
-				InputMode.SetHideCursorDuringCapture(false);
-				PlayerController->SetInputMode(InputMode);
-			}
+			interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(actorNum - 1);
+
+			pc->SetShowMouseCursor(true);
+			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
 		}
-		else
-		{
-			if ( interactionUI )
-			{
-				interactionUI->SetVisibility(ESlateVisibility::Hidden);
-			}
-
-			if ( PlayerController )
-			{
-				PlayerController->bShowMouseCursor = false;
-				FInputModeGameOnly InputMode;
-				PlayerController->SetInputMode(InputMode);
-			}
+		else{
+			interactionUI->SetVisibility(ESlateVisibility::Hidden);
+			pc->SetShowMouseCursor(false);
+			pc->SetInputMode(FInputModeGameOnly());
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		}
 		bPick = !bPick;
 	}
-}
-
-void ATP_ThirdPersonCharacter::BeginPlay()
-{
-	// Call the base class  
-	Super::BeginPlay();
-
-	//PlayerController = Cast<APlayerController>(GetController());
-
-	//ChildActor->SetVisibility(false);
-
-	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
-	EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
-
-	if ( interactionUI )
-	{
-		interactionUI->AddToViewport();
-		interactionUI->SetVisibility(ESlateVisibility::Hidden);
-	}
-}
-
-void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
-
-	PerformHighLight();
 }
 
 void ATP_ThirdPersonCharacter::PerformLineTrace()
@@ -207,77 +277,23 @@ void ATP_ThirdPersonCharacter::PerformLineTrace()
 	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Input
-
-void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ATP_ThirdPersonCharacter::OpenInventory()
 {
-	// Add Input Mapping Context
-	if ( APlayerController* PlayerController= Cast<APlayerController>(GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
-		}
+	auto* pc = Cast<APlayerController>(GetController());
+	if ( !pc ) {
+		return;
 	}
-	
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Move);
-
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Look);
-
-
-		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnMyActionZoomIn);
-		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
-
-		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
+	if ( InventoryUI->IsVisible() ) {
+		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
+		pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameOnly());
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
-	else
-	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	else {
+		InventoryUI->SetVisibility(ESlateVisibility::Visible);
+		pc->SetShowMouseCursor(true);
+		pc->SetInputMode(FInputModeGameAndUI());
+		GetCharacterMovement()->DisableMovement();
 	}
 }
 
-void ATP_ThirdPersonCharacter::Move(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
-}
-
-void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
-}
