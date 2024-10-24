@@ -34,4 +34,11 @@ public:
 
 	UFUNCTION(Client , Unreliable)
 	void StoC_SendMessage(const FString& Message);
+
+
+	// 서버로 닉네임을 전송하는 RPC 함수
+	UFUNCTION(Server, Reliable)
+	void ServerSetUserName(const FString& UserName);
+	
+
 };

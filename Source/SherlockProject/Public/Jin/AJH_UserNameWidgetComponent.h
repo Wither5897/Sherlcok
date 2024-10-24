@@ -29,7 +29,7 @@ public:
 	UFUNCTION()
 	void OnRep_UserName();
 
-	APlayerController* pc;
+	class ASherlockPlayerController* pc;
 	void CheckPlayerController();
 
 	void SetUserName(FString UserName_);

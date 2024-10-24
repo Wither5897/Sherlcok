@@ -8,14 +8,27 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "SherlockPlayerController.h"
 
 void UAJH_UserNameWidgetComponent::BeginPlay()
 {
     Super::BeginPlay();
 
+	pc = Cast<ASherlockPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	// 복제 가능하도록 설정
+	SetIsReplicated(true);
 	// 약간의 딜레이 후에 컨트롤러 확인
 	FTimerHandle UnusedHandle;
 	GetWorld()->GetTimerManager().SetTimer(UnusedHandle, this, &UAJH_UserNameWidgetComponent::CheckPlayerController, 0.5f, false);
+	if ( pc->HasAuthority() )  // 서버에서만 실행
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the server"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the client"));
+	}
 
 }
 
@@ -27,6 +40,7 @@ void UAJH_UserNameWidgetComponent::ServerSetUserName_Implementation(const FStrin
 
 void UAJH_UserNameWidgetComponent::MultiCastSetUserName_Implementation(const FString& UserName_)
 {
+	UE_LOG(LogTemp, Warning, TEXT("MultiCastSetUserName called with UserName: %s"), *UserName_);
 	SetUserName(UserName_);
 }
 
@@ -46,12 +60,11 @@ void UAJH_UserNameWidgetComponent::CheckPlayerController()
 		{
 			if ( AActor* ownerActor = GetOwner() )
 			{
-
-				pc = UGameplayStatics::GetPlayerController(World, 0);
+				pc = Cast<ASherlockPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
 				if ( GetOwner() && pc->IsLocalController() )
 				{
 					// 게임 인스턴스에서 닉네임을 받아 캐릭터에 설정
-					ServerSetUserName(GameInstance->UserNickName);
+					pc->ServerSetUserName(GameInstance->UserNickName);
 				}
 			}
 		}

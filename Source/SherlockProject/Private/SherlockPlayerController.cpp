@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
+#include "Jin/AJH_UserNameWidgetComponent.h"
 
 void ASherlockPlayerController::SetupInputComponent()
 {
@@ -58,4 +59,17 @@ void ASherlockPlayerController::StoC_SendMessage_Implementation(const FString& M
 	if ( HUD == nullptr ) return;
 
 	HUD->AddChatMessage(Message);
+}
+
+void ASherlockPlayerController::ServerSetUserName_Implementation(const FString& UserName)
+{
+	me = Cast<ATP_ThirdPersonCharacter>(GetPawn());
+	if ( me )
+	{
+		UAJH_UserNameWidgetComponent* UserNameWidgetComp = me->FindComponentByClass<UAJH_UserNameWidgetComponent>();
+		if ( UserNameWidgetComp )
+		{
+			UserNameWidgetComp->SetUserName(UserName);
+		}
+	}
 }
