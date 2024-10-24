@@ -16,8 +16,22 @@ class SHERLOCKPROJECT_API UAJH_UserNameWidgetComponent : public UWidgetComponent
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
-	void SetUserName(FString UserName);
+	UFUNCTION(Server, Reliable)
+	void ServerSetUserName(const FString& UserName_);
+	UFUNCTION(NetMulticast, Reliable)
+	void MultiCastSetUserName(const FString& UserName_);
+
+	UPROPERTY(ReplicatedUsing = OnRep_UserName, EditDefaultsOnly)
+	FString UserName;
+	UFUNCTION()
+	void OnRep_UserName();
+
+	class ASherlockPlayerController* pc;
+	void CheckPlayerController();
+
+	void SetUserName(FString UserName_);
 
 };
