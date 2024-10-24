@@ -15,6 +15,7 @@ class SHERLOCKPROJECT_API UAJH_UserNameWidgetComponent : public UWidgetComponent
 	GENERATED_BODY()
 
 protected:
+	UAJH_UserNameWidgetComponent();
 	virtual void BeginPlay() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	

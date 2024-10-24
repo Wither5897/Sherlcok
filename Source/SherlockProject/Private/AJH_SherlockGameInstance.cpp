@@ -255,6 +255,7 @@ void UAJH_SherlockGameInstance::UserNickNameToCharacter(ACharacter* player)
 		if ( NameWidgetComp )
 		{
 			NameWidgetComp->SetUserName(UserNickName);
+			UE_LOG(LogTemp, Warning, TEXT("UserNickName set in GameInstance: %s"), *NameWidgetComp->UserName);
 		}
 	}
 }

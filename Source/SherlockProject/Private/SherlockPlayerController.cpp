@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "Jin/AJH_UserNameWidgetComponent.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 
 void ASherlockPlayerController::SetupInputComponent()
 {
@@ -61,15 +62,36 @@ void ASherlockPlayerController::StoC_SendMessage_Implementation(const FString& M
 	HUD->AddChatMessage(Message);
 }
 
+bool ASherlockPlayerController::ServerSetUserName_Validate(const FString& UserName)
+{
+	return true;
+}
+
 void ASherlockPlayerController::ServerSetUserName_Implementation(const FString& UserName)
 {
-	me = Cast<ATP_ThirdPersonCharacter>(GetPawn());
-	if ( me )
+	if ( HasAuthority() )
 	{
-		UAJH_UserNameWidgetComponent* UserNameWidgetComp = me->FindComponentByClass<UAJH_UserNameWidgetComponent>();
-		if ( UserNameWidgetComp )
+		UE_LOG(LogTemp, Warning, TEXT("ServerSetUserName called on the server with UserName: %s"), *UserName);
+		me = Cast<ATP_ThirdPersonCharacter>(GetPawn());
+		if ( me )
 		{
-			UserNameWidgetComp->SetUserName(UserName);
+			UAJH_UserNameWidgetComponent* UserNameWidgetComp = me->FindComponentByClass<UAJH_UserNameWidgetComponent>();
+			if ( UserNameWidgetComp )
+			{
+				UserNameWidgetComp->UserName = UserName;
+				UserNameWidgetComp->SetUserName(UserName);
+				UserNameWidgetComp->MultiCastSetUserName(UserName);
+				UE_LOG(LogTemp, Warning, TEXT("Server set UserName: %s"), *UserNameWidgetComp->UserName);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("UserNameWidgetComp is NULL on the server"));
+			}
 		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ServerSetUserName failed: no authority on the server."));
+	}
 }
+
