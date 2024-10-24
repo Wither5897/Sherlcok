@@ -281,7 +281,7 @@ void ATP_ThirdPersonCharacter::PerformLineTrace()
 
 	bHit = GetWorld()->LineTraceSingleByChannel(OutHit, start, End, traceChannel, Params);
 
-	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
+	//DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
 void ATP_ThirdPersonCharacter::OpenInventory()
