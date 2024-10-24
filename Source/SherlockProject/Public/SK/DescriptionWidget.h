@@ -18,13 +18,19 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* ItemDescription;
+	class UTextBlock* Description1;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Description2;
+
+	UPROPERTY(meta = ( BindWidget ))
+	class UTextBlock* Description3;
 
 	UFUNCTION(BlueprintCallable)
 	void WhenItemClicked(int32 value);
 	
 	UFUNCTION(BlueprintCallable)
-	void SetDescriptionText(FText NewText);
+	void SetDescriptionText(FText Text1, FText Text2, FText Text3);
 
 	void SetUIVisibility();
 

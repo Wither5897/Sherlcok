@@ -247,7 +247,6 @@ void ATP_ThirdPersonCharacter::Interaction()
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
 		if ( !bPick ){
-			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			if ( !actor->Comp ) {
 				return;
 			}
@@ -255,7 +254,9 @@ void ATP_ThirdPersonCharacter::Interaction()
 			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem();
 			InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
 
-			interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(actorNum - 1);
+			interactionUI->SetVisibility(ESlateVisibility::Visible);
+			interactionUI->WhenItemClick(actorNum);
+			// interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(actorNum - 1);
 
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
@@ -281,7 +282,7 @@ void ATP_ThirdPersonCharacter::PerformLineTrace()
 
 	bHit = GetWorld()->LineTraceSingleByChannel(OutHit, start, End, traceChannel, Params);
 
-	DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
+	// DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
 void ATP_ThirdPersonCharacter::OpenInventory()
