@@ -90,8 +90,8 @@ void ATP_ThirdPersonCharacter::HighlightActor()
 
 void ATP_ThirdPersonCharacter::UnHighlightActor()
 {
-	if ( EvidenceActor->StaticMesh == nullptr ) return;
-	EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
+	//if ( EvidenceActor->StaticMesh == nullptr ) return;
+	//EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
 }
 
 
