@@ -9,6 +9,13 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "SherlockPlayerController.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+
+UAJH_UserNameWidgetComponent::UAJH_UserNameWidgetComponent()
+{
+	// 복제 가능하도록 설정
+	SetIsReplicated(true);
+}
 
 void UAJH_UserNameWidgetComponent::BeginPlay()
 {
@@ -16,25 +23,32 @@ void UAJH_UserNameWidgetComponent::BeginPlay()
 
 	pc = Cast<ASherlockPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
-	// 복제 가능하도록 설정
-	SetIsReplicated(true);
 	// 약간의 딜레이 후에 컨트롤러 확인
 	FTimerHandle UnusedHandle;
 	GetWorld()->GetTimerManager().SetTimer(UnusedHandle, this, &UAJH_UserNameWidgetComponent::CheckPlayerController, 0.5f, false);
-	if ( pc->HasAuthority() )  // 서버에서만 실행
+	AActor* OwnerActor = GetOwner();
+	if (  OwnerActor )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the server"));
+		ATP_ThirdPersonCharacter* me = Cast<ATP_ThirdPersonCharacter>(OwnerActor);
+		if ( me )
+		{
+			pc = Cast<ASherlockPlayerController>(me->GetController());
+			if(pc && pc->HasAuthority())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the server"));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the client"));
+			}
+		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UAJH_UserNameWidgetComponent is running on the client"));
-	}
-
 }
 
 void UAJH_UserNameWidgetComponent::ServerSetUserName_Implementation(const FString& UserName_)
 {
 	UserName = UserName_;
+	UE_LOG(LogTemp, Warning, TEXT("ServerSetUserName called with UserName: %s"), *UserName_);
 	MultiCastSetUserName(UserName);
 }
 
@@ -63,8 +77,11 @@ void UAJH_UserNameWidgetComponent::CheckPlayerController()
 				pc = Cast<ASherlockPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
 				if ( GetOwner() && pc->IsLocalController() )
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Client is calling ServerSetUserName with UserName: %s"), *GameInstance->UserNickName);
 					// 게임 인스턴스에서 닉네임을 받아 캐릭터에 설정
 					pc->ServerSetUserName(GameInstance->UserNickName);
+
+					UE_LOG(LogTemp, Warning, TEXT("Client called ServerSetUserName"));
 				}
 			}
 		}

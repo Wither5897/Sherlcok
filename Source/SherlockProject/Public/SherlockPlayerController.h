@@ -37,7 +37,7 @@ public:
 
 
 	// 서버로 닉네임을 전송하는 RPC 함수
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerSetUserName(const FString& UserName);
 	
 
