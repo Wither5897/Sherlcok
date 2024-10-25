@@ -202,39 +202,42 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 
 void ATP_ThirdPersonCharacter::PerformHighLight()
 {
-	if ( Comp )
+	if ( IsLocallyControlled() )
 	{
-		// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
-		if ( EvidenceActor && EvidenceActor->StaticMesh )
+		if ( Comp )
 		{
-			Comp->SKUnHighlight(OutputMeshComp);
-		}
-
-		if ( bHit )
-		{
-			AActor* HitActor = OutHit.GetActor();
-			if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
+			if ( EvidenceActor && EvidenceActor->StaticMesh )
 			{
-				EvidenceActor = Cast<AEvidenceActor>(HitActor);
-				if ( EvidenceActor )
-				{
-					EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
 
-					// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
-					if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
+			if ( bHit )
+			{
+				AActor* HitActor = OutHit.GetActor();
+				if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+				{
+					EvidenceActor = Cast<AEvidenceActor>(HitActor);
+					if ( EvidenceActor )
 					{
-						Comp->SKHighlight(OutputMeshComp);
-					}
-					else
-					{
-						Comp->SKUnHighlight(OutputMeshComp);
+						EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+
+						// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
+						if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
+						{
+							Comp->SKHighlight(OutputMeshComp);
+						}
+						else
+						{
+							Comp->SKUnHighlight(OutputMeshComp);
+						}
 					}
 				}
 			}
-		}
-		else
-		{
-			Comp->SKUnHighlight(OutputMeshComp);
+			else
+			{
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
 		}
 	}
 }
