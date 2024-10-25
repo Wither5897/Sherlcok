@@ -24,7 +24,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ATP_ThirdPersonCharacter : public ACharacter, public IHighLightInterface
+class ATP_ThirdPersonCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
