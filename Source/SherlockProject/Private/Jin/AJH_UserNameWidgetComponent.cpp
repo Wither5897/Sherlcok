@@ -13,8 +13,8 @@
 
 UAJH_UserNameWidgetComponent::UAJH_UserNameWidgetComponent()
 {
-	// 복제 가능하도록 설정
-	SetIsReplicated(true);
+	// 컴포넌트가 생성될 때 복제 설정
+	SetIsReplicatedByDefault(true);
 }
 
 void UAJH_UserNameWidgetComponent::BeginPlay()
