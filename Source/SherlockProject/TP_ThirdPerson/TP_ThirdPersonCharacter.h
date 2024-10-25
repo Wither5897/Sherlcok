@@ -92,9 +92,6 @@ public:
 	void OnMyActionZoomIn();
 	void OnMyActionZoomOut();
 
-	virtual void HighlightActor() override;
-	virtual void UnHighlightActor() override;
-
 	void PerformHighLight();
 	
 protected:
@@ -137,5 +134,11 @@ public:
 	bool bPick = false;
 
 	float tracedis = 200;
+
+	UPROPERTY()
+	class UHighlightComponent* Comp;
+
+	UPROPERTY()
+	TArray<UStaticMeshComponent*> OutputMeshComp;
 };
 

@@ -20,6 +20,8 @@
 #include "SK/EvidenceActorComp.h"
 #include "SK/ItemWidget.h"
 #include "SK/NoteItemWidget.h"
+#include "SK/HighlightComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -73,6 +75,8 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	Comp = CreateDefaultSubobject<UHighlightComponent>(TEXT("HighlighComp"));
 }
 
 void ATP_ThirdPersonCharacter::BeginPlay()
@@ -196,41 +200,42 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 	TargetFOV = 90;
 }
 
-void ATP_ThirdPersonCharacter::HighlightActor()
-{
-	if ( EvidenceActor && EvidenceActor->StaticMesh )
-	{
-		EvidenceActor->StaticMesh->SetRenderCustomDepth(true);
-		EvidenceActor->StaticMesh->SetCustomDepthStencilValue(2);
-	}
-}
-
-void ATP_ThirdPersonCharacter::UnHighlightActor()
-{
-	if ( EvidenceActor && EvidenceActor->StaticMesh )
-	{
-		EvidenceActor->StaticMesh->SetRenderCustomDepth(false);
-	}
-}
-
 void ATP_ThirdPersonCharacter::PerformHighLight()
 {
-	if ( bHit )
+	if ( Comp )
 	{
-		EvidenceActor = Cast<AEvidenceActor>(OutHit.GetActor());
-
-		if ( EvidenceActor && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
+		// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
+		if ( EvidenceActor && EvidenceActor->StaticMesh )
 		{
-			HighlightActor();
+			Comp->SKUnHighlight(OutputMeshComp);
+		}
+
+		if ( bHit )
+		{
+			AActor* HitActor = OutHit.GetActor();
+			if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+			{
+				EvidenceActor = Cast<AEvidenceActor>(HitActor);
+				if ( EvidenceActor )
+				{
+					EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+
+					// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
+					if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
+					{
+						Comp->SKHighlight(OutputMeshComp);
+					}
+					else
+					{
+						Comp->SKUnHighlight(OutputMeshComp);
+					}
+				}
+			}
 		}
 		else
 		{
-			UnHighlightActor();
+			Comp->SKUnHighlight(OutputMeshComp);
 		}
-	}
-	else
-	{
-		UnHighlightActor();
 	}
 }
 
