@@ -7,10 +7,10 @@
 
 TSharedPtr<class SWidget> UUW_Main::GetChatInputTextObject()
 {
-	return UW_Chatting->GetChatInputTextObject();
+	return WBP_Chat->GetChatInputTextObject();
 }
 
 void UUW_Main::AddChatMessage(const FString& Message)
 {
-	UW_Chatting->AddChatMessage(Message);
+	WBP_Chat->AddChatMessage(Message);
 }

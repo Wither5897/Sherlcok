@@ -20,6 +20,6 @@ public:
 	TSharedPtr<class SWidget> GetChatInputTextObject();
 	void AddChatMessage(const FString& Message);
 
-	UPROPERTY()
-	class UUW_Chatting* UW_Chatting;
+	UPROPERTY(Meta = (BindWidget))
+	class UUW_Chatting* WBP_Chat;
 };
