@@ -40,5 +40,7 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerSetUserName(const FString& UserName);
 	
+	UFUNCTION(Server, Reliable)
+	void ServerReadyCount(int32 ReadyCount);
 
 };

@@ -22,4 +22,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category="Mysettings")
 	class UAJH_LoginWidget* LoginUI;
+
 };

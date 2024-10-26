@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerController.h"
 #include "Jin/AJH_DevelopMapGameMode.h"
+#include "SherlockPlayerController.h"
 
 void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 {
@@ -22,6 +23,11 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 	Btn_Back_1->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
 	Btn_Back_2->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
 	Btn_FirstCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
+	Btn_FirstCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
+	Btn_SecondCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
+	Btn_SecondCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
+	Btn_ThirdCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
+	Btn_ThirdCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
 	//Btn_LevelBack->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack);
 }
 
@@ -63,15 +69,23 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 
 }
 
+void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
+{
+	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	//gm->OnMyReadyCount(1);
+	ASherlockPlayerController* pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+	pc->ServerReadyCount(1);
+}
+
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 {
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
-	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
-	if ( gi != nullptr&& pc->IsLocalPlayerController())
+	AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	if ( gi != nullptr&& pc->HasAuthority() )
 	{
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
-		pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
-		// gm->ServerTravelToLevel("/Game/Jin/Maps/SampleLevel");
+		// pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
+		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase");
 	}
 }
 

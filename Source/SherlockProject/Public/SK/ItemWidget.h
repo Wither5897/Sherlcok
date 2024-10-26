@@ -21,7 +21,7 @@ public:
 	int32 GetMyNumber();
 
 	UFUNCTION(BlueprintCallable)
-	void WhenFindItem();
+	void WhenFindItem(int32 PlayerID);
 
 	UPROPERTY(Meta = (BindWidget))
 	class UImage* QuestionMark;

@@ -37,9 +37,15 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	class UButton* Btn_FirstCrimeTravel;
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UButton* Btn_FirstCrimeReady;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	class UButton* Btn_SecondCrimeTravel;
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UButton* Btn_SecondCrimeReady;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	class UButton* Btn_ThirdCrimeTravel;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UButton* Btn_ThirdCrimeReady;
 	//UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	//class UButton* Btn_LevelBack;
 
@@ -60,6 +66,8 @@ public:
 	void OnMyBtn_Crimefirst();
 	UFUNCTION()
 	void OnMyBtn_Back();
+	UFUNCTION()
+	void OnMyBtn_Ready();
 	UFUNCTION()
 	void OnMyBtn_FirstCrimeTravel();
 	UFUNCTION()

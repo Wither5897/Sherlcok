@@ -22,6 +22,8 @@
 #include "SK/NoteItemWidget.h"
 #include "SK/HighlightComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/PlayerState.h"
+#include "SK/MultiPlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -202,39 +204,42 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 
 void ATP_ThirdPersonCharacter::PerformHighLight()
 {
-	if ( Comp )
+	if ( IsLocallyControlled() )
 	{
-		// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
-		if ( EvidenceActor && EvidenceActor->StaticMesh )
+		if ( Comp )
 		{
-			Comp->SKUnHighlight(OutputMeshComp);
-		}
-
-		if ( bHit )
-		{
-			AActor* HitActor = OutHit.GetActor();
-			if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
+			if ( EvidenceActor && EvidenceActor->StaticMesh )
 			{
-				EvidenceActor = Cast<AEvidenceActor>(HitActor);
-				if ( EvidenceActor )
-				{
-					EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
 
-					// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
-					if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
+			if ( bHit )
+			{
+				AActor* HitActor = OutHit.GetActor();
+				if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+				{
+					EvidenceActor = Cast<AEvidenceActor>(HitActor);
+					if ( EvidenceActor )
 					{
-						Comp->SKHighlight(OutputMeshComp);
-					}
-					else
-					{
-						Comp->SKUnHighlight(OutputMeshComp);
+						EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+
+						// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
+						if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
+						{
+							Comp->SKHighlight(OutputMeshComp);
+						}
+						else
+						{
+							Comp->SKUnHighlight(OutputMeshComp);
+						}
 					}
 				}
 			}
-		}
-		else
-		{
-			Comp->SKUnHighlight(OutputMeshComp);
+			else
+			{
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
 		}
 	}
 }
@@ -243,26 +248,22 @@ void ATP_ThirdPersonCharacter::Interaction()
 {
 	auto* pc = Cast<APlayerController>(GetController());
 	//PerformLineTrace();
-	if ( !interactionUI ) {
-		return;
-	}
-	if ( !pc ) {
+	if ( !interactionUI || !pc) {
 		return;
 	}
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
-		if ( !bPick ){
-			if ( !actor->Comp ) {
-				return;
-			}
+		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
+		if (!actor || !ps){
+			return;
+		}
+		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
-			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem();
-			InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
-
+			int32 playerId = ps->GetPlayerId();
+			ServerItemFound(actorNum, playerId);
+			
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
-			// interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(actorNum - 1);
-
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
@@ -274,6 +275,19 @@ void ATP_ThirdPersonCharacter::Interaction()
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		}
 		bPick = !bPick;
+	}
+}
+
+void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID)
+{
+	MulticastItemFound(ActorNum, PlayerID);
+}
+
+void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID)
+{
+	if(InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
+		InventoryUI->ItemArray[ActorNum - 1]->WhenFindItem(PlayerID);
+		InventoryUI->NoteItemArray[ActorNum - 1]->WhenFindItem();
 	}
 }
 

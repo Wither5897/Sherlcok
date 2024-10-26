@@ -2,6 +2,7 @@
 
 #include "TP_ThirdPersonGameMode.h"
 #include "TP_ThirdPersonCharacter.h"
+#include "SK/MultiPlayerState.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATP_ThirdPersonGameMode::ATP_ThirdPersonGameMode()
@@ -11,5 +12,19 @@ ATP_ThirdPersonGameMode::ATP_ThirdPersonGameMode()
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+}
+
+void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+	
+	AMultiPlayerState* ps = Cast<AMultiPlayerState>(NewPlayer->GetPlayerState<APlayerState>());
+	if (ps)
+	{
+		ps->SetPlayerId(NumPlayers);
+		NumPlayers++;
+		
+		UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID: %d"), ps->GetPlayerId());
 	}
 }

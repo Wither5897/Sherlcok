@@ -8,6 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "Jin/AJH_DevelopMapGameMode.h"
 
 void ASherlockPlayerController::SetupInputComponent()
 {
@@ -93,5 +94,11 @@ void ASherlockPlayerController::ServerSetUserName_Implementation(const FString& 
 	{
 		UE_LOG(LogTemp, Error, TEXT("ServerSetUserName failed: no authority on the server."));
 	}
+}
+
+void ASherlockPlayerController::ServerReadyCount_Implementation(int32 ReadyCount)
+{
+	AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	gm->OnMyReadyCount(ReadyCount);
 }
 
