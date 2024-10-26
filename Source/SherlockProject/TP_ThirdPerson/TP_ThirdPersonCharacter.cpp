@@ -248,31 +248,22 @@ void ATP_ThirdPersonCharacter::Interaction()
 {
 	auto* pc = Cast<APlayerController>(GetController());
 	//PerformLineTrace();
-	if ( !interactionUI ) {
-		return;
-	}
-	if ( !pc ) {
+	if ( !interactionUI || !pc) {
 		return;
 	}
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
 		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
-		if (!ps){
+		if (!actor || !ps){
 			return;
 		}
-		if ( !bPick ){
-			if ( !actor->Comp ) {
-				return;
-			}
+		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
 			int32 playerId = ps->GetPlayerId();
-			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem(playerId);
-			InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
-
+			ServerItemFound(actorNum, playerId);
+			
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
-			// interactionUI->InteractionWidgetSwitcher->SetActiveWidgetIndex(actorNum - 1);
-
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
@@ -284,6 +275,19 @@ void ATP_ThirdPersonCharacter::Interaction()
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		}
 		bPick = !bPick;
+	}
+}
+
+void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID)
+{
+	MulticastItemFound(ActorNum, PlayerID);
+}
+
+void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID)
+{
+	if(InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
+		InventoryUI->ItemArray[ActorNum - 1]->WhenFindItem(PlayerID);
+		InventoryUI->NoteItemArray[ActorNum - 1]->WhenFindItem();
 	}
 }
 

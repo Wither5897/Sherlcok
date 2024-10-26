@@ -120,6 +120,12 @@ public:
 	float TargetFOV = 90;
 
 	void Interaction();
+
+	UFUNCTION(server, Reliable)
+	void ServerItemFound(int32 ActorNum, int32 PlayerID);
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastItemFound(int32 ActorNum, int32 PlayerID);
 	
 	void PerformLineTrace();
 

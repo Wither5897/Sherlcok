@@ -18,7 +18,7 @@ ATP_ThirdPersonGameMode::ATP_ThirdPersonGameMode()
 void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-
+	
 	AMultiPlayerState* ps = Cast<AMultiPlayerState>(NewPlayer->GetPlayerState<APlayerState>());
 	if (ps)
 	{
