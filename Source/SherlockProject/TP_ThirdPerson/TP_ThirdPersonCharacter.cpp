@@ -22,6 +22,8 @@
 #include "SK/NoteItemWidget.h"
 #include "SK/HighlightComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/PlayerState.h"
+#include "SK/MultiPlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -254,12 +256,17 @@ void ATP_ThirdPersonCharacter::Interaction()
 	}
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
+		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
+		if (!ps){
+			return;
+		}
 		if ( !bPick ){
 			if ( !actor->Comp ) {
 				return;
 			}
 			int32 actorNum = actor->Comp->GetTagNum();
-			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem();
+			int32 playerId = ps->GetPlayerId();
+			InventoryUI->ItemArray[actorNum - 1]->WhenFindItem(playerId);
 			InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
 
 			interactionUI->SetVisibility(ESlateVisibility::Visible);

@@ -37,10 +37,24 @@ int32 UItemWidget::GetMyNumber()
 	return value;
 }
 
-void UItemWidget::WhenFindItem()
+void UItemWidget::WhenFindItem(int32 PlayerID)
 {
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
-	Player1Light->SetVisibility(ESlateVisibility::Visible);
+
+	switch (PlayerID)
+	{
+	case 0:
+		Player1Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	case 1:
+		Player2Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	case 2:
+		Player3Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	default:
+		break;
+	}
 }
 
 void UItemWidget::ItemButtonClicked()

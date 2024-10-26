@@ -3,9 +3,13 @@
 
 #include "Jin/AJH_LobbyGameMode.h"
 #include "AJH_LoginWidget.h"
+#include "InterchangeResult.h"
 #include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/EditableText.h"
+#include "GameFramework/PlayerState.h"
+#include "Misc/CoreDelegates.h"
+#include "SK/MultiPlayerState.h"
 #include "ThirdParty/Steamworks/Steamv157/sdk/public/steam/steam_api.h"
 
 #pragma comment(lib, "ThirdParty/Steamworks/Steamv157/sdk/redistributable_bin/win64/steam_api64.lib")
@@ -41,5 +45,4 @@ void AAJH_LobbyGameMode::BeginPlay()
 			}
 		}
 	}
-
 }
