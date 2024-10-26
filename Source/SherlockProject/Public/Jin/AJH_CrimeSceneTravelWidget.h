@@ -67,6 +67,8 @@ public:
 	UFUNCTION()
 	void OnMyBtn_Back();
 	UFUNCTION()
+	void OnMyBtn_Ready();
+	UFUNCTION()
 	void OnMyBtn_FirstCrimeTravel();
 	UFUNCTION()
 	void OnMyBtn_LevelBack();
