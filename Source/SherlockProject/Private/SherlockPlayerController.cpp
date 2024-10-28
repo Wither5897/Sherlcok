@@ -9,6 +9,7 @@
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Jin/AJH_DevelopMapGameMode.h"
+#include "AJH_SherlockGameInstance.h"
 
 void ASherlockPlayerController::SetupInputComponent()
 {
@@ -20,6 +21,10 @@ void ASherlockPlayerController::SetupInputComponent()
 void ASherlockPlayerController::SendMessage(const FText& Text)
 {
 	FString PlayerName;
+	if ( auto* gi = Cast<UAJH_SherlockGameInstance>(GetWorld()->GetGameInstance()) )
+	{
+		PlayerName = gi->UserNickName;
+	}
 	FString Message = FString::Printf(TEXT("%s : %s"), *PlayerName, *Text.ToString());
 	// PlayerName stema ID 
 	CtoS_SendMessage(Message);

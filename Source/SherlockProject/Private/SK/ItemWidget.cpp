@@ -29,6 +29,22 @@ void UItemWidget::NativeConstruct()
 	Player3Light->SetVisibility(ESlateVisibility::Hidden);
 
 	ItemButton->OnClicked.AddDynamic(this, &UItemWidget::ItemButtonClicked);
+
+	//=======================================================================
+
+	if ( check.Num() == 0 )
+	{
+		check.Init(false, 6);
+	}
+
+	notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NoticeUI));
+
+	if ( notify )
+	{
+		notify->AddToViewport();
+		notify->SetVisibility(ESlateVisibility::Hidden);
+	}
+	CheckConditions();
 }
 
 int32 UItemWidget::GetMyNumber()
@@ -40,6 +56,13 @@ int32 UItemWidget::GetMyNumber()
 void UItemWidget::WhenFindItem(int32 PlayerID)
 {
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
+
+	int32 MyNumber = GetMyNumber();
+	if ( MyNumber > 0 && MyNumber <= check.Num() )
+	{
+		check[MyNumber - 1] = true;
+	}
+	CheckConditions();
 
 	switch (PlayerID)
 	{
@@ -62,5 +85,33 @@ void UItemWidget::ItemButtonClicked()
 	// WhenFindItem();
 	if ( Inven->DescriptionUI ) {
 		Inven->DescriptionUI->WhenItemClicked(GetMyNumber());
+	}
+}
+
+//=======================================================================
+
+void UItemWidget::CheckConditions()
+{
+	if ( check[0] )
+	{
+		ShowNotifyWidget();
+	}
+}
+
+void UItemWidget::ShowNotifyWidget()
+{
+	if ( notify )
+	{
+		notify->SetVisibility(ESlateVisibility::Visible);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemWidget::HideNotifyWidget, 5.0f, false);
+	}
+}
+
+void UItemWidget::HideNotifyWidget()
+{
+	if ( notify )
+	{
+		notify->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
