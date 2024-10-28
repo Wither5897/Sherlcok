@@ -84,7 +84,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<class UUserWidget> InventoryUIFactory;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UInventoryWidget* InventoryUI;
 
 	//====================================================================================================

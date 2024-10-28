@@ -108,16 +108,16 @@ public:
 
 	void DoubleClick(class UMultiLineEditableText* textbox);
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* SuspectImage;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* WeaponImage;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* MainEvidenceImage;
 
-	UPROPERTY(meta = ( BindWidget ))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* SpecialThingImage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
