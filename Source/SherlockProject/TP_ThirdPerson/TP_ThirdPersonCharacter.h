@@ -169,6 +169,8 @@ public:
 	TArray<UStaticMeshComponent*> OutputMeshComp;
 
 
+	UPROPERTY()
+	TArray<bool>check;
 
 };
 

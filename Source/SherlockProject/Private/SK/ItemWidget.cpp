@@ -24,7 +24,7 @@ void UItemWidget::NativeConstruct()
 		Inven->ItemArray.Add(this);
 	}
 
-	if ( GetMyNumber() <= 6 ) {
+	if ( GetMyNumber() <= 9 ) {
 		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 	}
 	Player1Light->SetVisibility(ESlateVisibility::Hidden);
@@ -34,12 +34,6 @@ void UItemWidget::NativeConstruct()
 	ItemButton->OnClicked.AddDynamic(this, &UItemWidget::ItemButtonClicked);
 
 	//=======================================================================
-
-	if ( check.Num() == 0 )
-	{
-		check.Init(false, 6);
-	}
-
 	notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NoticeUI));
 
 	if ( notify )
@@ -48,6 +42,12 @@ void UItemWidget::NativeConstruct()
 		notify->SetVisibility(ESlateVisibility::Hidden);
 	}
 	CheckConditions();
+
+	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	if ( me->check.Num() == 0 )
+	{
+		me->check.Init(false, 9);
+	}
 }
 
 int32 UItemWidget::GetMyNumber()
@@ -61,9 +61,9 @@ void UItemWidget::WhenFindItem(int32 PlayerID)
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
 
 	int32 MyNumber = GetMyNumber();
-	if ( MyNumber > 0 && MyNumber <= check.Num() )
+	if ( MyNumber > 0 && MyNumber <= me->check.Num() )
 	{
-		check[MyNumber - 1] = true;
+		me->check[MyNumber - 1] = true;
 	}
 	CheckConditions();
 
@@ -112,25 +112,24 @@ void UItemWidget::ItemButtonClicked()
 
 void UItemWidget::CheckConditions()
 {
-	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-
-	if ( check[0] && check[1] && check[2] && check[3] && check[4] && check[5] ) // 목격자의 진술, 
+	//me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	if ( me->check[0] && me->check[1] && me->check[2] && me->check[3] && me->check[4] && me->check[5] ) // 목격자의 진술, 
 	{
 	   me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
 	   ShowNotifyWidget(1);
 	}
 
-	if ( check[0] && check[2] && check[4] )// 전문가의 견해 
+	if ( me->check[0] && me->check[2] && me->check[4] )// 전문가의 견해 
 	{
 	   ShowNotifyWidget(2);
 	}
 
-	if ( check[2] && check[3] ) //  시체 검안서 
+	if ( me->check[2] && me->check[3] ) //  시체 검안서 
 	{
 		ShowNotifyWidget(3);
 	}
 
-	if ( check[2] ) //  잘린 손, 잘린 손 발견 신고 
+	if ( me->check[2] ) //  잘린 손, 잘린 손 발견 신고 
 	{
 	   ShowNotifyWidget(4);
 	}
