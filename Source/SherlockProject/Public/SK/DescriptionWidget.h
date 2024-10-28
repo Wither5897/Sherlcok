@@ -41,8 +41,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<class UTexture2D*> RealEvidenceArray;
-
 	UPROPERTY(meta = (BindWidget))
 	class UImage* RealEvidence;
 
+	UPROPERTY(EditDefaultsOnly)
+	TArray<class UTexture2D*> UnrealEvidenceArray;
+	UPROPERTY(meta = (BindWidget))
+	class UImage* UnrealEvidence;
 };

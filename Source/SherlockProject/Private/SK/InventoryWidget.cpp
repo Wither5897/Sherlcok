@@ -42,7 +42,7 @@ void UInventoryWidget::NativeConstruct()
 
 	if ( check.Num() == 0 )
 	{
-		check.Init(false, 6);
+		check.Init(false, 20);
 	}
 }
 
