@@ -1,10 +1,10 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "UW_Notify.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "ItemWidget.generated.h"
 
 /**
@@ -61,14 +61,18 @@ public:
 	void CheckConditions();
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUW_Notify> NoticeUI;
+	TSubclassOf<class UUW_Notify> NoticeUI;
 
 	UPROPERTY()
 	class UUW_Notify* notify;
 
 	UFUNCTION()
-    void ShowNotifyWidget();
+    void ShowNotifyWidget(int32 value);
 
 	UFUNCTION()
 	void HideNotifyWidget();
+
+
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* me;
 };

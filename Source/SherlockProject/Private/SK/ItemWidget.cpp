@@ -9,6 +9,9 @@
 #include "SK/InventoryWidget.h"
 #include "Components/Button.h"
 #include "SK/DescriptionWidget.h"
+#include "UW_ReportBoard.h"
+
+
 
 void UItemWidget::NativeConstruct()
 {
@@ -89,19 +92,27 @@ void UItemWidget::ItemButtonClicked()
 }
 
 //=======================================================================
-
 void UItemWidget::CheckConditions()
 {
+	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+
 	if ( check[0] )
 	{
-		ShowNotifyWidget();
+		me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(1);
+
+	}
+	if ( check[1] )
+	{
+		ShowNotifyWidget(2);
 	}
 }
 
-void UItemWidget::ShowNotifyWidget()
+void UItemWidget::ShowNotifyWidget(int32 value)
 {
 	if ( notify )
 	{
+		notify->notifySetting(value);
 		notify->SetVisibility(ESlateVisibility::Visible);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemWidget::HideNotifyWidget, 5.0f, false);

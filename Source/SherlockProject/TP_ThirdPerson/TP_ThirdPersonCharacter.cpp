@@ -24,6 +24,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/PlayerState.h"
 #include "SK/MultiPlayerState.h"
+#include "UW_ReportBoard.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -103,6 +104,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	if ( InventoryUI ) {
 		InventoryUI->AddToViewport();
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	reportboard = Cast<UUW_ReportBoard>(CreateWidget(GetWorld(), reportboardUI));
+	if ( reportboard ) {
+		reportboard->AddToViewport();
+		reportboard->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
