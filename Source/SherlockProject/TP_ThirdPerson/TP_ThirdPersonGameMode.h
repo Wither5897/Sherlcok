@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -17,6 +17,16 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	
 	int32 NumPlayers = 0;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerTravelToLevel(const FString& LevelName);
+
+	UPROPERTY()
+	int32 UserReady = 0;
+
+
+	UFUNCTION()
+	void OnMyReadyCount(int32 ReadyCount);
 };
 
 
