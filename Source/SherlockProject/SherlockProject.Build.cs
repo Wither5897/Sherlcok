@@ -8,7 +8,7 @@ public class SherlockProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput", "OnlineSubsystem", "OnlineSubsystemSteam", "Networking", "UMG" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput", "OnlineSubsystem", "OnlineSubsystemSteam", "Networking", "UMG", "InterchangeCore" });
         
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     }
