@@ -128,4 +128,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<bool> check;
+
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* me;
+	UPROPERTY(EditDefaultsOnly)
+	class UAJH_SummaryWidget* SummaryWidget;
 };

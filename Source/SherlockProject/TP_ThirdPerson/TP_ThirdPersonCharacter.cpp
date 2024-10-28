@@ -31,6 +31,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
+#include "Jin/AJH_SummaryWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -113,6 +114,13 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	if ( reportboard ) {
 		reportboard->AddToViewport();
 		reportboard->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	SummaryWidget = Cast<UAJH_SummaryWidget>(CreateWidget(GetWorld(), SummaryWidgetFactory));
+	if ( SummaryWidget )
+	{
+		SummaryWidget->AddToViewport();
+		SummaryWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

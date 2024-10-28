@@ -73,4 +73,6 @@ public:
 
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
+	UPROPERTY()
+	TArray<bool>check;
 };

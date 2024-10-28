@@ -93,6 +93,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UUW_ReportBoard* reportboard;
 
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> SummaryWidgetFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UAJH_SummaryWidget* SummaryWidget;
+
 	//====================================================================================================
 	
 	FVector Startlocation;
@@ -162,6 +167,8 @@ public:
 
 	UPROPERTY()
 	TArray<UStaticMeshComponent*> OutputMeshComp;
+
+
 
 };
 
