@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UW_Notify.h"
 #include "ItemWidget.generated.h"
 
 /**
@@ -52,4 +53,22 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* Player3Light;
+
+	// ===============================================
+
+	TArray<bool> check;
+
+	void CheckConditions();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUW_Notify> NoticeUI;
+
+	UPROPERTY()
+	class UUW_Notify* notify;
+
+	UFUNCTION()
+    void ShowNotifyWidget();
+
+	UFUNCTION()
+	void HideNotifyWidget();
 };

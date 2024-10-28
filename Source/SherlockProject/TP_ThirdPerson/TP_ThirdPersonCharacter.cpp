@@ -254,6 +254,8 @@ void ATP_ThirdPersonCharacter::Interaction()
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
 		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
+
+
 		if (!actor || !ps){
 			return;
 		}
@@ -267,6 +269,7 @@ void ATP_ThirdPersonCharacter::Interaction()
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
+
 		}
 		else{
 			interactionUI->SetVisibility(ESlateVisibility::Hidden);

@@ -11,6 +11,8 @@
 #include "KHH_InteractionWidget.h"
 #include "Components/TimelineComponent.h"
 #include "HighLightInterface.h"
+#include "UW_Notify.h"
+#include "SK/ItemWidget.h"
 #include "TP_ThirdPersonCharacter.generated.h"
 
 class USpringArmComponent;
@@ -146,5 +148,7 @@ public:
 
 	UPROPERTY()
 	TArray<UStaticMeshComponent*> OutputMeshComp;
+
+
 };
 

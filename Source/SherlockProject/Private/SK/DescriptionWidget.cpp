@@ -30,6 +30,7 @@ void UDescriptionWidget::WhenItemClicked(int32 value)
 		text2 = FText::FromString(FString::Printf(TEXT("날에 피가 묻은 채로 시체 주변에 함께 있었다.")));
 		text3 = FText::FromString(FString::Printf(TEXT("피해자의 손목을 잘랐을 때 사용한 것으로 추정된다.")));
 		SetDescriptionText(text1, text2, text3);
+
 		break;
 	case 2:
 		text1 = FText::FromString(FString::Printf(TEXT("시체를 덮고 있는 포대 위에서 발견된 볼펜.")));
