@@ -9,6 +9,9 @@
 #include "SK/InventoryWidget.h"
 #include "Components/Button.h"
 #include "SK/DescriptionWidget.h"
+#include "UW_ReportBoard.h"
+
+
 
 void UItemWidget::NativeConstruct()
 {
@@ -32,6 +35,11 @@ void UItemWidget::NativeConstruct()
 
 	//=======================================================================
 
+	if ( check.Num() == 0 )
+	{
+		check.Init(false, 6);
+	}
+
 	notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NoticeUI));
 
 	if ( notify )
@@ -39,7 +47,7 @@ void UItemWidget::NativeConstruct()
 		notify->AddToViewport();
 		notify->SetVisibility(ESlateVisibility::Hidden);
 	}
-	// CheckConditions();
+	CheckConditions();
 }
 
 int32 UItemWidget::GetMyNumber()
@@ -53,9 +61,9 @@ void UItemWidget::WhenFindItem(int32 PlayerID)
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
 
 	int32 MyNumber = GetMyNumber();
-	if ( MyNumber > 0 && MyNumber <= Inven->check.Num() )
+	if ( MyNumber > 0 && MyNumber <= check.Num() )
 	{
-		Inven->check[MyNumber - 1] = true;
+		check[MyNumber - 1] = true;
 	}
 	CheckConditions();
 
@@ -84,19 +92,27 @@ void UItemWidget::ItemButtonClicked()
 }
 
 //=======================================================================
-
 void UItemWidget::CheckConditions()
 {
-	if ( Inven->check[0] && Inven->check[1] )
+	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+
+	if ( check[0] )
 	{
-		ShowNotifyWidget();
+		me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(1);
+
+	}
+	if ( check[1] )
+	{
+		ShowNotifyWidget(2);
 	}
 }
 
-void UItemWidget::ShowNotifyWidget()
+void UItemWidget::ShowNotifyWidget(int32 value)
 {
 	if ( notify )
 	{
+		notify->notifySetting(value);
 		notify->SetVisibility(ESlateVisibility::Visible);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemWidget::HideNotifyWidget, 5.0f, false);

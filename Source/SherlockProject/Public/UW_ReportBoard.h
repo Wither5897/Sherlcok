@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,6 +7,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "Components/CanvasPanel.h"
 #include "SK/ItemWidget.h"
+#include "Components/Button.h"
 #include "UW_ReportBoard.generated.h"
 
 /**
@@ -21,14 +21,6 @@ class SHERLOCKPROJECT_API UUW_ReportBoard : public UUserWidget
 public:
 
 	virtual void NativeConstruct() override;
-
-	/*UPROPERTY()
-	class UItemWidget* itemwidget;*/
-
-	//TArray<bool> check;
-	
-	//void CheckMyNumberConditions();
-	
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* CloseButton;
@@ -44,6 +36,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* OpenReportButton_3;
+
+	UPROPERTY(meta = (BindWidget ))
+	class UButton* OpenReportButton_4;
+
 
 	UPROPERTY(meta = ( BindWidget ))
 	class UBackgroundBlur* BackgroundBlur_1;
@@ -63,6 +59,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* CanvasPanel_2;
+
+	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* CanvasPanel_3;
+
+
 
 	UFUNCTION()
 	void OpenEvidence1();
