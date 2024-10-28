@@ -1,6 +1,8 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TP_ThirdPersonCharacter.h"
+
+#include "AJH_SherlockGameInstance.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -23,7 +25,10 @@
 #include "SK/NoteItemWidget.h"
 #include "SK/HighlightComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TextRenderComponent.h"
+#include "Engine/GameInstance.h"
 #include "GameFramework/PlayerState.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "SK/MultiPlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -73,6 +78,13 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	SpotLight->InnerConeAngle = 20.f;
 	SpotLight->SetVisibility(false);
 
+	Nickname = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Nickname"));
+	Nickname->SetupAttachment(RootComponent);
+	Nickname->SetRelativeLocation(FVector(0.f, 0.f, 110.f));
+	Nickname->SetHorizontalAlignment(EHTA_Center);
+	Nickname->SetVerticalAlignment(EVRTA_TextCenter);
+	Nickname->SetWorldSize(30.f);
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
@@ -102,13 +114,24 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		InventoryUI->AddToViewport();
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+	
+	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
+	Nickname->SetText(FText::FromString(gi->UserNickName));
+	
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
-	
+
+	auto* target = GetWorld()->GetFirstPlayerController()->GetCharacter();
+	if (target){
+		NicknameLocation = Nickname->GetComponentLocation();
+		FirstCameraLocation = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation();
+		NicknameRotation = UKismetMathLibrary::FindLookAtRotation(NicknameLocation, FirstCameraLocation);
+		Nickname->SetRelativeRotation(NicknameRotation);
+	}
 	PerformLineTrace();
 	PerformHighLight();
 }

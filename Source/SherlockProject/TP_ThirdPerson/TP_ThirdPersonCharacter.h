@@ -41,6 +41,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpotLightComponent* SpotLight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
+	class UTextRenderComponent* Nickname;
 	
 	UPROPERTY()
 	class AEvidenceActor* EvidenceActor;
@@ -157,6 +160,8 @@ public:
 	UPROPERTY()
 	TArray<UStaticMeshComponent*> OutputMeshComp;
 
-
+	FVector NicknameLocation;
+	FVector FirstCameraLocation;
+	FRotator NicknameRotation;
 };
 
