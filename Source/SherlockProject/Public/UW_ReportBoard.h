@@ -49,19 +49,19 @@ public:
 
 
 	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel_138;
+	class UCanvasPanel* FirstReport;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel;
+	class UCanvasPanel* HandReport;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel_1;
+	class UCanvasPanel* WitnessReport;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel_2;
+	class UCanvasPanel* ExpertReport;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel_3;
+	class UCanvasPanel* AutopsyReport;
 
 
 

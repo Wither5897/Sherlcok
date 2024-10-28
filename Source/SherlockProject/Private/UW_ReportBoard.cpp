@@ -13,11 +13,11 @@ void UUW_ReportBoard::NativeConstruct()
 	BackgroundBlur_1->SetVisibility(ESlateVisibility::Visible);
 	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Hidden);
 
-	CanvasPanel_1->SetVisibility(ESlateVisibility::Visible);
-	CanvasPanel_138->SetVisibility(ESlateVisibility::Hidden);
-	CanvasPanel->SetVisibility(ESlateVisibility::Hidden);
-	CanvasPanel_2->SetVisibility(ESlateVisibility::Hidden);
-	CanvasPanel_3->SetVisibility(ESlateVisibility::Hidden);
+	FirstReport->SetVisibility(ESlateVisibility::Visible);
+	HandReport->SetVisibility(ESlateVisibility::Hidden);
+	WitnessReport->SetVisibility(ESlateVisibility::Hidden);
+	ExpertReport->SetVisibility(ESlateVisibility::Hidden);
+	AutopsyReport->SetVisibility(ESlateVisibility::Hidden);
 
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
