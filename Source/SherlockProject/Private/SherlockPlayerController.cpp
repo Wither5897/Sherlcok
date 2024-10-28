@@ -32,7 +32,7 @@ void ASherlockPlayerController::SendMessage(const FText& Text)
 
 void ASherlockPlayerController::FocusGame()
 {
-	SetInputMode(FInputModeGameAndUI());
+	SetInputMode(FInputModeGameOnly());
 }
 
 void ASherlockPlayerController::FocusChatInputText()

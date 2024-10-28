@@ -54,9 +54,7 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* Player3Light;
 
-	// ===============================================
-
-	TArray<bool> check;
+	// ==============================================
 
 	void CheckConditions();
 

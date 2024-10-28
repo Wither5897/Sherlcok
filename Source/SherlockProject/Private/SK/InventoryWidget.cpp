@@ -39,6 +39,11 @@ void UInventoryWidget::NativeConstruct()
 	ResetButton->OnClicked.AddDynamic(this, &UInventoryWidget::ResetButtonClicked);
 
 	InitTexture = nullptr;
+
+	if ( check.Num() == 0 )
+	{
+		check.Init(false, 6);
+	}
 }
 
 void UInventoryWidget::PageDownButtonClicked()
