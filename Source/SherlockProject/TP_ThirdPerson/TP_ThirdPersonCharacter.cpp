@@ -13,6 +13,7 @@
 #include "EvidenceActor.h"
 #include "KHH_InteractionWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/SpotLightComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/GameplayStatics.h"
@@ -64,16 +65,13 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Arrow, ChildActor
-	//EvidenceArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("EvidenceArrow"));
-	//EvidenceArrow->SetupAttachment(FollowCamera);
-	//EvidenceArrow->ArrowLength = 22;
-	//EvidenceArrow->SetRelativeLocation(FVector( 0, -35, 0 ));
-
-	//ChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("ChildActor"));
-	//ChildActor->SetupAttachment(FollowCamera);
-	//ChildActor->SetRelativeLocation(FVector(70, 0, 0));
-	//ChildActor->SetChildActorClass(EvidenceActor);
+	SpotLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
+	SpotLight->SetupAttachment(FollowCamera);
+	SpotLight->SetRelativeRotation(FRotator(10.0f, 0.0f, 0.0f));
+	SpotLight->Intensity = 20000.f;
+	SpotLight->AttenuationRadius = 2500.f;
+	SpotLight->InnerConeAngle = 20.f;
+	SpotLight->SetVisibility(false);
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -149,6 +147,8 @@ void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
 
 		EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OpenInventory);
+
+		EnhancedInputComponent->BindAction(IA_FlashLight, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnOffFlashLight);
 	}
 	else
 	{
@@ -200,6 +200,15 @@ void ATP_ThirdPersonCharacter::OnMyActionZoomIn()
 void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
 {
 	TargetFOV = 90;
+}
+
+void ATP_ThirdPersonCharacter::OnOffFlashLight(){
+	if(SpotLight->GetVisibleFlag()){
+		SpotLight->SetVisibility(false);
+	}
+	else{
+		SpotLight->SetVisibility(true);
+	}
 }
 
 void ATP_ThirdPersonCharacter::PerformHighLight()

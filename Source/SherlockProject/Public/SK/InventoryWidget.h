@@ -126,5 +126,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UNoteItemWidget*> NoteItemArray;
 
-
+	UPROPERTY(EditAnywhere)
+	TArray<bool> check;
 };

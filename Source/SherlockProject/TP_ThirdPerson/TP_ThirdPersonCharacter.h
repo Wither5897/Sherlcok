@@ -39,6 +39,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpotLightComponent* SpotLight;
+	
 	UPROPERTY()
 	class AEvidenceActor* EvidenceActor;
 	
@@ -67,6 +70,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = ( AllowPrivateAccess = "true" ))
 	UInputAction* IA_OpenInventory;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = ( AllowPrivateAccess = "true" ))
+	UInputAction* IA_FlashLight;
+	
 	//widget====================================================================================================
 
 	UPROPERTY(EditDefaultsOnly, Category = UI)
@@ -95,6 +101,8 @@ public:
 	void OnMyActionZoomOut();
 
 	void PerformHighLight();
+
+	void OnOffFlashLight();
 	
 protected:
 

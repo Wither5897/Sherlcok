@@ -32,11 +32,6 @@ void UItemWidget::NativeConstruct()
 
 	//=======================================================================
 
-	if ( check.Num() == 0 )
-	{
-		check.Init(false, 6);
-	}
-
 	notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NoticeUI));
 
 	if ( notify )
@@ -44,7 +39,7 @@ void UItemWidget::NativeConstruct()
 		notify->AddToViewport();
 		notify->SetVisibility(ESlateVisibility::Hidden);
 	}
-	CheckConditions();
+	// CheckConditions();
 }
 
 int32 UItemWidget::GetMyNumber()
@@ -58,9 +53,9 @@ void UItemWidget::WhenFindItem(int32 PlayerID)
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
 
 	int32 MyNumber = GetMyNumber();
-	if ( MyNumber > 0 && MyNumber <= check.Num() )
+	if ( MyNumber > 0 && MyNumber <= Inven->check.Num() )
 	{
-		check[MyNumber - 1] = true;
+		Inven->check[MyNumber - 1] = true;
 	}
 	CheckConditions();
 
@@ -92,7 +87,7 @@ void UItemWidget::ItemButtonClicked()
 
 void UItemWidget::CheckConditions()
 {
-	if ( check[0] )
+	if ( Inven->check[0] && Inven->check[1] )
 	{
 		ShowNotifyWidget();
 	}
