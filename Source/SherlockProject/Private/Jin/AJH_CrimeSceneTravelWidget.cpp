@@ -9,6 +9,8 @@
 #include "GameFramework/PlayerController.h"
 #include "Jin/AJH_DevelopMapGameMode.h"
 #include "SherlockPlayerController.h"
+#include "SL_GameModeBase.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
 
 void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 {
@@ -80,12 +82,13 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 {
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
-	AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	ATP_ThirdPersonGameMode* gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
 	if ( gi != nullptr&& pc->HasAuthority() )
 	{
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
-		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase");
+		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase2");
 	}
 }
 
@@ -99,6 +102,6 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MyDevelopMap"), ETravelType::TRAVEL_Absolute);
 		//gm->ServerTravelToLevel("/Game/Jin/Maps/MyDevelopMap");
 		//gi->FindMySession();
-		pc->ClientTravel(FString("192.168.0.40:7777/Game/Jin/Maps/MainMyDevelopMap"), ETravelType::TRAVEL_Absolute);
+		pc->ClientTravel(FString("192.168.0.40:7777/Game/Jin/Maps/MainMyDevelopMap2"), ETravelType::TRAVEL_Absolute);
 	}
 }

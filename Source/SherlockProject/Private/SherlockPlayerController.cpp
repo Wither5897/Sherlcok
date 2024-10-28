@@ -10,6 +10,8 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Jin/AJH_DevelopMapGameMode.h"
 #include "AJH_SherlockGameInstance.h"
+#include "SL_GameModeBase.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
 
 void ASherlockPlayerController::SetupInputComponent()
 {
@@ -103,7 +105,7 @@ void ASherlockPlayerController::ServerSetUserName_Implementation(const FString& 
 
 void ASherlockPlayerController::ServerReadyCount_Implementation(int32 ReadyCount)
 {
-	AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
+	ATP_ThirdPersonGameMode* gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
 	gm->OnMyReadyCount(ReadyCount);
 }
 

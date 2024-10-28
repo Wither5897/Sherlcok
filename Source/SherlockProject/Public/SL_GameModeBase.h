@@ -17,6 +17,14 @@ class SHERLOCKPROJECT_API ASL_GameModeBase : public AGameModeBase
 public:
 	ASL_GameModeBase();
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerTravelToLevel(const FString& LevelName);
 
+	UPROPERTY()
+	int32 UserReady = 0;
+
+
+	UFUNCTION()
+	void OnMyReadyCount(int32 ReadyCount);
 	
 };
