@@ -92,19 +92,47 @@ void UItemWidget::ItemButtonClicked()
 }
 
 //=======================================================================
+//void UItemWidget::CheckConditions()
+//{
+//	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+//
+//	if ( check[0] )
+//	{
+//		me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
+//		ShowNotifyWidget(1);
+//
+//	}
+//	if ( check[1] )
+//	{
+//		ShowNotifyWidget(2);
+//	}
+//
+//
+//}
+
 void UItemWidget::CheckConditions()
 {
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
 
-	if ( check[0] )
+	if ( check[0] && check[1] && check[2] && check[3] && check[4] && check[5] ) // 목격자의 진술, 
 	{
-		me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
-		ShowNotifyWidget(1);
-
+	   me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
+	   ShowNotifyWidget(1);
 	}
-	if ( check[1] )
+
+	if ( check[0] && check[2] && check[4] )// 전문가의 견해 
 	{
-		ShowNotifyWidget(2);
+	   ShowNotifyWidget(2);
+	}
+
+	if ( check[2] && check[3] ) //  시체 검안서 
+	{
+		ShowNotifyWidget(3);
+	}
+
+	if ( check[2] ) //  잘린 손, 잘린 손 발견 신고 
+	{
+	   ShowNotifyWidget(4);
 	}
 }
 
