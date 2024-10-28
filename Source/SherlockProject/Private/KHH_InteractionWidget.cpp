@@ -8,8 +8,6 @@
 void UKHH_InteractionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	
 }
 
 void UKHH_InteractionWidget::WhenItemClick(int32 value)

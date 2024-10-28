@@ -2,10 +2,6 @@
 
 
 #include "UW_ReportBoard.h"
-#include "Components/BackgroundBlur.h"
-#include "Components/Button.h"
-#include "Components/WidgetSwitcher.h"
-#include "Components/CanvasPanel.h"
 #include "SK/ItemWidget.h"
 
 
@@ -13,24 +9,15 @@ void UUW_ReportBoard::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//itemwidget = Cast<UItemWidget>(GetWidgetFromName(TEXT("ItemWidget")));
-	//check.Init(false, 6);
-	//if ( itemwidget )
-	//{
-	//	int32 MyNumber = itemwidget->GetMyNumber();  
-	//	check[MyNumber - 1] = true; 
-
-	//	CheckMyNumberConditions(); 
-	//}
-
 	WidgetSwitcher_1->SetActiveWidgetIndex(0);
 	BackgroundBlur_1->SetVisibility(ESlateVisibility::Visible);
 	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Hidden);
 
-	CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
+	CanvasPanel_1->SetVisibility(ESlateVisibility::Visible);
+	CanvasPanel_138->SetVisibility(ESlateVisibility::Hidden);
 	CanvasPanel->SetVisibility(ESlateVisibility::Hidden);
-	CanvasPanel_1->SetVisibility(ESlateVisibility::Hidden);
 	CanvasPanel_2->SetVisibility(ESlateVisibility::Hidden);
+	CanvasPanel_3->SetVisibility(ESlateVisibility::Hidden);
 
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
@@ -39,15 +26,6 @@ void UUW_ReportBoard::NativeConstruct()
 	OpenReportButton_2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
 	OpenReportButton_3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
 }
-
-
-//void UUW_ReportBoard::CheckMyNumberConditions()
-//{
-//	if ( check[0] && check[1] )
-//	{
-//		// 알림 1번이 보이게 
-//	}
-//}
 
 void UUW_ReportBoard::OpenEvidence()
 {

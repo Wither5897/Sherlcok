@@ -12,7 +12,6 @@
 #include "Components/TimelineComponent.h"
 #include "HighLightInterface.h"
 #include "UW_Notify.h"
-#include "SK/ItemWidget.h"
 #include "TP_ThirdPersonCharacter.generated.h"
 
 class USpringArmComponent;
@@ -86,6 +85,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UInventoryWidget* InventoryUI;
+
+	
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> reportboardUI;
+
+	UPROPERTY(BlueprintReadOnly)
+	class UUW_ReportBoard* reportboard;
 
 	//====================================================================================================
 	
