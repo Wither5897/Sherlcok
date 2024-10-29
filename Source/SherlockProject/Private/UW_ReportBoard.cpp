@@ -20,6 +20,7 @@ void UUW_ReportBoard::NativeConstruct()
 	ExpertReport->SetVisibility(ESlateVisibility::Hidden);
 	AutopsyReport->SetVisibility(ESlateVisibility::Hidden);
 
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Hidden);
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
 	OpenReportB->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
@@ -32,26 +33,31 @@ void UUW_ReportBoard::NativeConstruct()
 void UUW_ReportBoard::OpenEvidence()
 {
 	Reports[0]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96-> SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence1()
 {
 	Reports[1]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence2()
 {
 	Reports[2]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence3()
 {
 	Reports[3]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence4()
 {
 	Reports[4]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::CloseButtonClicked()
