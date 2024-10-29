@@ -49,6 +49,32 @@ public:
 	//UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	//class UButton* Btn_LevelBack;
 
+	// 사건 목록
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_0;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_1;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_2;
+	
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UTextBlock* Txt_CrimeName_0;
+	FText CrimeName;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UTextBlock* Txt_CrimeName_1;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UTextBlock* Txt_CrimeName_2;
+
+	UFUNCTION()
+	void OnTextCrimeName();
+	// 여고생 사건 UI
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_0_0;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_1_1;
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	class UImage* Img_CrimeImage_2_2;
+
 
 	UPROPERTY(EditDefaultsOnly, meta = ( BindWidget ), Category = "MySettings")
 	class UWidgetSwitcher* Switcherindex;
