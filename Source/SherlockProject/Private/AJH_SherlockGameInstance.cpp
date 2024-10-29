@@ -81,7 +81,7 @@ void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuc
 
 	//멀티플레이를 할 맵으로 이동한다. 맵의 경로 작성해주기
 	//GetWorld()->ServerTravel("/Game/Jin/Maps/MyDevelopMap?Listen", true);
-	GetWorld()->ServerTravel("/Game/Jin/Maps/MainDevelopLevel2?Listen", true);
+	GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);
 	//지금현재 리슨서버이기때문에  ?listen 으로 설정 
 }
 

@@ -23,5 +23,6 @@ void UReportWidget::NativeConstruct()
 void UReportWidget::CloseReportButtonClicked()
 {
 	SetVisibility(ESlateVisibility::Hidden);
+	OuterWidget->BackgroundBlur_96->SetVisibility(ESlateVisibility::Hidden);
 }
 

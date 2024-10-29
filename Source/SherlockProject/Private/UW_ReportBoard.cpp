@@ -20,6 +20,7 @@ void UUW_ReportBoard::NativeConstruct()
 	ExpertReport->SetVisibility(ESlateVisibility::Hidden);
 	AutopsyReport->SetVisibility(ESlateVisibility::Hidden);
 
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Hidden);
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
 	OpenReportB->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
@@ -29,29 +30,34 @@ void UUW_ReportBoard::NativeConstruct()
 	OpenReportB4->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence4);
 }
 
-void UUW_ReportBoard::OpenEvidence()
+void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 {
 	Reports[0]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96-> SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence1()
+void UUW_ReportBoard::OpenEvidence1() // 2. 손 짤림
 {
 	Reports[1]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence2()
+void UUW_ReportBoard::OpenEvidence2() // 3. 목격자
 {
 	Reports[2]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence3()
+void UUW_ReportBoard::OpenEvidence3() // 4. 전문가
 {
 	Reports[3]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence4()
+void UUW_ReportBoard::OpenEvidence4() // 5. 시체 검안서
 {
 	Reports[4]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::CloseButtonClicked()
