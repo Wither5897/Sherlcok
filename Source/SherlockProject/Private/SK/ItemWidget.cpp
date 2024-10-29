@@ -102,28 +102,36 @@ void UItemWidget::ItemButtonClicked(){
 
 void UItemWidget::CheckConditions(){
 	//me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-	if (me->check[0] && me->check[1] && me->check[2] && me->check[3] && me->check[4] && me->check[5]) // 목격자의 진술, 
+	if (!me->isNotify1Checked && me->check[0] && me->check[1] && me->check[2] && me->check[3] && me->check[4] && me->check[5]) // 목격자의 진술, 
 	{
 		me->reportboard->WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(1);
+		me->isNotify1Checked = true;
+		return;
 	}
 
-	if (me->check[0] && me->check[2] && me->check[4]) // 전문가의 견해 
+	if (!me->isNotify2Checked && me->check[0] && me->check[2] && me->check[4]) // 전문가의 견해 
 	{
 		me->reportboard->ExpertReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(2);
+		me->isNotify2Checked = true;
+		return;
 	}
 
-	if (me->check[2] && me->check[3]) //  시체 검안서 
+	if (!me->isNotify3Checked && me->check[2] && me->check[3]) //  시체 검안서 
 	{
 		me->reportboard->AutopsyReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(3);
+		me->isNotify3Checked = true;
+		return;
 	}
 
-	if (me->check[2]) //  잘린 손, 잘린 손 발견 신고 
+	if (!me->isNotify4Checked && me->check[2]) //  잘린 손, 잘린 손 발견 신고 
 	{
 		me->reportboard->HandReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(4);
+		me->isNotify4Checked = true;
+		return;
 	}
 }
 
