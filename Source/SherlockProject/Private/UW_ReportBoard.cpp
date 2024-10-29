@@ -5,7 +5,11 @@
 
 #include "SherlockPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "SK/InventoryWidget.h"
 #include "SK/ItemWidget.h"
+#include "SK/MultiPlayerState.h"
+#include "SK/NoteItemWidget.h"
+#include "WorldPartition/DataLayer/DataLayerInstance.h"
 
 
 void UUW_ReportBoard::NativeConstruct()
@@ -28,12 +32,22 @@ void UUW_ReportBoard::NativeConstruct()
 	OpenReportB2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
 	OpenReportB3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
 	OpenReportB4->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence4);
+
+	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	ps = Cast<AMultiPlayerState>(me->GetPlayerState());
 }
 
 void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 {
 	Reports[0]->SetVisibility(ESlateVisibility::Visible);
 	BackgroundBlur_96-> SetVisibility(ESlateVisibility::Visible);
+	
+	me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
+	me->InventoryUI->NoteItemArray[0]->WhenFindItem();
+	me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
+	me->InventoryUI->NoteItemArray[1]->WhenFindItem();
+	me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
+	me->InventoryUI->NoteItemArray[2]->WhenFindItem();
 }
 
 void UUW_ReportBoard::OpenEvidence1() // 2. 손 짤림
@@ -66,8 +80,7 @@ void UUW_ReportBoard::CloseButtonClicked()
 	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
 	pc->SetInputMode(FInputModeGameOnly());
 	pc->SetShowMouseCursor(false);
-
-	auto* me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	
 	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 

@@ -2,6 +2,9 @@
 
 
 #include "Jin/AJH_SummaryWidget.h"
+
+#include <string>
+
 #include "Components/Button.h"
 #include "SK/InventoryWidget.h"
 #include "Kismet/GameplayStatics.h"
@@ -71,4 +74,21 @@ void UAJH_SummaryWidget::OnSpecialThingImage(class UTexture2D* SavedTexture)
 		return;
 	}
 	Img_SpecialThingImage->SetBrushFromTexture(SavedTexture);
+}
+
+void UAJH_SummaryWidget::OnMyBtn_Click(){
+	// for (int32 i = 0; i < AllTexture.Num(); i++){
+	// 	if (AllTexture[i] && Img_SuspectImage->Brush.GetResourceObject() == AllTexture[i]){
+	// 		ModifyDataTable("Suspect", FString::Printf("Clue" + FString::FromInt(i)));
+	// 	}
+	// 	if (AllTexture[i] && Img_WeaponImage->Brush.GetResourceObject() == AllTexture[i]){
+	// 		ModifyDataTable("Weapon", FString::Printf("Clue" + FString::FromInt(i)));
+	// 	}
+	// 	if (AllTexture[i] && Img_MainEvidenceImage->Brush.GetResourceObject() == AllTexture[i]){
+	// 		ModifyDataTable("MainEvidence", FString::Printf("Clue" + FString::FromInt(i)));
+	// 	}
+	// 	if (AllTexture[i] && Img_SpecialThingImage->Brush.GetResourceObject() == AllTexture[i]){
+	// 		ModifyDataTable("SpecialThing", FString::Printf("Clue" + FString::FromInt(i)));
+	// 	}
+	// }
 }

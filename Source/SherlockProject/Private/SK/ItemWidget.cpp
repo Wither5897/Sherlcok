@@ -85,7 +85,7 @@ void UItemWidget::ItemButtonClicked(){
 
 void UItemWidget::CheckConditions(){
 
-	if (!me->isNotify1Checked && me->check[0] && me->check[1] && me->check[2] && me->check[3] && me->check[4] && me->check[5]) // 목격자의 진술, 
+	if (!me->isNotify1Checked && me->check[3] && me->check[4] && me->check[5] && me->check[6] && me->check[7] && me->check[8]) // 목격자의 진술, 
 	{
 		me->reportboard->WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(1);
@@ -93,7 +93,7 @@ void UItemWidget::CheckConditions(){
 		return;
 	}
 
-	if (!me->isNotify2Checked && me->check[0] && me->check[2] && me->check[4]) // 전문가의 견해 
+	if (!me->isNotify2Checked && me->check[3] && me->check[5] && me->check[7]) // 전문가의 견해 
 	{
 		me->reportboard->ExpertReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(2);
@@ -101,7 +101,7 @@ void UItemWidget::CheckConditions(){
 		return;
 	}
 
-	if (!me->isNotify3Checked && me->check[2] && me->check[3]) //  시체 검안서 
+	if (!me->isNotify3Checked && me->check[5] && me->check[6]) //  시체 검안서 
 	{
 		me->reportboard->AutopsyReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(3);
@@ -109,7 +109,7 @@ void UItemWidget::CheckConditions(){
 		return;
 	}
 
-	if (!me->isNotify4Checked && me->check[2]) //  잘린 손, 잘린 손 발견 신고 
+	if (!me->isNotify4Checked && me->check[5]) //  잘린 손, 잘린 손 발견 신고 
 	{
 		me->reportboard->HandReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(4);

@@ -86,4 +86,9 @@ public:
 	UPROPERTY()
 	TArray<UReportWidget*> Reports;
 
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* me;
+
+	UPROPERTY()
+	class AMultiPlayerState* ps;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Engine/DataTable.h"
 #include "AJH_SummaryWidget.generated.h"
 
 /**
@@ -12,6 +13,27 @@
 
  class UImage;
  class UButton;
+
+USTRUCT(BlueprintType)
+struct FMyClueData{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString ClueID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SuspectCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 WeaponCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MainEvidenceCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SpecialThingCount;
+};
 
 UCLASS()
 class SHERLOCKPROJECT_API UAJH_SummaryWidget : public UUserWidget
@@ -49,9 +71,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UInventoryWidget* InventoryUI;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 	void OnMyBtn_Click();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UDataTable* EvidenceDataTable;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UTexture2D*> AllTexture;
 
