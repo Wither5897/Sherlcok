@@ -75,7 +75,8 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 	{
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
-		gm->ServerTravelToLevel("//Game/Jin/Maps/MainDevelopCase2");
+		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase2");
+
 	}
 }
 
