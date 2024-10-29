@@ -11,6 +11,8 @@
 #include "SherlockPlayerController.h"
 #include "SL_GameModeBase.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
+#include "Components/TextBlock.h"
+#include "Internationalization/Text.h"
 
 void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 {
@@ -31,6 +33,14 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 	Btn_ThirdCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
 	Btn_ThirdCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
 	//Btn_LevelBack->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack);
+	
+	
+
+}
+
+void UAJH_CrimeSceneTravelWidget::OnTextCrimeName()
+{
+	// CrimeName = FText::FromString(FString::Printf(TEXT("여고생 살인사건")));
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst()
