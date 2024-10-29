@@ -60,6 +60,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* AutopsyReport;
 
+	
+	UPROPERTY(meta = ( BindWidget ))
+	class UBackgroundBlur* BackgroundBlur_96;
+
 	UFUNCTION()
 	void OpenEvidence1();
 
