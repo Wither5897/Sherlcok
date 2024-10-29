@@ -15,7 +15,7 @@
  class UButton;
 
 USTRUCT(BlueprintType)
-struct FMyClueData{
+struct FClueData{
 	GENERATED_BODY()
 
 public:
@@ -80,5 +80,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UTexture2D*> AllTexture;
 
+	TArray<FClueData> ClueDataArray;
 	
+	void LoadClueData();
 };

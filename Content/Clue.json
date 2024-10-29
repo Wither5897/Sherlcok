@@ -1,0 +1,67 @@
+﻿{
+  "data": [
+    {
+      "ClueID": "Clue1",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue2",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue3",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue4",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue5",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue6",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue7",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue8",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    },
+    {
+      "ClueID": "Clue9",
+      "SuspectCount": "0",
+      "WeaponCount": "0",
+      "MainEvidenceCount": "0",
+      "SpecialThingCount": "0;"
+    }
+  ]
+}
