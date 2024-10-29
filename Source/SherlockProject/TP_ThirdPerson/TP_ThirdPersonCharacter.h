@@ -172,5 +172,10 @@ public:
 	UPROPERTY()
 	TArray<bool>check;
 
+	bool isNotify1Checked = false;
+	bool isNotify2Checked = false;
+	bool isNotify3Checked = false;
+	bool isNotify4Checked = false;
+
 };
 

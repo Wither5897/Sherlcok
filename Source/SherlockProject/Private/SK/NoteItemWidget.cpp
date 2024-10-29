@@ -19,7 +19,7 @@ void UNoteItemWidget::NativeConstruct()
 		Inven->NoteItemArray.Add(this);
 	}
 
-	if ( GetMyNumber() <= 6 ) {
+	if ( GetMyNumber() <= 9 ) {
 		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 	}
 
@@ -39,7 +39,7 @@ void UNoteItemWidget::WhenFindItem()
 
 void UNoteItemWidget::ItemButtonClicked()
 {
-	if ( GetMyNumber() <= 6 ) {
+	if ( GetMyNumber() <= 9 ) {
 		Inven->SavedTexture = ItemColor[GetMyNumber() - 1];
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("My Number: %d, Display Name: %s"), GetMyNumber() - 1, *UKismetSystemLibrary::GetDisplayName(Inven->SavedTexture)));
 	}
