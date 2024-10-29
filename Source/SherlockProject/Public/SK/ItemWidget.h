@@ -30,7 +30,7 @@ public:
 	UPROPERTY(Meta = ( BindWidget ))
 	class UImage* Evidence;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<class UTexture2D*> ItemColor;
 
 	UPROPERTY()

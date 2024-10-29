@@ -23,16 +23,14 @@ public:
 
 	UPROPERTY(meta=(BindWidget))
 	UButton* Btn_Submit;
-	UPROPERTY(meta=(BindWidget))
-	UImage* Img_Inven;
 
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SuspectImage;
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_WeaponImage;
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_MainEvidenceImage;
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SpecialThingImage;
 
 	UFUNCTION()
@@ -48,10 +46,14 @@ public:
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UInventoryWidget* InventoryUI;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void OnMyBtn_Click();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<class UTexture2D*> AllTexture;
+
+	
 };

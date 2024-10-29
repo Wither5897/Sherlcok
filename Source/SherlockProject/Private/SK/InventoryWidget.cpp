@@ -11,6 +11,7 @@
 #include "Components/Image.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "Engine/Engine.h"
 #include "Jin/AJH_SummaryWidget.h"
 
 void UInventoryWidget::NativeConstruct()
@@ -52,7 +53,6 @@ void UInventoryWidget::NativeConstruct()
 	{
 		return;
 	}
-	SummaryWidget = me->SummaryWidget;
 } 
 
 void UInventoryWidget::PageDownButtonClicked()
@@ -104,8 +104,7 @@ void UInventoryWidget::SuspectButtonClicked()
 		return;
 	}
 	SuspectImage->SetBrushFromTexture(SavedTexture);
-	SummaryWidget->OnSuspectImage(SavedTexture);
-	// OnSuspectImage
+	me->SummaryWidget->OnSuspectImage(SavedTexture);
 	SavedTexture = nullptr;
 }
 
@@ -116,7 +115,7 @@ void UInventoryWidget::WeaponButtonClicked()
 		return;
 	}
 	WeaponImage->SetBrushFromTexture(SavedTexture);
-	SummaryWidget->OnWeaponImage(SavedTexture);
+	me->SummaryWidget->OnWeaponImage(SavedTexture);
 	SavedTexture = nullptr;
 }
 
@@ -127,7 +126,7 @@ void UInventoryWidget::MainEvidenceButtonClicked()
 		return;
 	}
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
-	SummaryWidget->OnMainEvidenceImage(SavedTexture);
+	me->SummaryWidget->OnMainEvidenceImage(SavedTexture);
 	SavedTexture = nullptr;
 }
 
@@ -138,7 +137,7 @@ void UInventoryWidget::SpecialThingButtonClicked()
 		return;
 	}
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
-	SummaryWidget->OnSpecialThingImage(SavedTexture);
+	me->SummaryWidget->OnSpecialThingImage(SavedTexture);
 	SavedTexture = nullptr;
 }
 
