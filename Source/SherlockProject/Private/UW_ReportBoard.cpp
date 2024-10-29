@@ -42,12 +42,47 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 	Reports[0]->SetVisibility(ESlateVisibility::Visible);
 	BackgroundBlur_96-> SetVisibility(ESlateVisibility::Visible);
 	
-	me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
-	me->InventoryUI->NoteItemArray[0]->WhenFindItem();
-	me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
-	me->InventoryUI->NoteItemArray[1]->WhenFindItem();
-	me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
-	me->InventoryUI->NoteItemArray[2]->WhenFindItem();
+
+	//me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
+	//me->InventoryUI->NoteItemArray[0]->WhenFindItem();
+	//me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
+	//me->InventoryUI->NoteItemArray[1]->WhenFindItem();
+	//me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
+	//me->InventoryUI->NoteItemArray[2]->WhenFindItem();
+
+	if ( me && me->InventoryUI && ps )
+{
+		if ( me->InventoryUI->ItemArray.IsValidIndex(0) && me->InventoryUI->ItemArray[0] )
+		{
+			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
+		}
+
+		if ( me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0] )
+		{
+			me->InventoryUI->NoteItemArray[0]->WhenFindItem();
+		}
+
+		if ( me->InventoryUI->ItemArray.IsValidIndex(1) && me->InventoryUI->ItemArray[1] )
+		{
+			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
+		}
+
+		if ( me->InventoryUI->NoteItemArray.IsValidIndex(1) && me->InventoryUI->NoteItemArray[1] )
+		{
+			me->InventoryUI->NoteItemArray[1]->WhenFindItem();
+		}
+
+		if ( me->InventoryUI->ItemArray.IsValidIndex(2) && me->InventoryUI->ItemArray[2] )
+		{
+			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
+		}
+
+		if ( me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2] )
+		{
+			me->InventoryUI->NoteItemArray[2]->WhenFindItem();
+		}
+	}
+
 }
 
 void UUW_ReportBoard::OpenEvidence1() // 2. 손 짤림
