@@ -8,6 +8,7 @@
 #include "Components/CanvasPanel.h"
 #include "SK/ItemWidget.h"
 #include "Components/Button.h"
+#include "SK/ReportWidget.h"
 #include "UW_ReportBoard.generated.h"
 
 /**
@@ -62,8 +63,6 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* AutopsyReport;
-
-
 
 	UFUNCTION()
 	void OpenEvidence1();

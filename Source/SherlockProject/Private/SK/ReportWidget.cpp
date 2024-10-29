@@ -15,6 +15,6 @@ void UReportWidget::NativeConstruct()
 
 void UReportWidget::CloseReportButtonClicked()
 {
-	CanvasPanel_19->SetVisibility(ESlateVisibility::Collapsed);
+	CanvasPanel_19->SetVisibility(ESlateVisibility::Hidden);
 }
 
