@@ -56,19 +56,6 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 	{
 		Switcherindex->SetActiveWidgetIndex(0);
 	}
-
-	/*if( Btn_Back )
-	SetVisibility(ESlateVisibility::Hidden);
-
-	if( Btn_Back_0 )
-	Switcherindex->SetActiveWidgetIndex(0);
-
-	if( Btn_Back_1 )
-	Switcherindex->SetActiveWidgetIndex(0);
-
-	if( Btn_Back_2 )
-	Switcherindex->SetActiveWidgetIndex(0);*/
-
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
