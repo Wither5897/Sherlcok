@@ -45,10 +45,6 @@ public:
 	UPROPERTY(meta = ( BindWidget ))
 	class UBackgroundBlur* BackgroundBlur_1;
 
-	UPROPERTY(EditDefaultsOnly, meta = ( BindWidget ))
-	class UWidgetSwitcher* WidgetSwitcher_1;
-
-
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* FirstReport;
 
@@ -82,4 +78,7 @@ public:
 
 	UFUNCTION()
 	void CloseButtonClicked();
+
+	UPROPERTY()
+	TArray<UReportWidget*> Reports;
 };

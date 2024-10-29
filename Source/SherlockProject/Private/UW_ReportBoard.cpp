@@ -2,6 +2,9 @@
 
 
 #include "UW_ReportBoard.h"
+
+#include "SherlockPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "SK/ItemWidget.h"
 
 
@@ -9,9 +12,7 @@ void UUW_ReportBoard::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	WidgetSwitcher_1->SetActiveWidgetIndex(0);
 	BackgroundBlur_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Hidden);
 
 	FirstReport->SetVisibility(ESlateVisibility::Visible);
 	HandReport->SetVisibility(ESlateVisibility::Hidden);
@@ -30,37 +31,38 @@ void UUW_ReportBoard::NativeConstruct()
 
 void UUW_ReportBoard::OpenEvidence()
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(0);
+	Reports[0]->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence1()
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(1);
+	Reports[1]->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence2()
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(2);
+	Reports[2]->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence3()
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(3);
+	Reports[3]->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::OpenEvidence4()
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(4);
+	Reports[4]->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUW_ReportBoard::CloseButtonClicked()
 {
-	BackgroundBlur_1->SetVisibility(ESlateVisibility::Hidden);
+	SetVisibility(ESlateVisibility::Hidden);
+	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
+	pc->SetInputMode(FInputModeGameOnly());
+	pc->SetShowMouseCursor(false);
+
+	auto* me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
 

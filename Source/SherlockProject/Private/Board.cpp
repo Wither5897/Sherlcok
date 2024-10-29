@@ -22,6 +22,10 @@ void ABoard::BeginPlay()
 void ABoard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-   
+	
+}
+
+void ABoard::SetVisibleBoard(){
+	
 }
 
