@@ -18,7 +18,7 @@ public:
 	
 	int32 NumPlayers = 0;
 
-	UFUNCTION(Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable)
 	void ServerTravelToLevel(const FString& LevelName);
 
 	UPROPERTY()

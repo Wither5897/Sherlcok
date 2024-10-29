@@ -8,6 +8,7 @@
 #include "Components/CanvasPanel.h"
 #include "SK/ItemWidget.h"
 #include "Components/Button.h"
+#include "SK/ReportWidget.h"
 #include "UW_ReportBoard.generated.h"
 
 /**
@@ -26,27 +27,23 @@ public:
 	class UButton* CloseButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* OpenReportButton;
+	class UButton* OpenReportB;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* OpenReportButton_1;
+	class UButton* OpenReportB1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* OpenReportButton_2;
+	class UButton* OpenReportB2;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* OpenReportButton_3;
+	class UButton* OpenReportB3;
 
 	UPROPERTY(meta = (BindWidget ))
-	class UButton* OpenReportButton_4;
+	class UButton* OpenReportB4;
 
 
 	UPROPERTY(meta = ( BindWidget ))
 	class UBackgroundBlur* BackgroundBlur_1;
-
-	UPROPERTY(EditDefaultsOnly, meta = ( BindWidget ))
-	class UWidgetSwitcher* WidgetSwitcher_1;
-
 
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* FirstReport;
@@ -63,7 +60,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* AutopsyReport;
 
-
+	
+	UPROPERTY(meta = ( BindWidget ))
+	class UBackgroundBlur* BackgroundBlur_96;
 
 	UFUNCTION()
 	void OpenEvidence1();
@@ -75,8 +74,16 @@ public:
 	void OpenEvidence3();
 
 	UFUNCTION()
+	void OpenEvidence4();
+
+	UFUNCTION()
 	void OpenEvidence();
+
 
 	UFUNCTION()
 	void CloseButtonClicked();
+
+	UPROPERTY()
+	TArray<UReportWidget*> Reports;
+
 };

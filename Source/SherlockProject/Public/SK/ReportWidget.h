@@ -25,5 +25,9 @@ public:
 
 	UFUNCTION()
 	void CloseReportButtonClicked();
-	
+
+	UPROPERTY()
+	class UUW_ReportBoard* OuterWidget;
+
+	int32 value;
 };

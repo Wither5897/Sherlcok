@@ -56,19 +56,6 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 	{
 		Switcherindex->SetActiveWidgetIndex(0);
 	}
-
-	/*if( Btn_Back )
-	SetVisibility(ESlateVisibility::Hidden);
-
-	if( Btn_Back_0 )
-	Switcherindex->SetActiveWidgetIndex(0);
-
-	if( Btn_Back_1 )
-	Switcherindex->SetActiveWidgetIndex(0);
-
-	if( Btn_Back_2 )
-	Switcherindex->SetActiveWidgetIndex(0);*/
-
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
@@ -88,7 +75,8 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 	{
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
-		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase2");
+		gm->ServerTravelToLevel("/Game/Jin/Maps/MainDevelopCase3?Listen");
+
 	}
 }
 
@@ -102,6 +90,6 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MyDevelopMap"), ETravelType::TRAVEL_Absolute);
 		//gm->ServerTravelToLevel("/Game/Jin/Maps/MyDevelopMap");
 		//gi->FindMySession();
-		pc->ClientTravel(FString("192.168.0.40:7777/Game/Jin/Maps/MainMyDevelopMap2"), ETravelType::TRAVEL_Absolute);
+		pc->ClientTravel(FString("192.168.0.40:7777/Game/Jin/Maps/MainDevelopLevel2?"), ETravelType::TRAVEL_Absolute);
 	}
 }

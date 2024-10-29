@@ -14,7 +14,7 @@ void UKHH_InteractionWidget::WhenItemClick(int32 value)
 {
 	ExplainImage->SetBrushFromTexture(ItemTexture[value - 1]);
 	FText text1, text2, text3;
-	switch (value)
+	switch (value + 3)
 	{
 	case 1:
 		text1 = FText::FromString(FString::Printf(TEXT("사체 최초 발견자인 공사장 인부 이 모씨")));

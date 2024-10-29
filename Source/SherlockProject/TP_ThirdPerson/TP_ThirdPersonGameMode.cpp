@@ -38,11 +38,6 @@ void ATP_ThirdPersonGameMode::ServerTravelToLevel_Implementation(const FString& 
 	}
 }
 
-bool ATP_ThirdPersonGameMode::ServerTravelToLevel_Validate(const FString& LevelName)
-{
-	return true;
-}
-
 void ATP_ThirdPersonGameMode::OnMyReadyCount(int32 ReadyCount)
 {
 	UserReady += ReadyCount;

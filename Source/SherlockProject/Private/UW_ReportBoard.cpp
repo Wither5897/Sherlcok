@@ -2,6 +2,9 @@
 
 
 #include "UW_ReportBoard.h"
+
+#include "SherlockPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "SK/ItemWidget.h"
 
 
@@ -9,9 +12,7 @@ void UUW_ReportBoard::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	WidgetSwitcher_1->SetActiveWidgetIndex(0);
 	BackgroundBlur_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Hidden);
 
 	FirstReport->SetVisibility(ESlateVisibility::Visible);
 	HandReport->SetVisibility(ESlateVisibility::Hidden);
@@ -19,43 +20,55 @@ void UUW_ReportBoard::NativeConstruct()
 	ExpertReport->SetVisibility(ESlateVisibility::Hidden);
 	AutopsyReport->SetVisibility(ESlateVisibility::Hidden);
 
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Hidden);
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
-	OpenReportButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
-	OpenReportButton_1->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence1);
-	OpenReportButton_2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
-	OpenReportButton_3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
+	OpenReportB->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
+	OpenReportB1->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence1);
+	OpenReportB2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
+	OpenReportB3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
+	OpenReportB4->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence4);
 }
 
-void UUW_ReportBoard::OpenEvidence()
+void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(0);
+	Reports[0]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96-> SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence1()
+void UUW_ReportBoard::OpenEvidence1() // 2. 손 짤림
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(1);
+	Reports[1]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence2()
+void UUW_ReportBoard::OpenEvidence2() // 3. 목격자
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(2);
+	Reports[2]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UUW_ReportBoard::OpenEvidence3()
+void UUW_ReportBoard::OpenEvidence3() // 4. 전문가
 {
-	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
-	WidgetSwitcher_1->SetActiveWidgetIndex(3);
+	Reports[3]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 }
 
-
+void UUW_ReportBoard::OpenEvidence4() // 5. 시체 검안서
+{
+	Reports[4]->SetVisibility(ESlateVisibility::Visible);
+	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
+}
 
 void UUW_ReportBoard::CloseButtonClicked()
 {
-	BackgroundBlur_1->SetVisibility(ESlateVisibility::Hidden);
+	SetVisibility(ESlateVisibility::Hidden);
+	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
+	pc->SetInputMode(FInputModeGameOnly());
+	pc->SetShowMouseCursor(false);
+
+	auto* me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
 
