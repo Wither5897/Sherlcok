@@ -82,26 +82,9 @@ void UItemWidget::ItemButtonClicked(){
 }
 
 //=======================================================================
-//void UItemWidget::CheckConditions()
-//{
-//	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-//
-//	if ( check[0] )
-//	{
-//		me->reportboard->CanvasPanel_138->SetVisibility(ESlateVisibility::Visible);
-//		ShowNotifyWidget(1);
-//
-//	}
-//	if ( check[1] )
-//	{
-//		ShowNotifyWidget(2);
-//	}
-//
-//
-//}
 
 void UItemWidget::CheckConditions(){
-	//me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+
 	if (!me->isNotify1Checked && me->check[0] && me->check[1] && me->check[2] && me->check[3] && me->check[4] && me->check[5]) // 목격자의 진술, 
 	{
 		me->reportboard->WitnessReport->SetVisibility(ESlateVisibility::Visible);

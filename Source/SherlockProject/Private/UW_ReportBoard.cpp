@@ -21,10 +21,11 @@ void UUW_ReportBoard::NativeConstruct()
 
 
 	CloseButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::CloseButtonClicked);
-	OpenReportButton->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
-	OpenReportButton_1->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence1);
-	OpenReportButton_2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
-	OpenReportButton_3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
+	OpenReportB->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence);
+	OpenReportB1->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence1);
+	OpenReportB2->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence2);
+	OpenReportB3->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence3);
+	OpenReportB4->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence4);
 }
 
 void UUW_ReportBoard::OpenEvidence()
@@ -51,7 +52,11 @@ void UUW_ReportBoard::OpenEvidence3()
 	WidgetSwitcher_1->SetActiveWidgetIndex(3);
 }
 
-
+void UUW_ReportBoard::OpenEvidence4()
+{
+	WidgetSwitcher_1->SetVisibility(ESlateVisibility::Visible);
+	WidgetSwitcher_1->SetActiveWidgetIndex(4);
+}
 
 void UUW_ReportBoard::CloseButtonClicked()
 {
