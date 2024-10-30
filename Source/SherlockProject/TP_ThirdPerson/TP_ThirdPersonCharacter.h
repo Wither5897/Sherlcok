@@ -98,6 +98,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UAJH_SummaryWidget* SummaryWidget;
 
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> StatisticsUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UStatisticsWidget* StatisticsUI;
+	
 	//====================================================================================================
 	
 	FVector Startlocation;

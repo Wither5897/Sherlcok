@@ -96,5 +96,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* SpecialTextTop3;
 
-	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ExitButton;
+
+	UFUNCTION()
+	void OnClickedExit();
 };

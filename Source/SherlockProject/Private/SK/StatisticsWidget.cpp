@@ -3,6 +3,8 @@
 
 #include "SK/StatisticsWidget.h"
 
+#include "SherlockPlayerController.h"
+#include "Components/Button.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 
@@ -16,6 +18,7 @@ void UStatisticsWidget::NativeConstruct(){
 	Super::NativeConstruct();
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	ExitButton->OnClicked.AddDynamic(this, &UStatisticsWidget::UStatisticsWidget::OnClickedExit);
 }
 
 void UStatisticsWidget::OnVisibilityChange(ESlateVisibility InVisibility){
@@ -209,4 +212,12 @@ void UStatisticsWidget::CalcSpecialRank(){
 			break;
 		}
 	}
+}
+
+void UStatisticsWidget::OnClickedExit(){
+	SetVisibility(ESlateVisibility::Hidden);
+	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
+	pc->SetShowMouseCursor(false);
+	pc->SetInputMode(FInputModeGameOnly());
+	GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);
 }

@@ -16,6 +16,7 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "SK/MultiPlayerState.h"
+#include "SK/StatisticsWidget.h"
 
 void UAJH_SummaryWidget::NativeConstruct()
 {
@@ -112,6 +113,8 @@ void UAJH_SummaryWidget::OnMyBtn_Click(){
 		}
 	}
 	SaveClueData();
+	SetVisibility(ESlateVisibility::Hidden);
+	me->StatisticsUI->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UAJH_SummaryWidget::LoadClueData(){

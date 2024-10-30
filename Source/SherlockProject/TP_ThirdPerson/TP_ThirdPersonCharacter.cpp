@@ -32,6 +32,7 @@
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
 #include "Jin/AJH_SummaryWidget.h"
+#include "SK/StatisticsWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -75,7 +76,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	SpotLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
 	SpotLight->SetupAttachment(FollowCamera);
 	SpotLight->SetRelativeRotation(FRotator(10.0f, 0.0f, 0.0f));
-	SpotLight->Intensity = 20000.f;
+	SpotLight->Intensity = 5000.f;
 	SpotLight->AttenuationRadius = 2500.f;
 	SpotLight->InnerConeAngle = 20.f;
 	SpotLight->SetVisibility(false);
@@ -121,6 +122,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	{
 		SummaryWidget->AddToViewport();
 		SummaryWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	StatisticsUI = Cast<UStatisticsWidget>(CreateWidget(GetWorld(), StatisticsUIFactory));
+	if ( StatisticsUI ){
+		StatisticsUI->AddToViewport();
+		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
