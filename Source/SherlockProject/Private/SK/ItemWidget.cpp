@@ -124,6 +124,8 @@ void UItemWidget::ShowNotifyWidget(int32 value){
 		notify->SetVisibility(ESlateVisibility::Visible);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UItemWidget::HideNotifyWidget, 5.0f, false);
+
+		notify->PlayNotifyAnim();
 	}
 }
 

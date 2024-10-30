@@ -7,6 +7,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
 #include "Engine/Texture2D.h"
+#include "Animation/WidgetAnimation.h"
 #include "UW_Notify.generated.h"
 
 /**
@@ -32,5 +33,9 @@ public:
 
 	void notifySetting(int32 value);
 
+	UPROPERTY(EditDefaultsOnly, meta = ( BindWidgetAnim), Transient, Category = MySettings)
+	class UWidgetAnimation* Notifyinfo;
+
+	void PlayNotifyAnim();
 
 };
