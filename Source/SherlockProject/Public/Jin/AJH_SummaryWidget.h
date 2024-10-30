@@ -83,4 +83,6 @@ public:
 	TArray<FClueData> ClueDataArray;
 	
 	void LoadClueData();
+
+	void SaveClueData();
 };

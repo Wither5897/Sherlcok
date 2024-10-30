@@ -11,6 +11,7 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "AJH_SherlockGameInstance.h"
 #include "Engine/Engine.h"
+#include "HAL/PlatformFileManager.h"
 #include "Misc/FileHelper.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -81,38 +82,41 @@ void UAJH_SummaryWidget::OnSpecialThingImage(class UTexture2D* SavedTexture)
 }
 
 void UAJH_SummaryWidget::OnMyBtn_Click(){
+	if (ClueDataArray.Num() == 0)
+	{
+		LoadClueData();
+	}
+	
 	// alltexture 배열을 순회하면서 비교합니다
 	for (int32 i = 0; i < AllTexture.Num(); i++)
 	{
-		// 다음 Clue의 인덱스 계산 (마지막 텍스처인 경우 처리)
-		int32 nextClueIndex = (i + 1) % AllTexture.Num();
-        
 		// 각 이미지와 현재 alltexture 요소를 비교하고, 일치하면 다음 Clue의 해당 카테고리 카운트를 증가
 		if (Img_SuspectImage->GetBrush().GetResourceObject() == AllTexture[i])
 		{
-			ClueDataArray[nextClueIndex].SuspectCount++;
+			ClueDataArray[i].SuspectCount++;
 		}
         
 		if (Img_WeaponImage->GetBrush().GetResourceObject() == AllTexture[i])
 		{
-			ClueDataArray[nextClueIndex].WeaponCount++;
+			ClueDataArray[i].WeaponCount++;
 		}
         
 		if (Img_MainEvidenceImage->GetBrush().GetResourceObject() == AllTexture[i])
 		{
-			ClueDataArray[nextClueIndex].MainEvidenceCount++;
+			ClueDataArray[i].MainEvidenceCount++;
 		}
         
 		if (Img_SpecialThingImage->GetBrush().GetResourceObject() == AllTexture[i])
 		{
-			ClueDataArray[nextClueIndex].SpecialThingCount++;
+			ClueDataArray[i].SpecialThingCount++;
 		}
 	}
+	SaveClueData();
 }
 
 void UAJH_SummaryWidget::LoadClueData(){
 	// JSON 파일 경로 설정
-	FString JsonFilePath = FPaths::ProjectContentDir() / TEXT("Clue.json");
+	FString JsonFilePath = FPaths::ProjectSavedDir() / TEXT("Clue.json");
 	FString JsonString;
 
 	// JSON 파일 읽기
@@ -155,5 +159,67 @@ void UAJH_SummaryWidget::LoadClueData(){
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to load JSON file from path: %s"), *JsonFilePath);
+	}
+}
+
+void UAJH_SummaryWidget::SaveClueData(){
+	for (int32 i = 0; i < ClueDataArray.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Saving Clue %d - Suspect: %d, Weapon: %d, Evidence: %d, Special: %d"),
+			i,
+			ClueDataArray[i].SuspectCount,
+			ClueDataArray[i].WeaponCount,
+			ClueDataArray[i].MainEvidenceCount,
+			ClueDataArray[i].SpecialThingCount);
+	}
+	// 저장 경로를 GameSavedDir로 변경
+	FString JsonFilePath = FPaths::ProjectSavedDir() / TEXT("Clue.json");
+
+	// 디렉토리가 없다면 생성
+	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+	if (!PlatformFile.DirectoryExists(*FPaths::GetPath(JsonFilePath)))
+	{
+		PlatformFile.CreateDirectoryTree(*FPaths::GetPath(JsonFilePath));
+	}    
+	// 최상위 JSON 객체 생성
+	TSharedPtr<FJsonObject> MainJsonObject = MakeShareable(new FJsonObject);
+	TArray<TSharedPtr<FJsonObject>> DataArray;
+    
+	// ClueDataArray의 각 항목을 JSON 객체로 변환
+	for (const FClueData& ClueData : ClueDataArray)
+	{
+		TSharedPtr<FJsonObject> JsonClue = MakeShareable(new FJsonObject);
+        
+		// 데이터 설정
+		JsonClue->SetStringField(TEXT("ClueID"), ClueData.ClueID);
+		JsonClue->SetStringField(TEXT("SuspectCount"), FString::FromInt(ClueData.SuspectCount));
+		JsonClue->SetStringField(TEXT("WeaponCount"), FString::FromInt(ClueData.WeaponCount));
+		JsonClue->SetStringField(TEXT("MainEvidenceCount"), FString::FromInt(ClueData.MainEvidenceCount));
+		JsonClue->SetStringField(TEXT("SpecialThingCount"), FString::FromInt(ClueData.SpecialThingCount));
+        
+		DataArray.Add(JsonClue);
+	}
+    
+	// 데이터 배열을 메인 JSON 객체에 추가
+	TArray<TSharedPtr<FJsonValue>> JsonValueArray;
+	for (const TSharedPtr<FJsonObject>& JsonClue : DataArray)
+	{
+		JsonValueArray.Add(MakeShareable(new FJsonValueObject(JsonClue)));
+	}
+	MainJsonObject->SetArrayField(TEXT("data"), JsonValueArray);
+    
+	// JSON 문자열로 변환
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(MainJsonObject.ToSharedRef(), Writer);
+    
+	// 파일에 저장
+	if (FFileHelper::SaveStringToFile(OutputString, *JsonFilePath))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Successfully saved clue data to JSON file"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to save clue data to JSON file"));
 	}
 }
