@@ -45,3 +45,11 @@ void UUW_Notify::notifySetting(int32 value)
 	}
 	return;
 }
+
+void UUW_Notify::PlayNotifyAnim()
+{
+	if ( Notifyinfo )
+	{
+		PlayAnimation(Notifyinfo);
+	}
+}
