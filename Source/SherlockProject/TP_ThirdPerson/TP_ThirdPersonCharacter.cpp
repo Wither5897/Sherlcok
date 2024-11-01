@@ -112,6 +112,13 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	Notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NotifyUI));
+	if ( Notify ) {
+		Notify->AddToViewport();
+		Notify->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+
 	reportboard = Cast<UUW_ReportBoard>(CreateWidget(GetWorld(), reportboardUI));
 	if ( reportboard ) {
 		reportboard->AddToViewport();

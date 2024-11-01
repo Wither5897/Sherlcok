@@ -123,27 +123,26 @@ void UUW_ReportBoard::CheckCondition()
 {
 	if ( me->check[5] ) //  잘린 손, 잘린 손 발견 신고 
 	{
-		HandReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(4);
+		HandReport->SetVisibility(ESlateVisibility::Visible);
 	}
 
 	if ( me->check[5] && me->check[6] ) //  시체 검안서 
 	{
-		AutopsyReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(3);
+		AutopsyReport->SetVisibility(ESlateVisibility::Visible);
 	}
 
 	if ( me->check[3] && me->check[5] && me->check[7] ) // 전문가의 견해 
 	{
-		ExpertReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(2);
+		ExpertReport->SetVisibility(ESlateVisibility::Visible);
 	}
 
 	if ( me->check[3] && me->check[4] && me->check[5] && me->check[6] && me->check[7] && me->check[8] ) // 목격자의 진술, 
 	{
-		WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		ShowNotifyWidget(1);
-		//if(bShowReport) ShowNotifyWidget(1);
+		WitnessReport->SetVisibility(ESlateVisibility::Visible);
 	}	
 }
 
