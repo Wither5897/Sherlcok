@@ -90,13 +90,18 @@ void AAJH_MainTravelActor::ShowCrimeSceneTravelWidget_Client(AActor* OtherActor)
 void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
-	if ( player && player->IsLocallyControlled() )
+	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
 		//player->MainTravel(OtherActor);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
 		pc->bShowMouseCursor = true;
 		pc->SetInputMode(FInputModeGameAndUI());
-
+	}
+	else if( player && player->IsLocallyControlled())
+	{
+		player->TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
+		pc->bShowMouseCursor = true;
+		pc->SetInputMode(FInputModeGameAndUI());
 	}
 }
 
