@@ -25,6 +25,9 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
 	class UButton* Btn_findSessions;
 
+    UPROPERTY(EditDefaultsOnly, meta = (BindWidget), BlueprintReadWrite, Category = "MySettings")
+	class UWidgetSwitcher* Switcher_Opening;
+
 	UPROPERTY(BlueprintReadOnly)
 	class UAJH_SherlockGameInstance* gi;
 

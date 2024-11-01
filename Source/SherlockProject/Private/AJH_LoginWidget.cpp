@@ -5,15 +5,17 @@
 #include "Components/Button.h"
 #include "Components/EditableText.h"
 #include "AJH_SherlockGameInstance.h"
+#include "Components/WidgetSwitcher.h"
+#include "Animation/WidgetAnimation.h"
 
 void UAJH_LoginWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	Switcher_Opening->SetActiveWidgetIndex(0);
 	gi = GetGameInstance<UAJH_SherlockGameInstance>();
 	Btn_findSessions->OnClicked.AddDynamic(this, &UAJH_LoginWidget::OnClickedFindSessionsButton);
 	//Edit_hostName->OnTextChanged.AddDynamic(this, &UAJH_LoginWidget::OnMyTextChanged);
-	
 }
 
 void UAJH_LoginWidget::OnClickedFindSessionsButton()

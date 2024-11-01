@@ -80,6 +80,10 @@ public:
 	class UWidgetSwitcher* Switcherindex;
 	UPROPERTY(BlueprintReadOnly)
 	class UAJH_SherlockGameInstance* gi;
+	UPROPERTY()
+	class ASherlockPlayerController* SherlockPC;
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* player;
 
 	UPROPERTY()
 	int32 currentPageIndex;
