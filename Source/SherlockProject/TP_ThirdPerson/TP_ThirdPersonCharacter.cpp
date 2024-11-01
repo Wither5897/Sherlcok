@@ -33,6 +33,8 @@
 #include "UW_ReportBoard.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
+#include "Board.h"
+#include "UW_Notify.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -111,6 +113,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	Notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NotifyUI));
+	if ( Notify ) {
+		Notify->AddToViewport();
+		Notify->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 	reportboard = Cast<UUW_ReportBoard>(CreateWidget(GetWorld(), reportboardUI));
 	if ( reportboard ) {
 		reportboard->AddToViewport();
@@ -129,6 +137,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	TArray<AActor*> FoundActors;
+	TArray<ABoard*> BoardsWithTag;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ABoard::StaticClass(), FName(*FString(TEXT("Board"))), FoundActors);
+	Board = Cast<ABoard>(FoundActors[0]);
+
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
@@ -302,6 +316,7 @@ void ATP_ThirdPersonCharacter::Interaction()
 			
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
+
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();

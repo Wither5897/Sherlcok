@@ -54,24 +54,7 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* Player3Light;
 
-	// ==============================================
-
-	void CheckConditions();
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UUW_Notify> NoticeUI;
-
-	UPROPERTY()
-	class UUW_Notify* notify;
-
-	UFUNCTION()
-    void ShowNotifyWidget(int32 value);
-
-	UFUNCTION()
-	void HideNotifyWidget();
-
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
 
-	
 };

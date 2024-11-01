@@ -91,4 +91,13 @@ public:
 
 	UPROPERTY()
 	class AMultiPlayerState* ps;
+
+	void CheckCondition();
+
+	UFUNCTION()
+    void ShowNotifyWidget(int32 value);
+
+	UFUNCTION()
+	void HideNotifyWidget();
+
 };

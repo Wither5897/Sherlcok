@@ -86,6 +86,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UInventoryWidget* InventoryUI;
 
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> NotifyUI;
+
+	UPROPERTY(BlueprintReadOnly)
+	class UUW_Notify* Notify;
 	
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<class UUserWidget> reportboardUI;
@@ -181,6 +186,10 @@ public:
 	bool isNotify2Checked = false;
 	bool isNotify3Checked = false;
 	bool isNotify4Checked = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	class ABoard* Board;
+
 
 };
 

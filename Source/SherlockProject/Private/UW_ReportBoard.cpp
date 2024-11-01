@@ -119,4 +119,49 @@ void UUW_ReportBoard::CloseButtonClicked()
 	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
+void UUW_ReportBoard::CheckCondition()
+{
+	if ( me->check[5] ) //  잘린 손, 잘린 손 발견 신고 
+	{
+		HandReport->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(4);
+	}
+
+	if ( me->check[5] && me->check[6] ) //  시체 검안서 
+	{
+		AutopsyReport->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(3);
+	}
+
+	if ( me->check[3] && me->check[5] && me->check[7] ) // 전문가의 견해 
+	{
+		ExpertReport->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(2);
+	}
+
+	if ( me->check[3] && me->check[4] && me->check[5] && me->check[6] && me->check[7] && me->check[8] ) // 목격자의 진술, 
+	{
+		WitnessReport->SetVisibility(ESlateVisibility::Visible);
+		ShowNotifyWidget(1);
+		//if(bShowReport) ShowNotifyWidget(1);
+	}	
+}
+
+
+void UUW_ReportBoard::ShowNotifyWidget(int32 value) {
+	if ( me->Notify ) {
+		me->Notify->notifySetting(value);
+		me->Notify->SetVisibility(ESlateVisibility::Visible);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UUW_ReportBoard::HideNotifyWidget, 5.0f, false);
+
+		me->Notify->PlayNotifyAnim();
+	}
+}
+
+void UUW_ReportBoard::HideNotifyWidget() {
+	if ( me->Notify ) {
+		me->Notify->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
 

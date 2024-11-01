@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "UW_ReportBoard.h"
 #include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/WidgetComponent.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Board.generated.h"
 
 UCLASS()
@@ -27,4 +30,26 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetVisibleBoard();
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	class UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	class UBoxComponent* BoxArea;
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	class UWidgetComponent* Widget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	class UWidgetComponent* WidgetReportBoard;
+
+	UPROPERTY(BlueprintReadWrite)
+	class ATP_ThirdPersonCharacter* me;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UUW_ReportBoard* reportboard;
+
 };
