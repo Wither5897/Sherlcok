@@ -97,6 +97,10 @@ public:
 	TSubclassOf<class UUserWidget> SummaryWidgetFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UAJH_SummaryWidget* SummaryWidget;
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> CrimeSceneTravelWidgetFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UAJH_CrimeSceneTravelWidget* CrimeSceneTravelWidget;
 
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<class UUserWidget> StatisticsUIFactory;
@@ -156,6 +160,8 @@ public:
 	void PerformLineTrace();
 
 	void OpenInventory();
+
+	void MainTravel(AActor* OtherActor);
 
 	FHitResult OutHit;
 	FVector start;

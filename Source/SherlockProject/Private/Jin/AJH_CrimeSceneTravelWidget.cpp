@@ -13,11 +13,13 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
 #include "Components/TextBlock.h"
 #include "Internationalization/Text.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 
 void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 {
 	gi = GetGameInstance<UAJH_SherlockGameInstance>();
 	Switcherindex->SetActiveWidgetIndex(0);
+	SherlockPC = GetOwningPlayer<ASherlockPlayerController>();
 
 	Btn_Crimefirst->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst);
 	Btn_CrimeSecond->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst);
@@ -72,13 +74,15 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
 {
 	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
 	//gm->OnMyReadyCount(1);
-	ASherlockPlayerController* pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
-	pc->ServerReadyCount(1);
+	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+	SherlockPC->ServerReadyCount(1);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 {
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
+	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+	player = Cast<ATP_ThirdPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	//AAJH_DevelopMapGameMode* gm = Cast<AAJH_DevelopMapGameMode>(GetWorld()->GetAuthGameMode());
 	ATP_ThirdPersonGameMode* gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
 	if ( gi != nullptr&& pc->HasAuthority() )
@@ -86,7 +90,10 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 		// GetWorld()->ServerTravel("/Game/Jin/Maps/SampleLevel", true);
 		// pc->ClientTravel(FString("/Game/Jin/Maps/MainDevelopCase"), ETravelType::TRAVEL_Absolute);
 		gm->ServerTravelToLevel("/Game/TJ/Case?Listen");
-
+		if ( player && player->IsLocallyControlled() )
+		{
+			SherlockPC->SetInputMode(FInputModeGameOnly());
+		}
 	}
 }
 

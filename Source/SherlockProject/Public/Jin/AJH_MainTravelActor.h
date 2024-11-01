@@ -28,6 +28,23 @@ public:
 
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* player;
+	UPROPERTY()
+	class ASherlockPlayerController* pc;
+
+	UPROPERTY()
+	class UAJH_CrimeSceneTravelWidget* CrimeSceneTravelWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> CrimeSceneTravelWidgetFactory;
+	UPROPERTY()
+	class UAJH_TravelClientWidget* TravelClientWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> TravelClientWidgetFactory;
+	
+
+	UFUNCTION()
+	void ShowCrimeSceneTravelWidget_Server(AActor* OtherActor);
+	UFUNCTION()
+	void ShowCrimeSceneTravelWidget_Client(AActor* OtherActor);
 
 	UFUNCTION()
 	void OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

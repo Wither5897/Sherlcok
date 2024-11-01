@@ -33,6 +33,7 @@
 #include "UW_ReportBoard.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
+#include "Jin/AJH_CrimeSceneTravelWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -122,6 +123,13 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	{
 		SummaryWidget->AddToViewport();
 		SummaryWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	CrimeSceneTravelWidget = Cast<UAJH_CrimeSceneTravelWidget>(CreateWidget(GetWorld(), CrimeSceneTravelWidgetFactory));
+	if ( CrimeSceneTravelWidget )
+	{
+		CrimeSceneTravelWidget->AddToViewport();
+		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	StatisticsUI = Cast<UStatisticsWidget>(CreateWidget(GetWorld(), StatisticsUIFactory));
@@ -360,6 +368,14 @@ void ATP_ThirdPersonCharacter::OpenInventory()
 		pc->SetShowMouseCursor(true);
 		pc->SetInputMode(FInputModeGameAndUI());
 		GetCharacterMovement()->DisableMovement();
+	}
+}
+
+void ATP_ThirdPersonCharacter::MainTravel(AActor* OtherActor)
+{
+	if ( OtherActor )
+	{
+		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
