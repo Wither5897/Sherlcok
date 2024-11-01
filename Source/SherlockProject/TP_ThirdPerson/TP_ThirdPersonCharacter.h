@@ -106,6 +106,10 @@ public:
 	TSubclassOf<class UUserWidget> CrimeSceneTravelWidgetFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UAJH_CrimeSceneTravelWidget* CrimeSceneTravelWidget;
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> TravelClientWidgetFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UAJH_TravelClientWidget* TravelClientWidget;
 
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<class UUserWidget> StatisticsUIFactory;

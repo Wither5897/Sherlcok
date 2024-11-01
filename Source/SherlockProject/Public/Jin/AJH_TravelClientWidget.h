@@ -19,15 +19,22 @@ protected:
 	
 public:
 
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_FirstCrimeReady;
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(BindWidget))
 	class UButton* Btn_Cancel;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Crimefirst;
+
+	UPROPERTY(meta=(BindWidget))
+	class UWidgetSwitcher* Switcherindex;
 
 	UFUNCTION()
 	void OnMyBtn_FirstCrimeReady();
 	UFUNCTION()
 	void OnMyBtn_Cancel();
+	UFUNCTION()
+	void OnMyBtn_Crimefirst();
 
 	UPROPERTY()
 	class ASherlockPlayerController* SherlockPC;

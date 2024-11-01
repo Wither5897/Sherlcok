@@ -34,6 +34,7 @@
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
+#include "Jin/AJH_TravelClientWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -137,6 +138,13 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	{
 		CrimeSceneTravelWidget->AddToViewport();
 		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	TravelClientWidget = Cast<UAJH_TravelClientWidget>(CreateWidget(GetWorld(), TravelClientWidgetFactory));
+	if ( TravelClientWidget )
+	{
+		TravelClientWidget->AddToViewport();
+		TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	StatisticsUI = Cast<UStatisticsWidget>(CreateWidget(GetWorld(), StatisticsUIFactory));

@@ -108,10 +108,16 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
-	if ( player && player->IsLocallyControlled() )
+	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
 		// player->MainTravel(OtherActor);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+		pc->bShowMouseCursor = false;
+		pc->SetInputMode(FInputModeGameOnly());
+	}
+	else if ( player && player->IsLocallyControlled() )
+	{
+		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = false;
 		pc->SetInputMode(FInputModeGameOnly());
 	}

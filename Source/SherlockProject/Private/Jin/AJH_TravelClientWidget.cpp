@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
 #include "SherlockPlayerController.h"
+#include "Components/WidgetSwitcher.h"
 
 void UAJH_TravelClientWidget::NativeConstruct()
 {
@@ -12,6 +13,9 @@ void UAJH_TravelClientWidget::NativeConstruct()
 	
 	Btn_FirstCrimeReady->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady);
 	Btn_Cancel->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Cancel);
+	Btn_Crimefirst->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Crimefirst);
+
+	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady()
@@ -28,4 +32,9 @@ void UAJH_TravelClientWidget::OnMyBtn_Cancel()
 	SherlockPC->ServerReadyCount(-1);
 	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
 	Btn_FirstCrimeReady->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_TravelClientWidget::OnMyBtn_Crimefirst()
+{
+	Switcherindex->SetActiveWidgetIndex(1);
 }

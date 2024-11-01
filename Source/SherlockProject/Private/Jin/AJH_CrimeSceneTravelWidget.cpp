@@ -30,13 +30,14 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 	Btn_Back_2->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
 	Btn_FirstCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
 	Btn_FirstCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
+	Btn_Cancel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Cancel);
 	Btn_SecondCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
 	Btn_SecondCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
 	Btn_ThirdCrimeTravel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel);
 	Btn_ThirdCrimeReady->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready);
 	//Btn_LevelBack->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack);
 	
-	
+	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
 
 }
 
@@ -76,6 +77,18 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
 	//gm->OnMyReadyCount(1);
 	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	SherlockPC->ServerReadyCount(1);
+
+	Btn_FirstCrimeReady->SetVisibility(ESlateVisibility::Collapsed);
+	Btn_Cancel->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_CrimeSceneTravelWidget::OnMyBtn_Cancel()
+{
+	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+	SherlockPC->ServerReadyCount(-1);
+
+	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
+	Btn_FirstCrimeReady->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
