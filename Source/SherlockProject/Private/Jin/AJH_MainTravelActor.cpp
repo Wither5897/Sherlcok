@@ -94,6 +94,7 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 	{
 		//player->MainTravel(OtherActor);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
+		player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
 		pc->bShowMouseCursor = true;
 		pc->SetInputMode(FInputModeGameAndUI());
 	}

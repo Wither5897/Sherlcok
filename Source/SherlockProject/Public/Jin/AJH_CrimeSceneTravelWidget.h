@@ -77,6 +77,24 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	class UImage* Img_CrimeImage_2_2;
 
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidgetAnim ), Transient, Category = "MySettings")
+	class UWidgetAnimation* Anim_Btn_Crimefirst;
+	UFUNCTION()
+	void OnMyAnim_Btn_CrimefirstHoVered();
+	UFUNCTION()
+	void OnMyAnim_Btn_CrimefirstUnHoVered();
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidgetAnim ), Transient, Category = "MySettings")
+	class UWidgetAnimation* Anim_Switcherindex;
+	UFUNCTION()
+	void OnMyAnim_Switcherindex();
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidgetAnim ), Transient, Category = "MySettings")
+	class UWidgetAnimation* Anim_Canvas_First;
+	UFUNCTION()
+	void OnMyAnim_Canvas_First();
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidgetAnim ), Transient, Category = "MySettings")
+	class UWidgetAnimation* Anim_Canvas_Second;
+	UFUNCTION()
+	void OnMyAnim_Canvas_Second();
 
 	UPROPERTY(EditDefaultsOnly, meta = ( BindWidget ), Category = "MySettings")
 	class UWidgetSwitcher* Switcherindex;
