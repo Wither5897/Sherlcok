@@ -1,12 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SherlockHUD.h"
 #include "UW_Main.h"
 #include "Widgets/SWidget.h"
 #include "UW_ChatMessage.h"
 #include "UW_Chatting.h"
 #include "Components/ScrollBox.h"
+#include "Components/TextBlock.h"
 
 ASherlockHUD::ASherlockHUD()
 {
@@ -37,11 +36,16 @@ void ASherlockHUD::BeginPlay()
 
 	CheckUIObject(); 
 
+	// 알림(느낌표) 표시
+	if ( MainUIObject && MainUIObject->ChatNotificationText )
+	{
+		MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 }
 
 TSharedPtr<SWidget> ASherlockHUD::GetChatInputTextObject()
 {
-	//return MainUIObject->GetChatInputTextObject();
 	return ChatUIObject ? ChatUIObject->GetChatInputTextObject() : nullptr;
 }
 
@@ -56,9 +60,13 @@ void ASherlockHUD::AddChatMessage(const FString& Message, bool bIsSender)
 		if ( ChatUIObject->Chat_ScrollBox )
 		{
 			ChatUIObject->Chat_ScrollBox->AddChild(ChatMessageWidget);
+			ChatUIObject->Chat_ScrollBox->ScrollToEnd(); // 스크롤 끝으로 
 		}
 	}
-	//MainUIObject->AddChatMessage(Message);
+	if ( !bIsChatOpen && MainUIObject && MainUIObject->ChatNotificationText )
+	{
+		MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 bool ASherlockHUD::CheckUIObject()

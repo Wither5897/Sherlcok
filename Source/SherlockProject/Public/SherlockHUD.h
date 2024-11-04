@@ -23,7 +23,7 @@ public:
 	TSharedPtr<class SWidget> GetChatInputTextObject();
 	void AddChatMessage(const FString& Message, bool bIsSender);
 
-private:
+public:
 	TSubclassOf<class UUW_Main> MainUIClass;
 	class UUW_Main* MainUIObject;
 
@@ -35,4 +35,7 @@ private:
 private:
 	bool CheckUIObject();
 	bool CreateUIObject();
+
+public:
+	bool bIsChatOpen;
 };

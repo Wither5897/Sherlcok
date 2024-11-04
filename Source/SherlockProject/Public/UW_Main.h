@@ -22,4 +22,7 @@ public:
 
 	UPROPERTY(Meta = (BindWidget))
 	class UUW_Chatting* WBP_Chat;
+
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* ChatNotificationText;
 };
