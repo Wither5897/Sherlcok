@@ -31,7 +31,7 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 
 void ATP_ThirdPersonGameMode::ServerTravelToLevel_Implementation(const FString& LevelName)
 {
-	if ( HasAuthority() && UserReady >= 3 ) // 서버인지 확인
+	if ( HasAuthority() && UserReady >= 3 || HasAuthority() && UserReady >= 1 ) // 서버인지 확인
 	{
 		// 서버에서 레벨 이동을 처리
 		GetWorld()->ServerTravel(LevelName, true);

@@ -30,14 +30,21 @@ public:
 	UFUNCTION()
 	void OnMyMain_Btn_Back();
 
+	// Character
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Character_1;
+	UFUNCTION()
+	void OnMyBtn_Character_1();
+	
 
-	// 뒤로가기 버튼 이벤트 (스택 활용)
-	UPROPERTY()
-	int32 currentPageIndex; // 현재 페이지
-	UPROPERTY()
-	int32 MemoriesPageIndex; // 기억할 페이지
-	UPROPERTY()
-	TArray<int32> PageHistory;
+
+	//// 뒤로가기 버튼 이벤트 (스택 활용)
+	//UPROPERTY()
+	//int32 currentPageIndex; // 현재 페이지
+	//UPROPERTY()
+	//int32 MemoriesPageIndex; // 기억할 페이지
+	//UPROPERTY()
+	//TArray<int32> PageHistory;
 
 	
 };
