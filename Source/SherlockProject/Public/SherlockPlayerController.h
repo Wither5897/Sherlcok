@@ -33,7 +33,7 @@ public:
 	void CtoS_SendMessage(const FString& Message);
 
 	UFUNCTION(Client , Unreliable)
-	void StoC_SendMessage(const FString& Message);
+	void StoC_SendMessage(const FString& Message, bool bIsSender);
 
 
 	// 서버로 닉네임을 전송하는 RPC 함수

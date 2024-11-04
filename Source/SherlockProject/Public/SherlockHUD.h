@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "UW_Chatting.h"
 #include "SherlockHUD.generated.h"
 
 /**
@@ -20,11 +21,16 @@ public:
 
 public:
 	TSharedPtr<class SWidget> GetChatInputTextObject();
-	void AddChatMessage(const FString& Message);
+	void AddChatMessage(const FString& Message, bool bIsSender);
 
 private:
 	TSubclassOf<class UUW_Main> MainUIClass;
 	class UUW_Main* MainUIObject;
+
+	TSubclassOf<class UUW_Chatting> ChatUIClass;
+	class UUW_Chatting* ChatUIObject;
+
+	TSubclassOf<class UUW_ChatMessage> ChatMessageClass;
 
 private:
 	bool CheckUIObject();

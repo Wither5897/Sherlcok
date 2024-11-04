@@ -4,15 +4,31 @@
 #include "SherlockHUD.h"
 #include "UW_Main.h"
 #include "Widgets/SWidget.h"
+#include "UW_ChatMessage.h"
+#include "UW_Chatting.h"
+#include "Components/ScrollBox.h"
 
 ASherlockHUD::ASherlockHUD()
 {
-	static ConstructorHelpers::FClassFinder<UUW_Main> WBP_Main(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/WBP_Main.WBP_Main_C'"));
+	static ConstructorHelpers::FClassFinder<UUW_Main> WBP_Main(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/Chat/WBP_Main.WBP_Main_C'"));
 	
 	if ( WBP_Main.Succeeded() )
 	{
 		MainUIClass = WBP_Main.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<UUW_Chatting> WBP_Chat(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/Chat/WBP_Chat.WBP_Chat_C'"));
+	if ( WBP_Chat.Succeeded() )
+	{
+		ChatUIClass = WBP_Chat.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<UUW_ChatMessage> WBP_ChatMessage(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/Chat/WBP_ChatMesssage.WBP_ChatMesssage_C'"));
+	if ( WBP_ChatMessage.Succeeded() )
+	{
+		ChatMessageClass = WBP_ChatMessage.Class;
+	}
+
 }
 
 void ASherlockHUD::BeginPlay()
@@ -25,14 +41,24 @@ void ASherlockHUD::BeginPlay()
 
 TSharedPtr<SWidget> ASherlockHUD::GetChatInputTextObject()
 {
-	return MainUIObject->GetChatInputTextObject();
+	//return MainUIObject->GetChatInputTextObject();
+	return ChatUIObject ? ChatUIObject->GetChatInputTextObject() : nullptr;
 }
 
-void ASherlockHUD::AddChatMessage(const FString& Message)
+void ASherlockHUD::AddChatMessage(const FString& Message, bool bIsSender)
 {
-	if ( !CheckUIObject() ) return;
+	if ( !CheckUIObject() || !ChatUIObject ) return;
 
-	MainUIObject->AddChatMessage(Message);
+	UUW_ChatMessage* ChatMessageWidget = CreateWidget<UUW_ChatMessage>(GetOwningPlayerController(), ChatMessageClass);
+	if ( ChatMessageWidget )
+	{
+		ChatMessageWidget->SetMessageText(FText::FromString(Message), bIsSender);
+		if ( ChatUIObject->Chat_ScrollBox )
+		{
+			ChatUIObject->Chat_ScrollBox->AddChild(ChatMessageWidget);
+		}
+	}
+	//MainUIObject->AddChatMessage(Message);
 }
 
 bool ASherlockHUD::CheckUIObject()
@@ -52,7 +78,12 @@ bool ASherlockHUD::CreateUIObject()
 		if ( MainUIObject )
 		{
 			MainUIObject->AddToViewport();
-			return true; 
+
+			ChatUIObject = MainUIObject->WBP_Chat;
+			if ( ChatUIObject )
+			{
+				return true;
+			}
 		}
 	}
 	return false; 

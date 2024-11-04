@@ -57,17 +57,18 @@ void ASherlockPlayerController::CtoS_SendMessage_Implementation(const FString& M
 		ASherlockPlayerController* pc = Cast<ASherlockPlayerController>(OutActor);
 		if ( pc )
 		{
-			pc->StoC_SendMessage(Message);
+			bool bIsSender = (pc == this);
+			pc->StoC_SendMessage(Message, bIsSender);
 		}
 	}
 }
 
-void ASherlockPlayerController::StoC_SendMessage_Implementation(const FString& Message)
+void ASherlockPlayerController::StoC_SendMessage_Implementation(const FString& Message, bool bIsSender)
 {
 	ASherlockHUD* HUD = GetHUD<ASherlockHUD>();
 	if ( HUD == nullptr ) return;
 
-	HUD->AddChatMessage(Message);
+	HUD->AddChatMessage(Message, bIsSender);
 }
 
 bool ASherlockPlayerController::ServerSetUserName_Validate(const FString& UserName)
