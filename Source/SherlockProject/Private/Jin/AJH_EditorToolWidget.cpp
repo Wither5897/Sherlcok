@@ -16,14 +16,14 @@ void UAJH_EditorToolWidget::NativeConstruct()
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Character()
 {
-	currentPageIndex = EditorWidgetSwitcher->GetActiveWidgetIndex();
-	PageHistory.Add(currentPageIndex);
+	/*currentPageIndex = EditorWidgetSwitcher->GetActiveWidgetIndex();
+	PageHistory.Add(currentPageIndex);*/
 	EditorWidgetSwitcher->SetActiveWidgetIndex(1);
 }
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 {
-	if ( PageHistory.Num() > 0 )
+	/*if ( PageHistory.Num() > 0 )
 	{
 		MemoriesPageIndex = PageHistory.Pop();
 		EditorWidgetSwitcher->SetActiveWidgetIndex(MemoriesPageIndex);
@@ -35,5 +35,11 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 	else
 	{
 		EditorWidgetSwitcher->SetActiveWidgetIndex(0);
-	}
+	}*/
+	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+}
+
+void UAJH_EditorToolWidget::OnMyBtn_Character_1()
+{
+	
 }

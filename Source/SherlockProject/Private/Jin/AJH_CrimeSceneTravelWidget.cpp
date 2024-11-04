@@ -60,8 +60,8 @@ void UAJH_CrimeSceneTravelWidget::OnTextCrimeName()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst()
 {
-	currentPageIndex = Switcherindex->GetActiveWidgetIndex();
-	PageHistory.Add(currentPageIndex);
+	/*currentPageIndex = Switcherindex->GetActiveWidgetIndex();
+	PageHistory.Add(currentPageIndex);*/
 	//UUserWidget::PlayAnimationForward(Anim_Canvas_First);
 
 	Switcherindex->SetActiveWidgetIndex(1);
