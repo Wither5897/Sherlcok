@@ -105,6 +105,7 @@ public:
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* player;
 
+	// 뒤로가기 버튼 이벤트 (스택 활용)
 	UPROPERTY()
 	int32 currentPageIndex;
 	UPROPERTY()

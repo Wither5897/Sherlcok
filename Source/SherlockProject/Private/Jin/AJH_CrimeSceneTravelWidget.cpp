@@ -43,13 +43,13 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 	
 	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
 
-	if ( Anim_Canvas_First )
-	{
-		FWidgetAnimationDynamicEvent AnimationFinishedEvent;
-		AnimationFinishedEvent.BindUFunction(this, FName("OnMyAnim_Canvas_First"));
-		BindToAnimationFinished(Anim_Canvas_First, AnimationFinishedEvent);
-		// BindToAnimationFinished(Anim_Switcherindex, this, &UAJH_CrimeSceneTravelWidget::OnMyAnim_Canvas_First);
-	}
+	//if ( Anim_Canvas_First )
+	//{
+	//	FWidgetAnimationDynamicEvent AnimationFinishedEvent;
+	//	AnimationFinishedEvent.BindUFunction(this, FName("OnMyAnim_Canvas_First"));
+	//	BindToAnimationFinished(Anim_Canvas_First, AnimationFinishedEvent);
+	//	//BindToAnimationFinished(Anim_Switcherindex, AnimationFinishedEvent);
+	//}
 
 }
 
@@ -60,11 +60,11 @@ void UAJH_CrimeSceneTravelWidget::OnTextCrimeName()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst()
 {
-	currentPageIndex = Switcherindex->GetActiveWidgetIndex();
-	PageHistory.Add(currentPageIndex);
-	UUserWidget::PlayAnimationForward(Anim_Canvas_First);
+	/*currentPageIndex = Switcherindex->GetActiveWidgetIndex();
+	PageHistory.Add(currentPageIndex);*/
+	//UUserWidget::PlayAnimationForward(Anim_Canvas_First);
 
-	//Switcherindex->SetActiveWidgetIndex(1);
+	Switcherindex->SetActiveWidgetIndex(1);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyAnim_Btn_CrimefirstHoVered()
@@ -79,25 +79,25 @@ void UAJH_CrimeSceneTravelWidget::OnMyAnim_Btn_CrimefirstUnHoVered()
 
 void UAJH_CrimeSceneTravelWidget::OnMyAnim_Switcherindex()
 {
-	UUserWidget::PlayAnimationForward(Anim_Switcherindex);
+	//UUserWidget::PlayAnimationForward(Anim_Switcherindex);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyAnim_Canvas_First()
 {
 	Switcherindex->SetActiveWidgetIndex(1);
-	UUserWidget::PlayAnimationForward(Anim_Canvas_Second);
-	UUserWidget::PlayAnimationReverse(Anim_Canvas_First);
+	//UUserWidget::PlayAnimationForward(Anim_Canvas_Second);
+	//UUserWidget::PlayAnimationReverse(Anim_Canvas_First);
 	//UUserWidget::PlayAnimationForward(Anim_Switcherindex);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyAnim_Canvas_Second()
 {
-	// UUserWidget::PlayAnimationForward(Anim_Canvas_Second);
+	//UUserWidget::PlayAnimationForward(Anim_Canvas_Second);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 {
-	if ( PageHistory.Num() > 0 )
+	/*if ( PageHistory.Num() > 0 )
 	{
 		lastPageIndex = PageHistory.Pop();
 		Switcherindex->SetActiveWidgetIndex(lastPageIndex);
@@ -106,10 +106,16 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 	{
 		SetVisibility(ESlateVisibility::Hidden);
 	}
+	else if ( Btn_Back_0->IsPressed() )
+	{
+		SetVisibility(ESlateVisibility::Hidden);
+	}
 	else
 	{
 		Switcherindex->SetActiveWidgetIndex(0);
-	}
+	}*/
+	Switcherindex->SetActiveWidgetIndex(0);
+
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
