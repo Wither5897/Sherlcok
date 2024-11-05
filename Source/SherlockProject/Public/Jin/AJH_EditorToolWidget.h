@@ -18,12 +18,12 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UWidgetSwitcher* EditorWidgetSwitcher;
 	// Main
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Character;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Back;
 	UFUNCTION()
 	void OnMyMain_Btn_Character();
@@ -31,20 +31,36 @@ public:
 	void OnMyMain_Btn_Back();
 
 	// Character
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_Character_1;
 	UFUNCTION()
 	void OnMyBtn_Character_1();
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Character_2;
+	UFUNCTION()
+	void OnMyBtn_Character_2();
 	
+	UPROPERTY()
+	APlayerController* pc;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AAJH_EditorActor> EditorActorFactory;
+	UPROPERTY()
+	class AAJH_EditorActor* EditorActor;
+	ETraceTypeQuery query;
+	FHitResult outHit;
+	UPROPERTY()
+	class AAJH_EditorCharacter* me;
+	bool bIsSpawn = false;
 
-
-	//// 뒤로가기 버튼 이벤트 (스택 활용)
-	//UPROPERTY()
-	//int32 currentPageIndex; // 현재 페이지
-	//UPROPERTY()
-	//int32 MemoriesPageIndex; // 기억할 페이지
-	//UPROPERTY()
-	//TArray<int32> PageHistory;
+	// 스폰 (스택 활용)
+	UPROPERTY()
+	int32 currentActorIndex; // 현재 엑터
+	UPROPERTY()
+	int32 MemoriesActorIndex; // 기억할 엑터
+	UPROPERTY()
+	TMap<int32, TWeakObjectPtr<AAJH_EditorActor>> ActorMap;
+	UPROPERTY()
+	TArray<int32> ActorHistory;
 
 	
 };
