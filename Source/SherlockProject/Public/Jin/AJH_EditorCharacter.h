@@ -47,10 +47,24 @@ public:
 	class APlayerController* pc;
 
 	FVector direction;
+	bool bIsActorSpawn = false;
+	bool bIsEditorActor = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> EditorWidgetFactory;
 	UPROPERTY()
 	class UAJH_EditorToolWidget* EditorWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditorActorFactory;
+	UPROPERTY()
+	class AAJH_EditorActor* EditorActor;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> WorldActorFactory;
+	UPROPERTY()
+	class AAJH_WorldActor* WorldActor;
+	ETraceTypeQuery query;
+	FHitResult outHit;
+
+	void OnMyEditorActorSpawn(bool bIsSpawn);
 
 };

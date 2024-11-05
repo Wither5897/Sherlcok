@@ -6,6 +6,9 @@
 #include "../../../../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Jin/AJH_EditorToolWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "Jin/AJH_EditorActor.h"
+#include "Jin/AJH_WorldActor.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -39,6 +42,8 @@ void AAJH_EditorCharacter::BeginPlay()
 		EditorWidget->AddToViewport();
 	}
 
+	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
+	WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
 }
 
 // Called every frame
@@ -90,11 +95,42 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 	FInputModeGameAndUI InputMode;
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	pc->SetInputMode(InputMode);
+
+	if ( bIsActorSpawn && EditorActor != nullptr )
+	{
+		GetWorld()->SpawnActor<AAJH_WorldActor>(WorldActorFactory, EditorActor->GetActorTransform());
+		EditorActor->bIsSpawn = false;
+		EditorActor->Destroy();
+		bIsEditorActor = false;
+	}
+	else
+	{
+		return;
+	}
 }
 
 void AAJH_EditorCharacter::OnMyIA_RightClick()
 {
 	//pc->SetShowMouseCursor(true);
 	//pc->SetInputMode(FInputModeGameOnly());
+}
+
+void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
+{
+	// 새로운 액터 스폰
+	if ( bIsSpawn )
+	{
+		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
+		FTransform transform(outHit.Location);
+		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+		EditorActor->bIsSpawn = true;
+		bIsActorSpawn = true;
+		bIsEditorActor = true;
+	}
+	else
+	{
+		bIsEditorActor = false;
+		EditorActor->Destroy();
+	}
 }
 
