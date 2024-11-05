@@ -38,7 +38,6 @@ void UItemWidget::NativeConstruct() {
 	if ( me->check.Num() == 0 ) {
 		me->check.Init(false, 9);
 	}
-
 }
 
 int32 UItemWidget::GetMyNumber() {
@@ -47,17 +46,9 @@ int32 UItemWidget::GetMyNumber() {
 	return value;
 }
 
-void UItemWidget::WhenFindItem(int32 PlayerID) {
+void UItemWidget::WhenFindItem(int32 PlayerID)
+{
 	QuestionMark->SetVisibility(ESlateVisibility::Hidden);
-
-	int32 MyNumber = GetMyNumber();
-	if ( MyNumber > 0 && MyNumber <= me->check.Num() ) {
-		me->check[MyNumber - 1] = true;
-
-	}
-	me->reportboard->CheckCondition();
-	me->Board->reportboard->CheckCondition();
-	//CheckConditions();
 
 	switch ( PlayerID ) {
 	case 0:
@@ -72,6 +63,18 @@ void UItemWidget::WhenFindItem(int32 PlayerID) {
 	default:
 		break;
 	}
+}
+
+void UItemWidget::VisibleBoard()
+{
+	int32 MyNumber = GetMyNumber();
+
+	if ( MyNumber > 0 && MyNumber <= me->check.Num() )
+	{
+		me->check[MyNumber - 1] = true;
+	}
+	me->reportboard->CheckCondition(); // UI
+	me->Board->reportboard->CheckCondition(); // board
 }
 
 void UItemWidget::ItemButtonClicked() {

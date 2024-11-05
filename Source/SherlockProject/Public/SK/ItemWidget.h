@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void WhenFindItem(int32 PlayerID);
 
+	UFUNCTION(BlueprintCallable)
+	void VisibleBoard();
+
 	UPROPERTY(Meta = (BindWidget))
 	class UImage* QuestionMark;
 

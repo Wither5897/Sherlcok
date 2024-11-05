@@ -63,10 +63,6 @@ void ASherlockHUD::AddChatMessage(const FString& Message, bool bIsSender)
 			ChatUIObject->Chat_ScrollBox->ScrollToEnd(); // 스크롤 끝으로 
 		}
 	}
-	if ( !bIsChatOpen && MainUIObject && MainUIObject->ChatNotificationText )
-	{
-		MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Visible);
-	}
 }
 
 bool ASherlockHUD::CheckUIObject()

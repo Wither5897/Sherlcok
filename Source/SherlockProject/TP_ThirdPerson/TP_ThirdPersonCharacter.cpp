@@ -347,7 +347,14 @@ void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, in
 
 void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID)
 {
-	if(InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
+	if ( IsLocallyControlled() )
+	{
+		if ( InventoryUI && InventoryUI->ItemArray.IsValidIndex(( ActorNum - 1 )) ) {
+			InventoryUI->ItemArray[ActorNum - 1]->VisibleBoard();
+		}
+	}
+
+	if ( InventoryUI && InventoryUI->ItemArray.IsValidIndex(( ActorNum - 1 )) ) {
 		InventoryUI->ItemArray[ActorNum - 1]->WhenFindItem(PlayerID);
 		InventoryUI->NoteItemArray[ActorNum - 1]->WhenFindItem();
 	}

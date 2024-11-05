@@ -55,6 +55,12 @@ void ASherlockPlayerController::FocusChatInputText()
 		InputMode.SetWidgetToFocus(HUD->GetChatInputTextObject());
 		SetInputMode(InputMode);
 		HUD->bIsChatOpen = true;
+
+		// enter에 hidden 됨 수정이 필요할 듯
+		if ( HUD->MainUIObject && HUD->MainUIObject->ChatNotificationText )
+		{
+			HUD->MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
 }
 
@@ -80,14 +86,20 @@ void ASherlockPlayerController::StoC_SendMessage_Implementation(const FString& M
 
 	HUD->AddChatMessage(Message, bIsSender);
 
-	// 클라는 아직 안됨. 멀티 수정 필요 
-	if ( !HUD->bIsChatOpen && HUD->MainUIObject && HUD->MainUIObject->ChatNotificationText )
+
+	if ( !bIsSender )  // 자신이 보낸 메시지가 아닐 때 알림
 	{
-		HUD->MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Visible);
-	}
-	else if ( HUD->bIsChatOpen && HUD->MainUIObject && HUD->MainUIObject->ChatNotificationText )
-	{
-		HUD->MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Hidden);
+		if ( HUD->MainUIObject && HUD->MainUIObject->ChatNotificationText )
+		{
+			if ( !HUD->bIsChatOpen )
+			{
+				HUD->MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Visible);
+			}
+			else
+			{
+				HUD->MainUIObject->ChatNotificationText->SetVisibility(ESlateVisibility::Hidden);
+			}
+		}
 	}
 }
 

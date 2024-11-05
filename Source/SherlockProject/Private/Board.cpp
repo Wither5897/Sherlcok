@@ -42,40 +42,11 @@ ABoard::ABoard()
         WidgetReportBoard->SetWidgetClass(WidgetClass.Class);
     }
     WidgetReportBoard->SetDrawSize(FVector2D(1550, 900));
-
-    //reportboard = Cast<UUW_ReportBoard>(WidgetReportBoard->GetWidget());
-
-    //Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
-    //Box->SetupAttachment(RootComponent);
-    //
-    //Box->SetRelativeLocation(FVector(1.0f, 2.0f, 70.0f));
-    //Box->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
-    //Box->SetRelativeScale3D(FVector(1.5f, 3.25f, 2.0f));
-    //
-    //Box->SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
-    
-    //Widget = CreateDefaultSubobject<UWidgetComponent>(TEXT("ReportBoard"));
-    //Widget->SetupAttachment(RootComponent);
-    //
-    //Widget->SetRelativeLocation(FVector(-0.0f, 2.0f, 70.0f));
-    //Widget->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
-    //Widget->SetRelativeScale3D(FVector(0.13f, 0.13f, 0.13f));
-    //
-    //static ConstructorHelpers::FClassFinder<UUW_ReportBoard> WidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/Board/SKWBP_ReportBoard2.SKWBP_ReportBoard2_C'"));
-    //if ( WidgetClass.Succeeded() )
-    //{
-    //    Widget->SetWidgetClass(WidgetClass.Class);
-    //}
-    //Widget->SetDrawSize(FVector2D(1550, 900));
-    //
-    //reportboard = Cast<UUW_ReportBoard>(Widget->GetWidget());
-
 }
 
 void ABoard::BeginPlay()
 {
 	Super::BeginPlay();
-    //me->ItemWidget->CheckConditions();
 }
 
 // Called every frame
