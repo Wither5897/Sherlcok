@@ -25,7 +25,14 @@ public:
 
 	UPROPERTY()
 	APlayerController* pc;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* MeshComp;
+	const TCHAR* MeshPath;
+	UStaticMesh* LoadeMesh;
 
 	UPROPERTY()
 	bool bIsSpawn = false;
+
+	UFUNCTION()
+	void OnMyMeshPath(int32 Itemnumber);
 };

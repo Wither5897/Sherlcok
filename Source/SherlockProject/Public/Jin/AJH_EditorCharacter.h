@@ -65,6 +65,6 @@ public:
 	ETraceTypeQuery query;
 	FHitResult outHit;
 
-	void OnMyEditorActorSpawn(bool bIsSpawn);
+	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
 
 };

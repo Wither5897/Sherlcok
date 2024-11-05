@@ -60,15 +60,22 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 	}*/
 	if ( me->bIsEditorActor == false )
 	{
-		me->OnMyEditorActorSpawn(true);
+		me->OnMyEditorActorSpawn(true, 0);
 	}
 	else
 	{
-		me->OnMyEditorActorSpawn(false);
+		me->OnMyEditorActorSpawn(false, 0);
 	}
 }
 
 void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 {
-	
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true, 1);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false, 1);
+	}
 }

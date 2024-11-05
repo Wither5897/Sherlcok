@@ -2,6 +2,8 @@
 
 
 #include "Jin/AJH_EditorActor.h"
+#include "Engine/StaticMesh.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 AAJH_EditorActor::AAJH_EditorActor()
@@ -9,6 +11,13 @@ AAJH_EditorActor::AAJH_EditorActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
+	SetRootComponent(MeshComp);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMeshComp(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
+	if ( tempMeshComp.Succeeded() )
+	{
+		MeshComp->SetStaticMesh(tempMeshComp.Object);
+	}
 
 }
 
@@ -18,6 +27,9 @@ void AAJH_EditorActor::BeginPlay()
 	Super::BeginPlay();
 	
 	pc = GetWorld()->GetFirstPlayerController();
+	MeshPath = TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'");
+	LoadeMesh = LoadObject<UStaticMesh>(nullptr, MeshPath);
+	MeshComp->SetStaticMesh(LoadeMesh);
 
 }
 
@@ -59,5 +71,36 @@ void AAJH_EditorActor::Tick(float DeltaTime)
 		}
 	}
 
+}
+
+void AAJH_EditorActor::OnMyMeshPath(int32 Itemnumber)
+{
+	if ( Itemnumber == 0 )
+	{
+		MeshPath = TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'");
+		LoadeMesh = LoadObject<UStaticMesh>(nullptr, MeshPath);
+		if (LoadeMesh)
+		{
+			MeshComp->SetStaticMesh(LoadeMesh);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to load static mesh."));
+		}
+
+		if ( !MeshComp )
+		{
+			UE_LOG(LogTemp, Error, TEXT("MeshComp is nullptr when setting mesh."));
+		}
+	}
+	else if ( Itemnumber == 1 )
+	{
+		MeshPath = TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cone.Cone'");
+		LoadeMesh = LoadObject<UStaticMesh>(nullptr, MeshPath);
+		if ( LoadeMesh )
+		{
+			MeshComp->SetStaticMesh(LoadeMesh);
+		}
+	}
 }
 
