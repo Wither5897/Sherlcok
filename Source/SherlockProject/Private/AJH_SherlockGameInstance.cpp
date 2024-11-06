@@ -14,6 +14,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "Jin/AJH_UserNameWidgetComponent.h"
+#include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "SK/MapSaveGame.h"
 
@@ -246,17 +247,17 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 }
 
 void UAJH_SherlockGameInstance::SaveLevel(){
+	UE_LOG(LogTemp, Warning, TEXT("Save Level"));
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
+
 	if(!SaveGameInstance){
-		UE_LOG(LogTemp, Warning, TEXT("Failed to Create SaveGameInstance"));
 		return;
 	}
 
-	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
-		AActor* Actor = *ActorItr;
+	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
+		AAJH_WorldActor* Actor = *ActorItr;
 
 		FActorSaveData ActorData;
-		ActorData.ActorName = FName(FString::Printf(TEXT("%s_2"), *Actor->GetName()));
 		ActorData.Location = Actor->GetActorLocation();
 		ActorData.Rotation = Actor->GetActorRotation();
 		ActorData.Scale = Actor->GetActorScale3D();
@@ -264,29 +265,24 @@ void UAJH_SherlockGameInstance::SaveLevel(){
 
 		SaveGameInstance->SavedActors.Add(ActorData);
 	}
-
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0);
 }
 
 void UAJH_SherlockGameInstance::LoadLevel(){
-	UMapSaveGame* LoadGameInsatace = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
-	if(!LoadGameInsatace){
-		UE_LOG(LogTemp, Warning, TEXT("Failed to Load Level"));
+	UE_LOG(LogTemp, Warning, TEXT("Load Level"));
+	UMapSaveGame* LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
+
+	if (!LoadGameInstance){
 		return;
 	}
 
-	// for(TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
-	// 	AActor* Actor = *ActorItr;
-	// 	Actor->Destroy();
-	// }
-
-	for(const FActorSaveData& ActorData : LoadGameInsatace->SavedActors){
+	for (const FActorSaveData& ActorData : LoadGameInstance->SavedActors){
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.Name = MakeUniqueObjectName(GetWorld(), ActorData.ActorClass, ActorData.ActorName);
-		AActor* NewActor = GetWorld()->SpawnActor<AActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
-		if(NewActor){
-			NewActor->SetActorScale3D(ActorData.Scale);
+		AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+		if (!NewActor){
+			return;
 		}
+		NewActor->SetActorScale3D(ActorData.Scale);
 	}
 }
 

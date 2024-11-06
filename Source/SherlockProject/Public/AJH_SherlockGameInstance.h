@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "SK/MapSaveGame.h"
 #include "AJH_SherlockGameInstance.generated.h"
 
 /**
  * 
  */
+
 UCLASS()
 class SHERLOCKPROJECT_API UAJH_SherlockGameInstance : public UGameInstance
 {
@@ -53,6 +55,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel();
+	
+	TMap<int32, TArray<FActorSaveData>> DataList;
 	
 private:
 	FName mySessionName = FName("first Session");
