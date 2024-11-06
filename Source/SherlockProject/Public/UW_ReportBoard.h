@@ -100,4 +100,11 @@ public:
 	UFUNCTION()
 	void HideNotifyWidget();
 
+public:
+
+	bool bHandReport = false;
+	bool bAutopsyReport = false;
+	bool bExpertReport = false;
+	bool bWitnessReport = false;
+
 };
