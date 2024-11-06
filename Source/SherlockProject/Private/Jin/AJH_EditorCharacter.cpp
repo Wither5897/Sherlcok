@@ -111,18 +111,18 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 
 void AAJH_EditorCharacter::OnMyIA_RightClick()
 {
-	//pc->SetShowMouseCursor(true);
-	//pc->SetInputMode(FInputModeGameOnly());
+	
 }
 
-void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
+void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn, int32 num)
 {
 	// 새로운 액터 스폰
-	if ( bIsSpawn )
+	if ( bIsSpawn)
 	{
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
 		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+		EditorActor->OnMyMeshPath(num);
 		EditorActor->bIsSpawn = true;
 		bIsActorSpawn = true;
 		bIsEditorActor = true;
