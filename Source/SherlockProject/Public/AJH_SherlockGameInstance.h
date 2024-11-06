@@ -47,6 +47,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	TArray<FName> AllSessionNames;
 	void OnDestroyAllSessions();
+
+	UFUNCTION(BlueprintCallable)
+	void SaveLevel();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadLevel();
+	
 private:
 	FName mySessionName = FName("first Session");
 	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 
