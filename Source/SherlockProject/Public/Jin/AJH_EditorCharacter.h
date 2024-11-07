@@ -74,6 +74,16 @@ public:
 	ETraceTypeQuery query;
 	FHitResult outHit;
 
+	float MovementScaleFactor = 10.0f;
+	UPROPERTY()
+	float DistanceMultiplier = 100.0f;
+	FVector2D initialMousePosition;
+
+	FVector initialWorldLocation;
+	FVector actorInitialLocation;
+
+	void OnMouseUpdateActorLocation();
+
 	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
 	void OnMyLineTrace();
 
