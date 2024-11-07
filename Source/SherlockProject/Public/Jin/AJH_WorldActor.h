@@ -23,7 +23,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* MeshComp;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* X_Axis;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Y_Axis;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Z_Axis;
+
+
+	UFUNCTION()
+	void ResetVisibility();
+
 	UPROPERTY()
 	bool bIsWorldSpawn = false;
-
+	bool bIsAxisLocation = false;
 };

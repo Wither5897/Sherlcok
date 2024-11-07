@@ -9,12 +9,16 @@
 #include "Kismet/GameplayStatics.h"
 #include "Jin/AJH_EditorActor.h"
 #include "Jin/AJH_WorldActor.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	cameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
+	cameraComp->SetupAttachment(RootComponent);
 
 }
 
@@ -43,7 +47,7 @@ void AAJH_EditorCharacter::BeginPlay()
 	}
 
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
-	WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
+	//WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
 }
 
 // Called every frame
@@ -71,6 +75,8 @@ void AAJH_EditorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		input->BindAction(IA_EditorMove, ETriggerEvent::Triggered, this, &AAJH_EditorCharacter::OnMyIA_EditorMove);
 		input->BindAction(IA_LeftClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_LeftClick);
 		input->BindAction(IA_RightClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_RightClick);
+		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick);
+		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Completed, this, &AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick);
 	}
 
 }
@@ -102,6 +108,7 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 		EditorActor->bIsSpawn = false;
 		EditorActor->Destroy();
 		bIsEditorActor = false;
+		bIsActorSpawn = false;
 	}
 	else
 	{
@@ -112,6 +119,86 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 void AAJH_EditorCharacter::OnMyIA_RightClick()
 {
 	
+}
+
+void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
+{
+	if ( bIsEditorActor )
+	{
+		return;
+	}
+
+	OnMyLineTrace();
+	 // 현재 LineTrace로 맞은 WorldActor
+	if ( outHit.GetActor() != nullptr && outHit.GetActor()->ActorHasTag(TEXT("Actor")) )
+	{
+		CurrentWorldActor = Cast<AAJH_WorldActor>(outHit.GetActor());
+	}
+
+	// 이전 WorldActor의 축 가시성을 초기화
+	if ( LastInteractedWorldActor != nullptr && LastInteractedWorldActor != CurrentWorldActor )
+	{
+		LastInteractedWorldActor->ResetVisibility();
+		LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("0000"));
+	}
+
+	// 현재 WorldActor의 축 가시성을 활성화
+	if ( CurrentWorldActor )
+	{
+		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+		CurrentWorldActor->X_Axis->SetVisibility(true);
+		CurrentWorldActor->Y_Axis->SetVisibility(true);
+		CurrentWorldActor->Z_Axis->SetVisibility(true);
+	}
+
+	if ( outHit.GetComponent() != nullptr && outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) )
+	{
+		CurrentWorldActor->bIsAxisLocation = true;
+		if ( CurrentWorldActor->bIsAxisLocation )
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("1111"), CurrentWorldActor->bIsAxisLocation);
+		}
+	}
+	else if ( outHit.GetComponent() != nullptr && outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
+	{
+		CurrentWorldActor->bIsAxisLocation = true;
+		if ( CurrentWorldActor->bIsAxisLocation )
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("2222"), CurrentWorldActor->bIsAxisLocation);
+		}
+	}
+	else if ( outHit.GetComponent() != nullptr && outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
+	{
+		CurrentWorldActor->bIsAxisLocation = true;
+		if ( CurrentWorldActor->bIsAxisLocation )
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("3333"), CurrentWorldActor->bIsAxisLocation);
+		}
+	}
+	else
+	{
+		// 허공을 클릭했을 때 모든 WorldActor의 축 가시성을 초기화
+		if ( LastInteractedWorldActor )
+		{
+			LastInteractedWorldActor->ResetVisibility();
+			LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+			LastInteractedWorldActor = nullptr;  // 초기화
+		}
+	}
+
+	// 마지막으로 상호작용한 WorldActor 업데이트
+	LastInteractedWorldActor = CurrentWorldActor;
+
+}
+
+void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
+{
+	if ( outHit.GetComponent() != nullptr && CurrentWorldActor != nullptr )
+	{
+		CurrentWorldActor->bIsAxisLocation = false;
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("4444"), CurrentWorldActor->bIsAxisLocation);
+	}
 }
 
 void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn, int32 num)
@@ -131,6 +218,30 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn, int32 num)
 	{
 		bIsEditorActor = false;
 		EditorActor->Destroy();
+	}
+}
+
+void AAJH_EditorCharacter::OnMyLineTrace()
+{
+	FVector WorldLocation, WorldDirection, Start, End;
+	if ( pc->DeprojectMousePositionToWorld(WorldLocation, WorldDirection) )
+	{
+		Start = WorldLocation;
+		End = WorldLocation + ( WorldDirection * 5000.0f );
+
+		FCollisionQueryParams param;
+		param.AddIgnoredActor(this);
+		bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, Start, End, ECC_Visibility, param);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
+		if ( bHit && outHit.GetActor() )
+		{
+			FString objectName = outHit.GetActor()->GetName();
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, objectName);
+		}
+		else
+		{
+			return;
+		}
 	}
 }
 
