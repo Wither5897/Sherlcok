@@ -18,6 +18,7 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Main_Btn_Character->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Character);
 	Main_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 	Btn_Character_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_1);
+	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Character()
@@ -78,4 +79,8 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 	{
 		me->OnMyEditorActorSpawn(false, 1);
 	}
+}
+
+void UAJH_EditorToolWidget::LevelSaveButtonClicked(){
+	
 }

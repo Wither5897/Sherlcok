@@ -51,12 +51,10 @@ public:
 	void OnDestroyAllSessions();
 
 	UFUNCTION(BlueprintCallable)
-	void SaveLevel();
+	void SaveLevel(FString LevelName);
 
 	UFUNCTION(BlueprintCallable)
-	void LoadLevel();
-	
-	TMap<int32, TArray<FActorSaveData>> DataList;
+	void LoadLevel(FString LevelName);
 	
 private:
 	FName mySessionName = FName("first Session");

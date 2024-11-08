@@ -39,4 +39,6 @@ class SHERLOCKPROJECT_API UMapSaveGame : public USaveGame
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TArray<FActorSaveData> SavedActors;
+
+	TMap<FString, TArray<FActorSaveData>> DataList;
 };

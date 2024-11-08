@@ -3,6 +3,7 @@
 
 #include "AJH_SherlockGameInstance.h"
 
+#include "EditorDirectories.h"
 #include "EngineUtils.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
@@ -246,7 +247,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(){
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName){
 	UE_LOG(LogTemp, Warning, TEXT("Save Level"));
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
 
@@ -265,10 +266,11 @@ void UAJH_SherlockGameInstance::SaveLevel(){
 
 		SaveGameInstance->SavedActors.Add(ActorData);
 	}
+	SaveGameInstance->DataList.Add(LevelName, SaveGameInstance->SavedActors);
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0);
 }
 
-void UAJH_SherlockGameInstance::LoadLevel(){
+void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
 	UE_LOG(LogTemp, Warning, TEXT("Load Level"));
 	UMapSaveGame* LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
@@ -276,7 +278,7 @@ void UAJH_SherlockGameInstance::LoadLevel(){
 		return;
 	}
 
-	for (const FActorSaveData& ActorData : LoadGameInstance->SavedActors){
+	for (const FActorSaveData& ActorData : LoadGameInstance->DataList[LevelName]){
 		FActorSpawnParameters SpawnParams;
 		AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
 		if (!NewActor){
