@@ -81,6 +81,11 @@ public:
 
 	FVector initialWorldLocation;
 	FVector actorInitialLocation;
+	FRotator actorInitialRotation;
+	FVector worldLocation;
+	FVector worldDirection;
+	FVector deltaLocation;
+	FVector newLocation;
 
 	void OnMouseUpdateActorLocation();
 
