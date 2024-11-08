@@ -54,6 +54,7 @@ void AAJH_EditorCharacter::BeginPlay()
 
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	//WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
+	IA_changeNum = 1;
 }
 
 // Called every frame
@@ -205,22 +206,36 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	if ( outHit.GetActor() != nullptr && outHit.GetActor()->ActorHasTag(TEXT("Actor")) )
 	{
 		CurrentWorldActor = Cast<AAJH_WorldActor>(outHit.GetActor());
+		if ( IA_changeNum == 1 )
+		{
+			CurrentWorldActor->LocationVisibility();
+		}
+		else if ( IA_changeNum == 2 )
+		{
+			CurrentWorldActor->RotationVisivility();
+		}
+		else if ( IA_changeNum == 3 )
+		{
+
+		}
 		actorInitialLocation = CurrentWorldActor->GetActorLocation();
 		actorInitialRotation = CurrentWorldActor->GetActorRotation();
 	}
 	else
 	{
 		// 허공을 클릭했거나 WorldActor가 아닌 액터를 클릭한 경우
-		CurrentWorldActor->bIsVisibleLocation = false;
-		CurrentWorldActor->bIsVisibleRotation = false;
-		CurrentWorldActor = nullptr;
+		if ( CurrentWorldActor )
+		{
+			CurrentWorldActor->bIsVisibleRotation = false;
+			CurrentWorldActor->bIsVisibleLocation = false;
+			CurrentWorldActor = nullptr;
+		}
 	}
 
 	// 이전 WorldActor의 축 가시성을 초기화
-	if ( LastInteractedWorldActor && ( CurrentWorldActor == nullptr || LastInteractedWorldActor != CurrentWorldActor ) )
+	if ( LastInteractedWorldActor )
 	{
-		LastInteractedWorldActor->LocationVisibility();
-		LastInteractedWorldActor->RotationVisivility();
+		LastInteractedWorldActor->GizmoVisibility(); // 모든 축을 비활성화
 		LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 		LastInteractedWorldActor = nullptr; // 초기화
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("0000"));
@@ -247,25 +262,21 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
 			GetCharacterMovement()->MaxFlySpeed = 0;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("X_Axis"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
 			GetCharacterMovement()->MaxFlySpeed = 0;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Y_Axis"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
 			GetCharacterMovement()->MaxFlySpeed = 0;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Z_Axis"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
 			GetCharacterMovement()->MaxFlySpeed = 0;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("XYZ_Axis"));
 		}
 	}
 
@@ -306,6 +317,7 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 {
 	if ( CurrentWorldActor )
 	{
+		IA_changeNum = 1;
 		CurrentWorldActor->LocationVisibility();
 		CurrentWorldActor->bIsVisibleLocation = true;
 		CurrentWorldActor->bIsVisibleRotation = false;
@@ -314,15 +326,18 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 
 void AAJH_EditorCharacter::OnMyIA_changeRotation()
 {
-	if( CurrentWorldActor )
-	CurrentWorldActor->RotationVisivility();
-	CurrentWorldActor->bIsVisibleLocation = false;
-	CurrentWorldActor->bIsVisibleRotation = true;
+	if ( CurrentWorldActor )
+	{
+		IA_changeNum = 2;
+		CurrentWorldActor->RotationVisivility();
+		CurrentWorldActor->bIsVisibleLocation = false;
+		CurrentWorldActor->bIsVisibleRotation = true;
+	}
 }
 
 void AAJH_EditorCharacter::OnMyIA_changeScale()
 {
-
+	IA_changeNum = 3;
 }
 
 void AAJH_EditorCharacter::OnMouseUpdateActorLocation()
