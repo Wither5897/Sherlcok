@@ -54,4 +54,6 @@ public:
 	bool bIsWorldSpawn = false;
 	bool bIsAxisLocation;
 	bool bIsAxisRotation;
+	bool bIsVisibleLocation;
+	bool bIsVisibleRotation;
 };
