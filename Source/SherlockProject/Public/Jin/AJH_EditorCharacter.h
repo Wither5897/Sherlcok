@@ -28,6 +28,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditDefaultsOnly)
+	class UCameraComponent* cameraComp;
+
+	UPROPERTY(EditDefaultsOnly)
 	class UInputMappingContext* IMC_EditorTool;
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_LookMouse;
@@ -37,11 +40,15 @@ public:
 	class UInputAction* IA_LeftClick;
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_RightClick;
+	UPROPERTY(EditDefaultsOnly)
+	class UInputAction* IA_LineTraceLeftClick;
 
 	void OnMyIA_LookMouse(const FInputActionValue& value);
 	void OnMyIA_EditorMove(const FInputActionValue& value);
 	void OnMyIA_LeftClick();
 	void OnMyIA_RightClick();
+	void OnMyIA_StartLineTraceLeftClick();
+	void OnMyIA_EndLineTraceLeftClick();
 
 	UPROPERTY()
 	class APlayerController* pc;
@@ -62,9 +69,22 @@ public:
 	TSubclassOf<class AActor> WorldActorFactory;
 	UPROPERTY()
 	class AAJH_WorldActor* WorldActor;
+	AAJH_WorldActor* CurrentWorldActor = nullptr;
+	AAJH_WorldActor* LastInteractedWorldActor = nullptr;
 	ETraceTypeQuery query;
 	FHitResult outHit;
 
+	float MovementScaleFactor = 10.0f;
+	UPROPERTY()
+	float DistanceMultiplier = 100.0f;
+	FVector2D initialMousePosition;
+
+	FVector initialWorldLocation;
+	FVector actorInitialLocation;
+
+	void OnMouseUpdateActorLocation();
+
 	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
+	void OnMyLineTrace();
 
 };
