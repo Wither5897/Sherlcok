@@ -74,7 +74,6 @@ void AAJH_WorldActor::LocationVisibility()
 	Y_Axis->SetVisibility(true);
 	Z_Axis->SetVisibility(true);
 	XYZ_Axis->SetVisibility(true);
-	
 
 	// Rotation 축 비활성화
 	X_Rot->SetVisibility(false);

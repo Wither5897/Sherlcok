@@ -62,6 +62,8 @@ public:
 	UPROPERTY()
 	class APlayerController* pc;
 
+	int32 IA_changeNum;
+
 	FVector direction;
 	bool bIsActorSpawn = false;
 	bool bIsEditorActor = false;
