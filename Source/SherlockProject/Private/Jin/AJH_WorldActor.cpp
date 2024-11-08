@@ -40,9 +40,9 @@ void AAJH_WorldActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bIsAxisLocation = true;
-	bIsAxisRotation = false;
 	GizmoVisibility();
+	bIsVisibleLocation = false;
+	bIsVisibleRotation = false;
 
 }
 
@@ -66,23 +66,29 @@ void AAJH_WorldActor::GizmoVisibility()
 
 void AAJH_WorldActor::LocationVisibility()
 {
+	//bIsAxisLocation = true;
+	//bIsAxisRotation = false;
+
 	// Location 축 활성화
 	X_Axis->SetVisibility(true);
 	Y_Axis->SetVisibility(true);
 	Z_Axis->SetVisibility(true);
 	XYZ_Axis->SetVisibility(true);
+	
 
 	// Rotation 축 비활성화
 	X_Rot->SetVisibility(false);
 	Y_Rot->SetVisibility(false);
 	Z_Rot->SetVisibility(false);
 
-	bIsAxisLocation = true;
-	bIsAxisRotation = false;
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("LocationVisibility called"));
 }
 
 void AAJH_WorldActor::RotationVisivility()
 {
+	//bIsAxisLocation = false;
+	//bIsAxisRotation = true;
+
 	// Rotation 축 활성화
 	X_Rot->SetVisibility(true);
 	Y_Rot->SetVisibility(true);
@@ -94,7 +100,7 @@ void AAJH_WorldActor::RotationVisivility()
 	Z_Axis->SetVisibility(false);
 	XYZ_Axis->SetVisibility(false);
 
-	bIsAxisLocation = false;
-	bIsAxisRotation = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("RotationVisivility called"));
+
 }
 

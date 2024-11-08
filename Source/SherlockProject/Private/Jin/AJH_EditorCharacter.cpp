@@ -124,6 +124,9 @@ void AAJH_EditorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		input->BindAction(IA_RightClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_RightClick);
 		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick);
 		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Completed, this, &AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick);
+		input->BindAction(IA_changeLocation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeLocation);
+		input->BindAction(IA_changeRotation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeRotation);
+		input->BindAction(IA_changeScale, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeScale);
 	}
 
 }
@@ -208,6 +211,8 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	else
 	{
 		// 허공을 클릭했거나 WorldActor가 아닌 액터를 클릭한 경우
+		CurrentWorldActor->bIsVisibleLocation = false;
+		CurrentWorldActor->bIsVisibleRotation = false;
 		CurrentWorldActor = nullptr;
 	}
 
@@ -221,22 +226,6 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("0000"));
 	}
 
-	// 현재 WorldActor의 축 가시성을 활성화 (CurrentWorldActor가 nullptr 이 아닐 때만)
-	/*if ( CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
-	{
-		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
-		CurrentWorldActor->X_Axis->SetVisibility(true);
-		CurrentWorldActor->Y_Axis->SetVisibility(true);
-		CurrentWorldActor->Z_Axis->SetVisibility(true);
-		CurrentWorldActor->XYZ_Axis->SetVisibility(true);
-	}
-	else if ( CurrentWorldActor && CurrentWorldActor->bIsAxisRotation )
-	{
-		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
-		CurrentWorldActor->X_Rot->SetVisibility(true);
-		CurrentWorldActor->Y_Rot->SetVisibility(true);
-		CurrentWorldActor->Z_Rot->SetVisibility(true);
-	}*/
 	if ( CurrentWorldActor )
 	{
 		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
@@ -245,25 +234,10 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		{
 			CurrentWorldActor->LocationVisibility();
 		}
-		/*if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) ||
-			outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) ||
-			outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) ||
-			outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
-		{
-			CurrentWorldActor->LocationVisibility();
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Axis Location Visibility Activated"));
-		}*/
 		else if ( CurrentWorldActor->bIsAxisRotation )
 		{
 			CurrentWorldActor->RotationVisivility();
 		}
-		/*else if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Rot")) ||
-				 outHit.GetComponent()->ComponentHasTag(TEXT("Y_Rot")) ||
-				 outHit.GetComponent()->ComponentHasTag(TEXT("Z_Rot")) )
-		{
-			CurrentWorldActor->RotationVisivility();
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Axis Rotation Visibility Activated"));
-		}*/
 	}
 
 	// 축 가시성 및 상태 설정 (CurrentWorldActor가 nullptr이 아닐 때만)
@@ -298,6 +272,23 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	// 마지막으로 상호작용한 WorldActor 업데이트
 	LastInteractedWorldActor = CurrentWorldActor;
 
+	// 현재 WorldActor의 축 가시성을 활성화 (CurrentWorldActor가 nullptr 이 아닐 때만)
+	/*if ( CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
+	{
+		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+		CurrentWorldActor->X_Axis->SetVisibility(true);
+		CurrentWorldActor->Y_Axis->SetVisibility(true);
+		CurrentWorldActor->Z_Axis->SetVisibility(true);
+		CurrentWorldActor->XYZ_Axis->SetVisibility(true);
+	}
+	else if ( CurrentWorldActor && CurrentWorldActor->bIsAxisRotation )
+	{
+		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+		CurrentWorldActor->X_Rot->SetVisibility(true);
+		CurrentWorldActor->Y_Rot->SetVisibility(true);
+		CurrentWorldActor->Z_Rot->SetVisibility(true);
+	}*/
+
 }
 
 void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
@@ -306,9 +297,32 @@ void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 	{
 		CurrentWorldActor->bIsAxisLocation = false;
 		CurrentWorldActor->bIsAxisRotation = false;
-		GetCharacterMovement()->MaxFlySpeed = 1000;
+		GetCharacterMovement()->MaxFlySpeed = 1800;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("4444"), CurrentWorldActor->bIsAxisLocation);
 	}
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeLocation()
+{
+	if ( CurrentWorldActor )
+	{
+		CurrentWorldActor->LocationVisibility();
+		CurrentWorldActor->bIsVisibleLocation = true;
+		CurrentWorldActor->bIsVisibleRotation = false;
+	}
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeRotation()
+{
+	if( CurrentWorldActor )
+	CurrentWorldActor->RotationVisivility();
+	CurrentWorldActor->bIsVisibleLocation = false;
+	CurrentWorldActor->bIsVisibleRotation = true;
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeScale()
+{
+
 }
 
 void AAJH_EditorCharacter::OnMouseUpdateActorLocation()
