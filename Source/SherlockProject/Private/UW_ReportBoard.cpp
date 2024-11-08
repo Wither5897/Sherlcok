@@ -12,6 +12,8 @@
 #include "WorldPartition/DataLayer/DataLayerInstance.h"
 
 
+
+
 void UUW_ReportBoard::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -170,5 +172,6 @@ void UUW_ReportBoard::HideNotifyWidget()
 		me->Notify->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+
 
 
