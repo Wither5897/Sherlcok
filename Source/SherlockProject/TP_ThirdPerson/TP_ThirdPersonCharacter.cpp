@@ -323,13 +323,8 @@ void ATP_ThirdPersonCharacter::Interaction()
 		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
 			int32 playerId = ps->GetPlayerId();
-
-			if(HasAuthority()){
-				ServerItemFound(actorNum, playerId);
-			}
-			else{
-				MulticastItemFound(actorNum, playerId);
-			}
+			
+			ServerItemFound(actorNum, playerId);
 			
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
@@ -354,8 +349,8 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 	auto* gs = GetWorld()->GetGameState();
 	TArray<APlayerState*> PlayerArray = gs->PlayerArray;
 
-	for (APlayerState* Player : PlayerArray){
-		if(auto* Character = Cast<ATP_ThirdPersonCharacter>(Player)){
+	for (APlayerState* ps2 : PlayerArray){
+		if(ATP_ThirdPersonCharacter* Character = Cast<ATP_ThirdPersonCharacter>(ps2->GetPawn())){
 			if(Character->InventoryUI && Character->InventoryUI->ItemArray.IsValidIndex(ActorNum - 1)){
 				switch (PlayerID){
 				case 0:
@@ -378,6 +373,7 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID)
 {
 	MulticastItemFound(ActorNum, PlayerID);
+	ItemFound(ActorNum, PlayerID);
 }
 
 void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID)

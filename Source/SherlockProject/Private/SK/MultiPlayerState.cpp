@@ -2,4 +2,22 @@
 
 
 #include "SK/MultiPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
+AMultiPlayerState::AMultiPlayerState()
+{
+	// 레플리케이션 활성화
+	bReplicates = true;
+}
+
+void AMultiPlayerState::SetPlayerId(int32 newPlayerID){
+	if(HasAuthority()){
+		PlayerIDNum = newPlayerID;
+	}
+}
+
+void AMultiPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMultiPlayerState, PlayerIDNum);
+}

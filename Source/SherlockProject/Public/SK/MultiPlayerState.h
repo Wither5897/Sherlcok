@@ -15,10 +15,14 @@ class SHERLOCKPROJECT_API AMultiPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
-	void SetPlayerId(int32 newPlayerId) { PlayerID = newPlayerId; }
-	int32 GetPlayerId() const { return PlayerID; }
-
-private:
-	int32 PlayerID;
+	AMultiPlayerState();
 	
+	void SetPlayerId(int32 newPlayerID);
+	int32 GetPlayerId() const { return PlayerIDNum; }
+
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	
+private:
+	UPROPERTY(Replicated)
+	int32 PlayerIDNum;
 };
