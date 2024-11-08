@@ -50,11 +50,18 @@ public:
 	TArray<FName> AllSessionNames;
 	void OnDestroyAllSessions();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	UMapSaveGame* LoadGameInstance;
+	
 	UFUNCTION(BlueprintCallable)
 	void SaveLevel(FString LevelName);
 
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel(FString LevelName);
+
+	bool bShouldLoadLevel = false;
+
+	FString LoadLevelName;
 	
 private:
 	FName mySessionName = FName("first Session");

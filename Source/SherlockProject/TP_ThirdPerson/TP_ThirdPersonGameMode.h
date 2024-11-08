@@ -14,6 +14,8 @@ class ATP_ThirdPersonGameMode : public AGameModeBase
 public:
 	ATP_ThirdPersonGameMode();
 
+	virtual void BeginPlay() override;
+
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	
 	int32 NumPlayers = 0;

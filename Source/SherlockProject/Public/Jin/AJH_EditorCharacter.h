@@ -69,6 +69,10 @@ public:
 	TSubclassOf<class AActor> WorldActorFactory;
 	UPROPERTY()
 	class AAJH_WorldActor* WorldActor;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> SaveLevelWidgetFactory;
+	UPROPERTY()
+	class USaveLevelUI* SaveLevelWidget;
 	AAJH_WorldActor* CurrentWorldActor = nullptr;
 	AAJH_WorldActor* LastInteractedWorldActor = nullptr;
 	ETraceTypeQuery query;

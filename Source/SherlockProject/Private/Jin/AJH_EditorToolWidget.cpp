@@ -7,6 +7,7 @@
 #include "Jin/AJH_EditorActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "Jin/AJH_EditorCharacter.h"
+#include "SK/SaveLevelUI.h"
 
 void UAJH_EditorToolWidget::NativeConstruct()
 {
@@ -82,5 +83,5 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 }
 
 void UAJH_EditorToolWidget::LevelSaveButtonClicked(){
-	
+	me->SaveLevelWidget->SetVisibility(ESlateVisibility::Visible);
 }

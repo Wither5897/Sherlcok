@@ -10,6 +10,7 @@
 #include "Jin/AJH_EditorActor.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Camera/CameraComponent.h"
+#include "SK/SaveLevelUI.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -44,6 +45,11 @@ void AAJH_EditorCharacter::BeginPlay()
 	if ( EditorWidget )
 	{
 		EditorWidget->AddToViewport();
+	}
+
+	SaveLevelWidget = Cast<USaveLevelUI>(CreateWidget(GetWorld(), SaveLevelWidgetFactory));
+	if(SaveLevelWidget){
+		SaveLevelWidget->AddToViewport();
 	}
 
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));

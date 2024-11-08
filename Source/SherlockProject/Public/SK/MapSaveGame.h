@@ -31,6 +31,18 @@ struct FActorSaveData{
 	TSubclassOf<AActor> ActorClass;
 };
 
+USTRUCT(BlueprintType)
+struct FLevelSaveData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	FString LevelName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	TArray<FActorSaveData> SavedActors;
+};
+
 UCLASS()
 class SHERLOCKPROJECT_API UMapSaveGame : public USaveGame
 {
@@ -40,5 +52,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TArray<FActorSaveData> SavedActors;
 
-	TMap<FString, TArray<FActorSaveData>> DataList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	TArray<FLevelSaveData> DataList;
 };
