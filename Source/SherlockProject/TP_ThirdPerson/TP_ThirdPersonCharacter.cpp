@@ -32,6 +32,7 @@
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
 #include "Editor/GroupActor.h"
+#include "GameFramework/GameStateBase.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
@@ -350,18 +351,27 @@ void ATP_ThirdPersonCharacter::Interaction()
 void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 	InventoryUI->ItemArray[ActorNum - 1]->QuestionMark->SetVisibility(ESlateVisibility::Hidden);
 
-	switch (PlayerID){
-	case 0:
-		InventoryUI->ItemArray[ActorNum - 1]->Player1Light->SetVisibility(ESlateVisibility::Visible);
-		break;
-	case 1:
-		InventoryUI->ItemArray[ActorNum - 1]->Player2Light->SetVisibility(ESlateVisibility::Visible);
-		break;
-	case 2:
-		InventoryUI->ItemArray[ActorNum - 1]->Player3Light->SetVisibility(ESlateVisibility::Visible);
-		break;
-	default:
-		break;
+	auto* gs = GetWorld()->GetGameState();
+	TArray<APlayerState*> PlayerArray = gs->PlayerArray;
+
+	for (APlayerState* Player : PlayerArray){
+		if(auto* Character = Cast<ATP_ThirdPersonCharacter>(Player)){
+			if(Character->InventoryUI && Character->InventoryUI->ItemArray.IsValidIndex(ActorNum - 1)){
+				switch (PlayerID){
+				case 0:
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player1Light->SetVisibility(ESlateVisibility::Visible);
+					break;
+				case 1:
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player2Light->SetVisibility(ESlateVisibility::Visible);
+					break;
+				case 2:
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player3Light->SetVisibility(ESlateVisibility::Visible);
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 }
 
