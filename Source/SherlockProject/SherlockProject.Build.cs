@@ -11,5 +11,6 @@ public class SherlockProject : ModuleRules
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput", "OnlineSubsystem", "OnlineSubsystemSteam", "Networking", "UMG", "InterchangeCore", "Json", "JsonUtilities" });
         
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
     }
 }
