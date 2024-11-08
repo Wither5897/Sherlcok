@@ -2,6 +2,9 @@
 
 
 #include "AJH_SherlockGameInstance.h"
+
+#include "EditorDirectories.h"
+#include "EngineUtils.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 #include "SherlockProject.h"
@@ -12,6 +15,9 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "Jin/AJH_UserNameWidgetComponent.h"
+#include "Jin/AJH_WorldActor.h"
+#include "Kismet/GameplayStatics.h"
+#include "SK/MapSaveGame.h"
 
 void UAJH_SherlockGameInstance::Init()
 {
@@ -238,6 +244,70 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	for (const FName& SessionName : AllSessionNames)
 	{
 		sessionInterface->DestroySession(SessionName);
+	}
+}
+
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName){
+	UE_LOG(LogTemp, Warning, TEXT("Save Level"));
+	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
+
+	if(!SaveGameInstance){
+		SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
+		if(!SaveGameInstance){
+			return;
+		}
+	}
+	
+	FLevelSaveData* ExistingLevelData = SaveGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
+		return Data.LevelName == LevelName;
+	});
+
+	if(!ExistingLevelData){
+		FLevelSaveData NewLevelData;
+		NewLevelData.LevelName = LevelName;
+		SaveGameInstance->DataList.Add(NewLevelData);
+		ExistingLevelData = &SaveGameInstance->DataList.Last();
+	}
+	else{
+		ExistingLevelData->SavedActors.Empty();
+	}
+	
+	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
+		AAJH_WorldActor* Actor = *ActorItr;
+
+		FActorSaveData ActorData;
+		ActorData.Location = Actor->GetActorLocation();
+		ActorData.Rotation = Actor->GetActorRotation();
+		ActorData.Scale = Actor->GetActorScale3D();
+		ActorData.ActorClass = Actor->GetClass();
+
+		ExistingLevelData->SavedActors.Add(ActorData);
+	}
+	
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0);
+}
+
+void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
+	UE_LOG(LogTemp, Warning, TEXT("Load Level"));
+	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
+
+	if (!LoadGameInstance){
+		return;
+	}
+
+	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
+		return Data.LevelName == LevelName;
+	});
+
+	if(LevelData){
+		for (const FActorSaveData& ActorData : LevelData->SavedActors){
+			FActorSpawnParameters SpawnParams;
+			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+			if (!NewActor){
+				return;
+			}
+			NewActor->SetActorScale3D(ActorData.Scale);
+		}
 	}
 }
 

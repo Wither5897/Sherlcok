@@ -62,5 +62,9 @@ public:
 	UPROPERTY()
 	TArray<int32> ActorHistory;
 
-	
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	UButton* LevelSaveButton;
+
+	UFUNCTION()
+	void LevelSaveButtonClicked();
 };

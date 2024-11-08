@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "SK/MapSaveGame.h"
 #include "AJH_SherlockGameInstance.generated.h"
 
 /**
  * 
  */
+
 UCLASS()
 class SHERLOCKPROJECT_API UAJH_SherlockGameInstance : public UGameInstance
 {
@@ -47,6 +49,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	TArray<FName> AllSessionNames;
 	void OnDestroyAllSessions();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	UMapSaveGame* LoadGameInstance;
+	
+	UFUNCTION(BlueprintCallable)
+	void SaveLevel(FString LevelName);
+
+	UFUNCTION(BlueprintCallable)
+	void LoadLevel(FString LevelName);
+
+	bool bShouldLoadLevel = false;
+
+	FString LoadLevelName;
+	
 private:
 	FName mySessionName = FName("first Session");
 	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 
