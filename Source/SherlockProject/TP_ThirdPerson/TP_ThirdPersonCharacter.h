@@ -160,7 +160,10 @@ public:
 
 	void Interaction();
 
-	UFUNCTION(server, Reliable)
+	UFUNCTION()
+	void ItemFound(int32 ActorNum, int32 PlayerID);
+	
+	UFUNCTION(Server, Reliable)
 	void ServerItemFound(int32 ActorNum, int32 PlayerID);
 	
 	UFUNCTION(NetMulticast, Reliable)
@@ -200,6 +203,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class ABoard* Board;
 
-
+	
 };
 

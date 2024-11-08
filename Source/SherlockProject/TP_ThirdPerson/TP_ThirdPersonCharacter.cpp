@@ -31,6 +31,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
+#include "Editor/GroupActor.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
@@ -321,7 +322,13 @@ void ATP_ThirdPersonCharacter::Interaction()
 		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
 			int32 playerId = ps->GetPlayerId();
-			ServerItemFound(actorNum, playerId);
+
+			if(HasAuthority()){
+				ServerItemFound(actorNum, playerId);
+			}
+			else{
+				MulticastItemFound(actorNum, playerId);
+			}
 			
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
@@ -340,6 +347,24 @@ void ATP_ThirdPersonCharacter::Interaction()
 	}
 }
 
+void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
+	InventoryUI->ItemArray[ActorNum - 1]->QuestionMark->SetVisibility(ESlateVisibility::Hidden);
+
+	switch (PlayerID){
+	case 0:
+		InventoryUI->ItemArray[ActorNum - 1]->Player1Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	case 1:
+		InventoryUI->ItemArray[ActorNum - 1]->Player2Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	case 2:
+		InventoryUI->ItemArray[ActorNum - 1]->Player3Light->SetVisibility(ESlateVisibility::Visible);
+		break;
+	default:
+		break;
+	}
+}
+
 void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID)
 {
 	MulticastItemFound(ActorNum, PlayerID);
@@ -353,11 +378,7 @@ void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum,
 			InventoryUI->ItemArray[ActorNum - 1]->VisibleBoard();
 		}
 	}
-
-	if ( InventoryUI && InventoryUI->ItemArray.IsValidIndex(( ActorNum - 1 )) ) {
-		InventoryUI->ItemArray[ActorNum - 1]->WhenFindItem(PlayerID);
-		InventoryUI->NoteItemArray[ActorNum - 1]->WhenFindItem();
-	}
+	ItemFound(ActorNum, PlayerID);
 }
 
 void ATP_ThirdPersonCharacter::PerformLineTrace()

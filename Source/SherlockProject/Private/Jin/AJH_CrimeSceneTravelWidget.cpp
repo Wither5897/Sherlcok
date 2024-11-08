@@ -181,11 +181,11 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 
 void UAJH_CrimeSceneTravelWidget::RefreshList(){
 	if(LoadGameInstance->DataList.Num() > 0){
-		FText Temptext = FText::FromString(FString::Printf(TEXT("%s"), *LoadGameInstance->DataList[0].LevelName));
+		FText Temptext = FText::FromString(FString::Printf(TEXT("%s"), *LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 2].LevelName));
 		Txt_CrimeName_1->SetText(Temptext);
 	}
 	if(LoadGameInstance->DataList.Num() > 1){
-		FText Temptext = FText::FromString(FString::Printf(TEXT("%s"), *LoadGameInstance->DataList[1].LevelName));
+		FText Temptext = FText::FromString(FString::Printf(TEXT("%s"), *LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 1].LevelName));
 		Txt_CrimeName_2->SetText(Temptext);
 	}
 }
