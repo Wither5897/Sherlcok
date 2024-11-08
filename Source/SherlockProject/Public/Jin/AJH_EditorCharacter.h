@@ -42,6 +42,12 @@ public:
 	class UInputAction* IA_RightClick;
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_LineTraceLeftClick;
+	UPROPERTY(EditDefaultsOnly)
+	class UInputAction* IA_changeLocation;
+	UPROPERTY(EditDefaultsOnly)
+	class UInputAction* IA_changeRotation;
+	UPROPERTY(EditDefaultsOnly)
+	class UInputAction* IA_changeScale;
 
 	void OnMyIA_LookMouse(const FInputActionValue& value);
 	void OnMyIA_EditorMove(const FInputActionValue& value);
@@ -49,6 +55,9 @@ public:
 	void OnMyIA_RightClick();
 	void OnMyIA_StartLineTraceLeftClick();
 	void OnMyIA_EndLineTraceLeftClick();
+	void OnMyIA_changeLocation();
+	void OnMyIA_changeRotation();
+	void OnMyIA_changeScale();
 
 	UPROPERTY()
 	class APlayerController* pc;
@@ -69,6 +78,10 @@ public:
 	TSubclassOf<class AActor> WorldActorFactory;
 	UPROPERTY()
 	class AAJH_WorldActor* WorldActor;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> SaveLevelWidgetFactory;
+	UPROPERTY()
+	class USaveLevelUI* SaveLevelWidget;
 	AAJH_WorldActor* CurrentWorldActor = nullptr;
 	AAJH_WorldActor* LastInteractedWorldActor = nullptr;
 	ETraceTypeQuery query;
@@ -81,6 +94,11 @@ public:
 
 	FVector initialWorldLocation;
 	FVector actorInitialLocation;
+	FRotator actorInitialRotation;
+	FVector worldLocation;
+	FVector worldDirection;
+	FVector deltaLocation;
+	FVector newLocation;
 
 	void OnMouseUpdateActorLocation();
 

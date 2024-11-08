@@ -23,6 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//============ Location ===================
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* MeshComp;
 	UPROPERTY(EditDefaultsOnly)
@@ -31,12 +32,28 @@ public:
 	class UStaticMeshComponent* Y_Axis;
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* Z_Axis;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* XYZ_Axis;
+
+	// ===============Rotation =================
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* X_Rot;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Y_Rot;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Z_Rot;
 
 
 	UFUNCTION()
-	void ResetVisibility();
+	void GizmoVisibility();
+	void LocationVisibility();
+	UFUNCTION()
+	void RotationVisivility();
 
 	UPROPERTY()
 	bool bIsWorldSpawn = false;
-	bool bIsAxisLocation = false;
+	bool bIsAxisLocation;
+	bool bIsAxisRotation;
+	bool bIsVisibleLocation;
+	bool bIsVisibleRotation;
 };

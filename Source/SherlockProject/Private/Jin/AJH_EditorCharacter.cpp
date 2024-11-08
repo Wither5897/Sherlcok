@@ -10,6 +10,7 @@
 #include "Jin/AJH_EditorActor.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Camera/CameraComponent.h"
+#include "SK/SaveLevelUI.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -46,6 +47,11 @@ void AAJH_EditorCharacter::BeginPlay()
 		EditorWidget->AddToViewport();
 	}
 
+	SaveLevelWidget = Cast<USaveLevelUI>(CreateWidget(GetWorld(), SaveLevelWidgetFactory));
+	if(SaveLevelWidget){
+		SaveLevelWidget->AddToViewport();
+	}
+
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	//WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
 }
@@ -65,16 +71,15 @@ void AAJH_EditorCharacter::Tick(float DeltaTime)
 		float currentMouseX, currentMouseY;
 		if ( pc && pc->GetMousePosition(currentMouseX, currentMouseY) )
 		{
-			FVector worldLocation, worldDirection;
 			if ( pc->DeprojectScreenPositionToWorld(currentMouseX, currentMouseY, worldLocation, worldDirection) )
 			{
-				FVector deltaLocation = worldLocation - initialWorldLocation;
+				deltaLocation = worldLocation - initialWorldLocation;
 				if ( deltaLocation.IsNearlyZero(0.01f) ) return; // 이동 값이 작으면 무시
 
-				float scaleFactor = 25.0f; // 이동 속도 조절
+				float scaleFactor = 23.0f; // 이동 속도 조절
 				deltaLocation *= scaleFactor;
 
-				FVector newLocation = actorInitialLocation;
+				newLocation = actorInitialLocation;
 				if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) )
 				{
 					newLocation.X += deltaLocation.X;
@@ -89,6 +94,11 @@ void AAJH_EditorCharacter::Tick(float DeltaTime)
 				{
 					newLocation.Z += deltaLocation.Z;
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along Z Axis"));
+				}
+				if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
+				{
+					newLocation += deltaLocation;
+					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along XYZ Axis"));
 				}
 
 				// 좌표 갱신
@@ -114,6 +124,9 @@ void AAJH_EditorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		input->BindAction(IA_RightClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_RightClick);
 		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick);
 		input->BindAction(IA_LineTraceLeftClick, ETriggerEvent::Completed, this, &AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick);
+		input->BindAction(IA_changeLocation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeLocation);
+		input->BindAction(IA_changeRotation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeRotation);
+		input->BindAction(IA_changeScale, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeScale);
 	}
 
 }
@@ -171,7 +184,6 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	float currentMouseX, currentMouseY;
 	if ( pc && pc->GetMousePosition(currentMouseX, currentMouseY) )
 	{
-		FVector worldLocation, worldDirection;
 		if ( pc->DeprojectScreenPositionToWorld(currentMouseX, currentMouseY, worldLocation, worldDirection) )
 		{
 			initialWorldLocation = worldLocation;
@@ -194,29 +206,38 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	{
 		CurrentWorldActor = Cast<AAJH_WorldActor>(outHit.GetActor());
 		actorInitialLocation = CurrentWorldActor->GetActorLocation();
+		actorInitialRotation = CurrentWorldActor->GetActorRotation();
 	}
 	else
 	{
 		// 허공을 클릭했거나 WorldActor가 아닌 액터를 클릭한 경우
+		CurrentWorldActor->bIsVisibleLocation = false;
+		CurrentWorldActor->bIsVisibleRotation = false;
 		CurrentWorldActor = nullptr;
 	}
 
 	// 이전 WorldActor의 축 가시성을 초기화
 	if ( LastInteractedWorldActor && ( CurrentWorldActor == nullptr || LastInteractedWorldActor != CurrentWorldActor ) )
 	{
-		LastInteractedWorldActor->ResetVisibility();
+		LastInteractedWorldActor->LocationVisibility();
+		LastInteractedWorldActor->RotationVisivility();
 		LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 		LastInteractedWorldActor = nullptr; // 초기화
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("0000"));
 	}
 
-	// 현재 WorldActor의 축 가시성을 활성화 (CurrentWorldActor가 nullptr 이 아닐 때만)
 	if ( CurrentWorldActor )
 	{
 		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
-		CurrentWorldActor->X_Axis->SetVisibility(true);
-		CurrentWorldActor->Y_Axis->SetVisibility(true);
-		CurrentWorldActor->Z_Axis->SetVisibility(true);
+
+		if ( CurrentWorldActor->bIsAxisLocation )
+		{
+			CurrentWorldActor->LocationVisibility();
+		}
+		else if ( CurrentWorldActor->bIsAxisRotation )
+		{
+			CurrentWorldActor->RotationVisivility();
+		}
 	}
 
 	// 축 가시성 및 상태 설정 (CurrentWorldActor가 nullptr이 아닐 때만)
@@ -225,22 +246,48 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("1111"));
+			GetCharacterMovement()->MaxFlySpeed = 0;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("X_Axis"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("2222"));
+			GetCharacterMovement()->MaxFlySpeed = 0;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Y_Axis"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
 		{
 			CurrentWorldActor->bIsAxisLocation = true;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("3333"));
+			GetCharacterMovement()->MaxFlySpeed = 0;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Z_Axis"));
+		}
+		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
+		{
+			CurrentWorldActor->bIsAxisLocation = true;
+			GetCharacterMovement()->MaxFlySpeed = 0;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("XYZ_Axis"));
 		}
 	}
 
 	// 마지막으로 상호작용한 WorldActor 업데이트
 	LastInteractedWorldActor = CurrentWorldActor;
+
+	// 현재 WorldActor의 축 가시성을 활성화 (CurrentWorldActor가 nullptr 이 아닐 때만)
+	/*if ( CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
+	{
+		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+		CurrentWorldActor->X_Axis->SetVisibility(true);
+		CurrentWorldActor->Y_Axis->SetVisibility(true);
+		CurrentWorldActor->Z_Axis->SetVisibility(true);
+		CurrentWorldActor->XYZ_Axis->SetVisibility(true);
+	}
+	else if ( CurrentWorldActor && CurrentWorldActor->bIsAxisRotation )
+	{
+		CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+		CurrentWorldActor->X_Rot->SetVisibility(true);
+		CurrentWorldActor->Y_Rot->SetVisibility(true);
+		CurrentWorldActor->Z_Rot->SetVisibility(true);
+	}*/
 
 }
 
@@ -249,8 +296,33 @@ void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 	if ( outHit.GetComponent() != nullptr && CurrentWorldActor != nullptr )
 	{
 		CurrentWorldActor->bIsAxisLocation = false;
+		CurrentWorldActor->bIsAxisRotation = false;
+		GetCharacterMovement()->MaxFlySpeed = 1800;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("4444"), CurrentWorldActor->bIsAxisLocation);
 	}
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeLocation()
+{
+	if ( CurrentWorldActor )
+	{
+		CurrentWorldActor->LocationVisibility();
+		CurrentWorldActor->bIsVisibleLocation = true;
+		CurrentWorldActor->bIsVisibleRotation = false;
+	}
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeRotation()
+{
+	if( CurrentWorldActor )
+	CurrentWorldActor->RotationVisivility();
+	CurrentWorldActor->bIsVisibleLocation = false;
+	CurrentWorldActor->bIsVisibleRotation = true;
+}
+
+void AAJH_EditorCharacter::OnMyIA_changeScale()
+{
+
 }
 
 void AAJH_EditorCharacter::OnMouseUpdateActorLocation()
@@ -263,8 +335,8 @@ void AAJH_EditorCharacter::OnMouseUpdateActorLocation()
 		initialMousePosition = currentMousePosition; // 마우스 위치를 갱신
 
 		// 마우스 움직임 값을 X축 위치에 반영 (Y 및 Z는 0으로 고정)
-		FVector deltaLocation = FVector(mouseDelta.X * 1.0f, 0.0f, 0.0f); // 0.1f는 스케일링 팩터
-		FVector newLocation = CurrentWorldActor->GetActorLocation() + deltaLocation;
+		deltaLocation = FVector(mouseDelta.X * 1.0f, 0.0f, 0.0f); // 0.1f는 스케일링 팩터
+		newLocation = CurrentWorldActor->GetActorLocation() + deltaLocation;
 		CurrentWorldActor->SetActorLocation(newLocation);
 
 		// 디버그 메시지 출력

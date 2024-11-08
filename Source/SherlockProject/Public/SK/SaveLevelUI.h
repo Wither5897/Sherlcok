@@ -18,7 +18,7 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox* LevelNameEdit;
+	class UEditableText* LevelNameEdit;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ConfirmButton;

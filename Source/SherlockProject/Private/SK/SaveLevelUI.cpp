@@ -5,11 +5,13 @@
 
 #include "AJH_SherlockGameInstance.h"
 #include "Components/Button.h"
-#include "Components/EditableTextBox.h"
+#include "Components/EditableText.h"
 
 void USaveLevelUI::NativeConstruct(){
 	Super::NativeConstruct();
 
+	SetVisibility(ESlateVisibility::Hidden);
+	
 	ConfirmButton->OnClicked.AddDynamic(this, &USaveLevelUI::ConfirmButtonClicked);
 }
 
@@ -19,4 +21,5 @@ void USaveLevelUI::ConfirmButtonClicked(){
 		return;
 	}
 	gi->SaveLevel(LevelNameEdit->GetText().ToString());
+	SetVisibility(ESlateVisibility::Hidden);
 }
