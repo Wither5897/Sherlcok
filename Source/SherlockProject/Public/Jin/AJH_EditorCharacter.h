@@ -7,6 +7,13 @@
 #include "../../../../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputActionValue.h"
 #include "AJH_EditorCharacter.generated.h"
 
+enum  class EGizmoState
+{
+	Location,
+	Rotation,
+	Scale,
+};
+
 UCLASS()
 class SHERLOCKPROJECT_API AAJH_EditorCharacter : public ACharacter
 {
@@ -49,10 +56,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_changeScale;
 
+	FVector2D MouseValue;
+
 	void OnMyIA_LookMouse(const FInputActionValue& value);
 	void OnMyIA_EditorMove(const FInputActionValue& value);
 	void OnMyIA_LeftClick();
+	void OnMyIA_EndLeftClick();
 	void OnMyIA_RightClick();
+	void OnMyIA_EndRightClick();
 	void OnMyIA_StartLineTraceLeftClick();
 	void OnMyIA_EndLineTraceLeftClick();
 	void OnMyIA_changeLocation();
@@ -93,18 +104,37 @@ public:
 	UPROPERTY()
 	float DistanceMultiplier = 100.0f;
 	FVector2D initialMousePosition;
+	bool bIsGizmoRotationActive = false;
+	bool bIsGizmoScaleActive = false;
 
 	FVector initialWorldLocation;
 	FVector actorInitialLocation;
-	FRotator actorInitialRotation;
 	FVector worldLocation;
 	FVector worldDirection;
 	FVector deltaLocation;
 	FVector newLocation;
-
-	void OnMouseUpdateActorLocation();
+	FRotator initialWorldRotation;
+	FRotator actorInitialRotation;
+	FRotator newRotation;
+	FRotator worldRotation;
+	FRotator deltaRotation;
+	FVector initialWorldScale;
+	FVector newScale;
+	FVector actorInitialScale;
+	FVector worldScale;
 
 	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
 	void OnMyLineTrace();
+	void OnMyHandleGizmoRotation();
+	void OnMyHandleGizmoScale();
+	void LocationGizmoForSetCollision();
+	void RotationGizmoForSetCollision();
+	void ScaleGizmoForSetCollision();
+	void OnMyLocationGizmoMovement();
+
+	void OnMyGizmoInteraction();
+	void SetGizmoState(EGizmoState GizmoState);
+	// 상태 정보를 저장할 변수 추가
+	EGizmoState CurrentGizmoState = EGizmoState::Location;
 
 };
