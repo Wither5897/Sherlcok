@@ -43,17 +43,31 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* Z_Rot;
 
+	// ==================Scale================
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* X_Scale;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Y_Scale;
+	UPROPERTY(EditDefaultsOnly)
+	class UStaticMeshComponent* Z_Scale;
+
+
 
 	UFUNCTION()
 	void GizmoVisibility();
+	UFUNCTION()
 	void LocationVisibility();
 	UFUNCTION()
 	void RotationVisivility();
+	UFUNCTION()
+	void ScaleVisivility();
 
 	UPROPERTY()
 	bool bIsWorldSpawn = false;
 	bool bIsAxisLocation;
 	bool bIsAxisRotation;
+	bool bIsAxisScale;
 	bool bIsVisibleLocation;
 	bool bIsVisibleRotation;
+	bool bIsVisibleScale;
 };
