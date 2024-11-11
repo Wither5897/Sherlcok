@@ -14,6 +14,7 @@
 
 
 
+
 void UUW_ReportBoard::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -150,6 +151,10 @@ void UUW_ReportBoard::CheckCondition()
 		WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		bWitnessReport = true;
 	}
+	//if ( me->check[3] && me->check[5] && me->check[8] )
+	//{
+	//	//ULevelSequencePlayer::CreateLevelSequencePlayer
+	//}
 }
 
 
