@@ -3,7 +3,7 @@
 
 #include "AJH_SherlockGameInstance.h"
 
-#include "EditorDirectories.h"
+// #include "EditorDirectories.h"
 #include "EngineUtils.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
@@ -18,6 +18,10 @@
 #include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "SK/MapSaveGame.h"
+
+#if WITH_EDITOR
+#include "EditorDirectories.h"
+#endif
 
 void UAJH_SherlockGameInstance::Init()
 {
