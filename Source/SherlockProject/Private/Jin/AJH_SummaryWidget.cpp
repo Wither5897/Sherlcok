@@ -49,37 +49,36 @@ void UAJH_SummaryWidget::NativeConstruct()
 	LoadClueData();
 }
 
-void UAJH_SummaryWidget::OnSuspectImage(class UTexture2D* SavedTexture)
+void UAJH_SummaryWidget::OnSuspectImage(class UTexture2D* SavedTexture, int32 playerid)
 {
-	if ( !Img_SuspectImage ) {
+	if ( !Img_SuspectImage1 ) {
 		return;
 	}
-	Img_SuspectImage->SetBrushFromTexture(SavedTexture);
-	
+	Img_SuspectImage1->SetBrushFromTexture(SavedTexture);
 }
 
-void UAJH_SummaryWidget::OnWeaponImage(class UTexture2D* SavedTexture)
+void UAJH_SummaryWidget::OnWeaponImage(class UTexture2D* SavedTexture, int32 playerid)
 {
-	if ( !Img_WeaponImage ) {
+	if ( !Img_WeaponImage1 ) {
 		return;
 	}
-	Img_WeaponImage->SetBrushFromTexture(SavedTexture);
+	Img_WeaponImage1->SetBrushFromTexture(SavedTexture);
 }
 
-void UAJH_SummaryWidget::OnMainEvidenceImage(class UTexture2D* SavedTexture)
+void UAJH_SummaryWidget::OnMainEvidenceImage(class UTexture2D* SavedTexture, int32 playerid)
 {
-	if ( !Img_MainEvidenceImage ) {
+	if ( !Img_MainEvidenceImage1 ) {
 		return;
 	}
-	Img_MainEvidenceImage->SetBrushFromTexture(SavedTexture);
+	Img_MainEvidenceImage1->SetBrushFromTexture(SavedTexture);
 }
 
-void UAJH_SummaryWidget::OnSpecialThingImage(class UTexture2D* SavedTexture)
+void UAJH_SummaryWidget::OnSpecialThingImage(class UTexture2D* SavedTexture, int32 playerid)
 {
-	if ( !Img_SpecialThingImage ) {
+	if ( !Img_SpecialThingImage1 ) {
 		return;
 	}
-	Img_SpecialThingImage->SetBrushFromTexture(SavedTexture);
+	Img_SpecialThingImage1->SetBrushFromTexture(SavedTexture);
 }
 
 void UAJH_SummaryWidget::OnMyBtn_Click(){
@@ -92,22 +91,22 @@ void UAJH_SummaryWidget::OnMyBtn_Click(){
 	for (int32 i = 0; i < AllTexture.Num(); i++)
 	{
 		// 각 이미지와 현재 alltexture 요소를 비교하고, 일치하면 다음 Clue의 해당 카테고리 카운트를 증가
-		if (Img_SuspectImage->GetBrush().GetResourceObject() == AllTexture[i])
+		if (Img_SuspectImage1->GetBrush().GetResourceObject() == AllTexture[i])
 		{
 			ClueDataArray[i].SuspectCount++;
 		}
         
-		if (Img_WeaponImage->GetBrush().GetResourceObject() == AllTexture[i])
+		if (Img_WeaponImage1->GetBrush().GetResourceObject() == AllTexture[i])
 		{
 			ClueDataArray[i].WeaponCount++;
 		}
         
-		if (Img_MainEvidenceImage->GetBrush().GetResourceObject() == AllTexture[i])
+		if (Img_MainEvidenceImage1->GetBrush().GetResourceObject() == AllTexture[i])
 		{
 			ClueDataArray[i].MainEvidenceCount++;
 		}
         
-		if (Img_SpecialThingImage->GetBrush().GetResourceObject() == AllTexture[i])
+		if (Img_SpecialThingImage1->GetBrush().GetResourceObject() == AllTexture[i])
 		{
 			ClueDataArray[i].SpecialThingCount++;
 		}

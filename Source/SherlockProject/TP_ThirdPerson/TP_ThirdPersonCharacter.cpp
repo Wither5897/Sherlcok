@@ -16,19 +16,14 @@
 #include "KHH_InteractionWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SpotLightComponent.h"
-#include "Components/TimelineComponent.h"
-#include "Components/WidgetSwitcher.h"
 #include "Kismet/GameplayStatics.h"
 #include "SK/InventoryWidget.h"
 #include "SK/EvidenceActorComp.h"
 #include "SK/ItemWidget.h"
-#include "SK/NoteItemWidget.h"
 #include "SK/HighlightComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
-#include "Engine/GameInstance.h"
 #include "GameFramework/PlayerState.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
 #include "Editor/GroupActor.h"
@@ -37,14 +32,14 @@
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
 #include "Jin/AJH_TravelClientWidget.h"
+#include "SK/NoteItemWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
 // ATP_ThirdPersonCharacter
 
-ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
-{
+ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -74,7 +69,8 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	SpotLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
@@ -84,15 +80,14 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	SpotLight->AttenuationRadius = 2500.f;
 	SpotLight->InnerConeAngle = 20.f;
 	SpotLight->SetVisibility(false);
-	
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	Comp = CreateDefaultSubobject<UHighlightComponent>(TEXT("HighlighComp"));
 }
 
-void ATP_ThirdPersonCharacter::BeginPlay()
-{
+void ATP_ThirdPersonCharacter::BeginPlay(){
 	// Call the base class  
 	Super::BeginPlay();
 
@@ -103,64 +98,59 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
 	//EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
 
-	if ( interactionUI )
-	{
+	if (interactionUI){
 		interactionUI->AddToViewport();
 		interactionUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	InventoryUI = Cast<UInventoryWidget>(CreateWidget(GetWorld(), InventoryUIFactory));
-	if ( InventoryUI ) {
+	if (InventoryUI){
 		InventoryUI->AddToViewport();
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	Notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NotifyUI));
-	if ( Notify ) {
+	if (Notify){
 		Notify->AddToViewport();
 		Notify->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 
 	reportboard = Cast<UUW_ReportBoard>(CreateWidget(GetWorld(), reportboardUI));
-	if ( reportboard ) {
+	if (reportboard){
 		reportboard->AddToViewport();
 		reportboard->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	SummaryWidget = Cast<UAJH_SummaryWidget>(CreateWidget(GetWorld(), SummaryWidgetFactory));
-	if ( SummaryWidget )
-	{
+	if (SummaryWidget){
 		SummaryWidget->AddToViewport();
 		SummaryWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	CrimeSceneTravelWidget = Cast<UAJH_CrimeSceneTravelWidget>(CreateWidget(GetWorld(), CrimeSceneTravelWidgetFactory));
-	if ( CrimeSceneTravelWidget )
-	{
+	if (CrimeSceneTravelWidget){
 		CrimeSceneTravelWidget->AddToViewport();
 		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	TravelClientWidget = Cast<UAJH_TravelClientWidget>(CreateWidget(GetWorld(), TravelClientWidgetFactory));
-	if ( TravelClientWidget )
-	{
+	if (TravelClientWidget){
 		TravelClientWidget->AddToViewport();
 		TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	StatisticsUI = Cast<UStatisticsWidget>(CreateWidget(GetWorld(), StatisticsUIFactory));
-	if ( StatisticsUI ){
+	if (StatisticsUI){
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
-void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
-{
+void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 	FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, TargetFOV, DeltaTime * 5);
-	
+
 	PerformLineTrace();
 	PerformHighLight();
 }
@@ -168,20 +158,17 @@ void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Input
 
-void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent){
 	// Add Input Mapping Context
-	if ( APlayerController* PlayerController = Cast<APlayerController>(GetController()) )
-	{
-		if ( UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()) )
-		{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())){
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())){
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
 
 	// Set up action bindings
-	if ( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent) ) {
-
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)){
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -193,28 +180,33 @@ void ATP_ThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATP_ThirdPersonCharacter::Look);
 
 
-		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnMyActionZoomIn);
-		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
+		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Started, this,
+		                                   &ATP_ThirdPersonCharacter::OnMyActionZoomIn);
+		EnhancedInputComponent->BindAction(IA_Zoom, ETriggerEvent::Completed, this,
+		                                   &ATP_ThirdPersonCharacter::OnMyActionZoomOut);
 
-		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::Interaction);
+		EnhancedInputComponent->BindAction(IA_Interaction, ETriggerEvent::Started, this,
+		                                   &ATP_ThirdPersonCharacter::Interaction);
 
-		EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OpenInventory);
+		EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Started, this,
+		                                   &ATP_ThirdPersonCharacter::OpenInventory);
 
-		EnhancedInputComponent->BindAction(IA_FlashLight, ETriggerEvent::Started, this, &ATP_ThirdPersonCharacter::OnOffFlashLight);
+		EnhancedInputComponent->BindAction(IA_FlashLight, ETriggerEvent::Started, this,
+		                                   &ATP_ThirdPersonCharacter::OnOffFlashLight);
 	}
-	else
-	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	else{
+		UE_LOG(LogTemplateCharacter, Error,
+		       TEXT(
+			       "'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."
+		       ), *GetNameSafe(this));
 	}
 }
 
-void ATP_ThirdPersonCharacter::Move(const FInputActionValue& Value)
-{
+void ATP_ThirdPersonCharacter::Move(const FInputActionValue& Value){
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if ( Controller != nullptr )
-	{
+	if (Controller != nullptr){
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -231,31 +223,27 @@ void ATP_ThirdPersonCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value)
-{
+void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value){
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if ( Controller != nullptr )
-	{
+	if (Controller != nullptr){
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
 
-void ATP_ThirdPersonCharacter::OnMyActionZoomIn()
-{
+void ATP_ThirdPersonCharacter::OnMyActionZoomIn(){
 	TargetFOV = 60;
 }
 
-void ATP_ThirdPersonCharacter::OnMyActionZoomOut()
-{
+void ATP_ThirdPersonCharacter::OnMyActionZoomOut(){
 	TargetFOV = 90;
 }
 
 void ATP_ThirdPersonCharacter::OnOffFlashLight(){
-	if(SpotLight->GetVisibleFlag()){
+	if (SpotLight->GetVisibleFlag()){
 		SpotLight->SetVisibility(false);
 	}
 	else{
@@ -263,56 +251,46 @@ void ATP_ThirdPersonCharacter::OnOffFlashLight(){
 	}
 }
 
-void ATP_ThirdPersonCharacter::PerformHighLight()
-{
-	if ( IsLocallyControlled() )
-	{
-		if ( Comp )
-		{
+void ATP_ThirdPersonCharacter::PerformHighLight(){
+	if (IsLocallyControlled()){
+		if (Comp){
 			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
-			if ( EvidenceActor && EvidenceActor->StaticMesh )
-			{
+			if (EvidenceActor && EvidenceActor->StaticMesh){
 				Comp->SKUnHighlight(OutputMeshComp);
 			}
 
-			if ( bHit )
-			{
+			if (bHit){
 				AActor* HitActor = OutHit.GetActor();
-				if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+				if (HitActor) // Actor가 nullptr이 아닌지 확인
 				{
 					EvidenceActor = Cast<AEvidenceActor>(HitActor);
-					if ( EvidenceActor )
-					{
+					if (EvidenceActor){
 						EvidenceActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
 
 						// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
-						if ( EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 )
-						{
+						if (EvidenceActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0){
 							Comp->SKHighlight(OutputMeshComp);
 						}
-						else
-						{
+						else{
 							Comp->SKUnHighlight(OutputMeshComp);
 						}
 					}
 				}
 			}
-			else
-			{
+			else{
 				Comp->SKUnHighlight(OutputMeshComp);
 			}
 		}
 	}
 }
 
-void ATP_ThirdPersonCharacter::Interaction()
-{
+void ATP_ThirdPersonCharacter::Interaction(){
 	auto* pc = Cast<APlayerController>(GetController());
 	//PerformLineTrace();
-	if ( !interactionUI || !pc) {
+	if (!interactionUI || !pc){
 		return;
 	}
-	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")) ){
+	if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
 		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
 
@@ -323,15 +301,16 @@ void ATP_ThirdPersonCharacter::Interaction()
 		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
 			int32 playerId = ps->GetPlayerId();
-			
+
 			ServerItemFound(actorNum, playerId);
-			
+			if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
+				InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
+			}
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
-
 		}
 		else{
 			interactionUI->SetVisibility(ESlateVisibility::Hidden);
@@ -345,22 +324,25 @@ void ATP_ThirdPersonCharacter::Interaction()
 
 void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 	InventoryUI->ItemArray[ActorNum - 1]->QuestionMark->SetVisibility(ESlateVisibility::Hidden);
-
+	
 	auto* gs = GetWorld()->GetGameState();
 	TArray<APlayerState*> PlayerArray = gs->PlayerArray;
 
 	for (APlayerState* ps2 : PlayerArray){
-		if(ATP_ThirdPersonCharacter* Character = Cast<ATP_ThirdPersonCharacter>(ps2->GetPawn())){
-			if(Character->InventoryUI && Character->InventoryUI->ItemArray.IsValidIndex(ActorNum - 1)){
+		if (ATP_ThirdPersonCharacter* Character = Cast<ATP_ThirdPersonCharacter>(ps2->GetPawn())){
+			if (Character->InventoryUI && Character->InventoryUI->ItemArray.IsValidIndex(ActorNum - 1)){
 				switch (PlayerID){
 				case 0:
-					Character->InventoryUI->ItemArray[ActorNum - 1]->Player1Light->SetVisibility(ESlateVisibility::Visible);
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player1Light->SetVisibility(
+						ESlateVisibility::Visible);
 					break;
 				case 1:
-					Character->InventoryUI->ItemArray[ActorNum - 1]->Player2Light->SetVisibility(ESlateVisibility::Visible);
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player2Light->SetVisibility(
+						ESlateVisibility::Visible);
 					break;
 				case 2:
-					Character->InventoryUI->ItemArray[ActorNum - 1]->Player3Light->SetVisibility(ESlateVisibility::Visible);
+					Character->InventoryUI->ItemArray[ActorNum - 1]->Player3Light->SetVisibility(
+						ESlateVisibility::Visible);
 					break;
 				default:
 					break;
@@ -370,25 +352,21 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 	}
 }
 
-void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID)
-{
+void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID){
 	MulticastItemFound(ActorNum, PlayerID);
 	ItemFound(ActorNum, PlayerID);
 }
 
-void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID)
-{
-	if ( IsLocallyControlled() )
-	{
-		if ( InventoryUI && InventoryUI->ItemArray.IsValidIndex(( ActorNum - 1 )) ) {
+void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID){
+	if (IsLocallyControlled()){
+		if (InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
 			InventoryUI->ItemArray[ActorNum - 1]->VisibleBoard();
 		}
 	}
 	ItemFound(ActorNum, PlayerID);
 }
 
-void ATP_ThirdPersonCharacter::PerformLineTrace()
-{
+void ATP_ThirdPersonCharacter::PerformLineTrace(){
 	start = FollowCamera->GetComponentLocation();
 	End = start + FollowCamera->GetForwardVector() * tracedis;
 	traceChannel = ECC_Visibility;
@@ -400,19 +378,18 @@ void ATP_ThirdPersonCharacter::PerformLineTrace()
 	// DrawDebugLine(GetWorld(), start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
-void ATP_ThirdPersonCharacter::OpenInventory()
-{
+void ATP_ThirdPersonCharacter::OpenInventory(){
 	auto* pc = Cast<APlayerController>(GetController());
-	if ( !pc ) {
+	if (!pc){
 		return;
 	}
-	if ( InventoryUI->IsVisible() ) {
+	if (InventoryUI->IsVisible()){
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
 		pc->SetShowMouseCursor(false);
 		pc->SetInputMode(FInputModeGameOnly());
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
-	else {
+	else{
 		InventoryUI->SetVisibility(ESlateVisibility::Visible);
 		pc->SetShowMouseCursor(true);
 		pc->SetInputMode(FInputModeGameAndUI());
@@ -420,11 +397,82 @@ void ATP_ThirdPersonCharacter::OpenInventory()
 	}
 }
 
-void ATP_ThirdPersonCharacter::MainTravel(AActor* OtherActor)
-{
-	if ( OtherActor )
-	{
+void ATP_ThirdPersonCharacter::MainTravel(AActor* OtherActor){
+	if (OtherActor){
 		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
+
+void ATP_ThirdPersonCharacter::SetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID){
+	auto* gs = GetWorld()->GetGameState();
+	TArray<APlayerState*> PlayerArray = gs->PlayerArray;
+
+	for (APlayerState* ps2 : PlayerArray){
+		if (ATP_ThirdPersonCharacter* Character = Cast<ATP_ThirdPersonCharacter>(ps2->GetPawn())){
+			if (!Character->SummaryWidget){
+				return;
+			}
+			switch (Category){
+			case 0:
+				if (PlayerID == 0){
+					Character->SummaryWidget->Img_SuspectImage1->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_SuspectImage2->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_SuspectImage3->SetBrushFromTexture(SavedTexture);
+				}
+				break;
+			case 1:
+				if (PlayerID == 0){
+					Character->SummaryWidget->Img_WeaponImage1->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_WeaponImage2->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_WeaponImage3->SetBrushFromTexture(SavedTexture);
+				}
+				break;
+			case 2:
+				if (PlayerID == 0){
+					Character->SummaryWidget->Img_MainEvidenceImage1->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_MainEvidenceImage2->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_MainEvidenceImage3->SetBrushFromTexture(SavedTexture);
+				}
+				break;
+			case 3:
+				if (PlayerID == 0){
+					Character->SummaryWidget->Img_SpecialThingImage1->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_SpecialThingImage2->SetBrushFromTexture(SavedTexture);
+				}
+				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_SpecialThingImage3->SetBrushFromTexture(SavedTexture);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void ATP_ThirdPersonCharacter::ServerSetSummaryMulti_Implementation(int32 Category, UTexture2D* SavedTexture,
+																	int32 PlayerID){
+	MulticastSetSummaryMulti(Category, SavedTexture, PlayerID);
+	SetSummaryMulti(Category, SavedTexture, PlayerID);
+}
+
+void ATP_ThirdPersonCharacter::MulticastSetSummaryMulti_Implementation(int32 Category, UTexture2D* SavedTexture,
+	int32 PlayerID){
+	SetSummaryMulti(Category, SavedTexture, PlayerID);
+}
+
 

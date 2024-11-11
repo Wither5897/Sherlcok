@@ -203,6 +203,13 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class ABoard* Board;
 
-	
+	UFUNCTION()
+	void SetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
 };
 

@@ -47,22 +47,42 @@ public:
 	UButton* Btn_Submit;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UImage* Img_SuspectImage;
+	UImage* Img_SuspectImage1;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UImage* Img_WeaponImage;
+	UImage* Img_SuspectImage2;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UImage* Img_MainEvidenceImage;
+	UImage* Img_SuspectImage3;
+	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UImage* Img_SpecialThingImage;
+	UImage* Img_WeaponImage1;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_WeaponImage2;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_WeaponImage3;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_MainEvidenceImage1;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_MainEvidenceImage2;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_MainEvidenceImage3;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_SpecialThingImage1;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_SpecialThingImage2;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UImage* Img_SpecialThingImage3;
+	
 
 	UFUNCTION()
-	void OnSuspectImage(class UTexture2D* SavedTexture);
+	void OnSuspectImage(class UTexture2D* SavedTexture, int32 playerid);
 	UFUNCTION()
-	void OnWeaponImage(class UTexture2D* SavedTexture);
+	void OnWeaponImage(class UTexture2D* SavedTexture, int32 playerid);
 	UFUNCTION()
-	void OnMainEvidenceImage(class UTexture2D* SavedTexture);
+	void OnMainEvidenceImage(class UTexture2D* SavedTexture, int32 playerid);
 	UFUNCTION()
-	void OnSpecialThingImage(class UTexture2D* SavedTexture);
+	void OnSpecialThingImage(class UTexture2D* SavedTexture, int32 playerid);
 
 
 	UPROPERTY()
