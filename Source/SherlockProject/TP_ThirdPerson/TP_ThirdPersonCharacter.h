@@ -211,5 +211,6 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
+	
 };
 

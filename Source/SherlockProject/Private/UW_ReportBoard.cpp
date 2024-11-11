@@ -5,13 +5,11 @@
 
 #include "SherlockPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "SK/InventoryWidget.h"
 #include "SK/ItemWidget.h"
 #include "SK/MultiPlayerState.h"
 #include "SK/NoteItemWidget.h"
-#include "WorldPartition/DataLayer/DataLayerInstance.h"
-
-
 
 
 
@@ -151,10 +149,16 @@ void UUW_ReportBoard::CheckCondition()
 		WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		bWitnessReport = true;
 	}
-	//if ( me->check[3] && me->check[5] && me->check[8] )
-	//{
-	//	//ULevelSequencePlayer::CreateLevelSequencePlayer
-	//}
+	if ( me->check[3] && me->check[5] && me->check[8] && !bSequence)
+	{
+		FMovieSceneSequencePlaybackSettings PlaybackSettings;
+		ALevelSequenceActor* OutActor;
+		ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), LevelSequence, PlaybackSettings, OutActor);
+		if(LevelSequencePlayer){
+			LevelSequencePlayer->Play();
+		}
+		bSequence = true;
+	}
 }
 
 

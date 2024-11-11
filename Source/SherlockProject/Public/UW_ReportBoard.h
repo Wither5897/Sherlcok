@@ -106,6 +106,10 @@ public:
 	bool bAutopsyReport = false;
 	bool bExpertReport = false;
 	bool bWitnessReport = false;
-
-
+	bool bSequence = false;
+	
+	UPROPERTY(EditDefaultsOnly)
+	class ULevelSequence* LevelSequence;
+	
+	
 };
