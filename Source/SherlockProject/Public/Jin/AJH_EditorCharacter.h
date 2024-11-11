@@ -94,6 +94,11 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> SaveLevelWidgetFactory;
 	UPROPERTY()
+	class UAJH_GizmoUI* GizmoUI;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> GizmoUIFactory;
+
+	UPROPERTY()
 	class USaveLevelUI* SaveLevelWidget;
 	AAJH_WorldActor* CurrentWorldActor = nullptr;
 	AAJH_WorldActor* LastInteractedWorldActor = nullptr;
@@ -104,6 +109,7 @@ public:
 	UPROPERTY()
 	float DistanceMultiplier = 100.0f;
 	FVector2D initialMousePosition;
+	bool bIsGizmoLocationActive = false;
 	bool bIsGizmoRotationActive = false;
 	bool bIsGizmoScaleActive = false;
 
