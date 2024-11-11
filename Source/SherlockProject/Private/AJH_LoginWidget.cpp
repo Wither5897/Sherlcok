@@ -7,6 +7,7 @@
 #include "AJH_SherlockGameInstance.h"
 #include "Components/WidgetSwitcher.h"
 #include "Animation/WidgetAnimation.h"
+#include "Kismet/GameplayStatics.h"
 
 void UAJH_LoginWidget::NativeConstruct()
 {
@@ -24,7 +25,8 @@ void UAJH_LoginWidget::OnClickedFindSessionsButton()
 	{
 		// 누를때 닉네임과 캐릭터 선택값을 저장하기
 		gi->UserNickName = Edit_hostName->GetText().ToString();
-		gi->FindMySession();
+		UGameplayStatics::OpenLevel(GetWorld(), "EditMap");
+		// gi->FindMySession();
 	}
 }
 
