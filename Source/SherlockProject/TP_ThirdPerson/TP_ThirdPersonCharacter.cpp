@@ -32,6 +32,7 @@
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
 #include "Jin/AJH_TravelClientWidget.h"
+#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "SK/NoteItemWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -361,6 +362,7 @@ void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum,
 	if (IsLocallyControlled()){
 		if (InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
 			InventoryUI->ItemArray[ActorNum - 1]->VisibleBoard();
+			
 		}
 	}
 	ItemFound(ActorNum, PlayerID);
