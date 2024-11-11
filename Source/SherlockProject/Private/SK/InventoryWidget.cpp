@@ -13,6 +13,7 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Engine/Engine.h"
 #include "Jin/AJH_SummaryWidget.h"
+#include "SK/MultiPlayerState.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -104,7 +105,8 @@ void UInventoryWidget::SuspectButtonClicked()
 		return;
 	}
 	SuspectImage->SetBrushFromTexture(SavedTexture);
-	me->SummaryWidget->OnSuspectImage(SavedTexture);
+	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
+	me->ServerSetSummaryMulti(0, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
@@ -115,7 +117,8 @@ void UInventoryWidget::WeaponButtonClicked()
 		return;
 	}
 	WeaponImage->SetBrushFromTexture(SavedTexture);
-	me->SummaryWidget->OnWeaponImage(SavedTexture);
+	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
+	me->ServerSetSummaryMulti(1, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
@@ -126,7 +129,8 @@ void UInventoryWidget::MainEvidenceButtonClicked()
 		return;
 	}
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
-	me->SummaryWidget->OnMainEvidenceImage(SavedTexture);
+	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
+	me->ServerSetSummaryMulti(2, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
@@ -137,7 +141,8 @@ void UInventoryWidget::SpecialThingButtonClicked()
 		return;
 	}
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
-	me->SummaryWidget->OnSpecialThingImage(SavedTexture);
+	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
+	me->ServerSetSummaryMulti(3, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
