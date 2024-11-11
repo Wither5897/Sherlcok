@@ -11,6 +11,7 @@
 #include "Jin/AJH_WorldActor.h"
 #include "Camera/CameraComponent.h"
 #include "SK/SaveLevelUI.h"
+#include "AJH_GizmoUI.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -52,9 +53,16 @@ void AAJH_EditorCharacter::BeginPlay()
 		SaveLevelWidget->AddToViewport();
 	}
 
+	GizmoUI = Cast<UAJH_GizmoUI>(CreateWidget(GetWorld(), GizmoUIFactory));
+	if ( GizmoUI )
+	{
+		GizmoUI->AddToViewport();
+	}
+
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	//WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
 	IA_changeNum = 1;
+
 }
 
 // Called every frame
@@ -103,18 +111,21 @@ void AAJH_EditorCharacter::OnMyIA_LookMouse(const FInputActionValue& value)
 	// Gizmo 회전 처리
 	if ( IA_changeNum == 2 && CurrentWorldActor && CurrentWorldActor->bIsAxisRotation )
 	{
+		bIsGizmoLocationActive = false;
 		bIsGizmoRotationActive = true;
 		bIsGizmoScaleActive = false;
 		OnMyHandleGizmoRotation();
 	}
 	else if ( IA_changeNum == 3 && CurrentWorldActor && CurrentWorldActor->bIsAxisScale )
 	{
+		bIsGizmoLocationActive = false;
 		bIsGizmoRotationActive = false;
 		bIsGizmoScaleActive = true;
 		OnMyHandleGizmoScale();
 	}
 	else
 	{
+		bIsGizmoLocationActive = true;
 		bIsGizmoRotationActive = false;
 		bIsGizmoScaleActive = false;
 		// Gizmo 회전 모드가 아닐 때 카메라 회전 처리
@@ -264,6 +275,9 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		actorInitialLocation = CurrentWorldActor->GetActorLocation();
 		actorInitialRotation = CurrentWorldActor->GetActorRotation();
 		actorInitialScale = CurrentWorldActor->GetActorScale3D();
+
+		GizmoUI->actorLocation = actorInitialLocation;
+		GizmoUI->GetEdit_Location();
 		
 
 		// Gizmo 상호작용 처리
@@ -271,16 +285,25 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 
 		if ( IA_changeNum == 1 )
 		{
+			bIsGizmoLocationActive = true;
+			bIsGizmoRotationActive = false;
+			bIsGizmoScaleActive = false;
 			CurrentWorldActor->LocationVisibility();
 			LocationGizmoForSetCollision();
 		}
 		else if ( IA_changeNum == 2 )
 		{
+			bIsGizmoLocationActive = false;
+			bIsGizmoRotationActive = true;
+			bIsGizmoScaleActive = false;
 			CurrentWorldActor->RotationVisivility();
 			RotationGizmoForSetCollision();
 		}
 		else if ( IA_changeNum == 3 )
 		{
+			bIsGizmoLocationActive = false;
+			bIsGizmoRotationActive = false;
+			bIsGizmoScaleActive = true;
 			CurrentWorldActor->ScaleVisivility();
 			ScaleGizmoForSetCollision();
 		}
@@ -291,7 +314,10 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		if ( CurrentWorldActor )
 		{
 			CurrentWorldActor->GizmoVisibility();
-			CurrentWorldActor = nullptr;
+			CurrentWorldActor->bIsAxisLocation = false;
+			CurrentWorldActor->bIsAxisRotation = false;
+			CurrentWorldActor->bIsAxisScale = false;
+			// CurrentWorldActor = nullptr;
 		}
 	}
 
@@ -300,11 +326,8 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	{
 		LastInteractedWorldActor->GizmoVisibility(); // 모든 축을 비활성화
 		LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-		LastInteractedWorldActor = nullptr; // 초기화
+		// LastInteractedWorldActor = nullptr; // 초기화
 	}
-
-	// 마지막으로 상호작용한 WorldActor 업데이트
-	LastInteractedWorldActor = CurrentWorldActor;
 
 	if ( CurrentWorldActor )
 	{
@@ -312,30 +335,53 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 
 		if ( CurrentWorldActor->bIsAxisLocation )
 		{
+			CurrentWorldActor->bIsAxisLocation = true;
+			CurrentWorldActor->bIsAxisRotation = false;
+			CurrentWorldActor->bIsAxisScale = false;
 			CurrentWorldActor->LocationVisibility();
 		}
 		else if ( CurrentWorldActor->bIsAxisRotation )
 		{
+			CurrentWorldActor->bIsAxisLocation = false;
+			CurrentWorldActor->bIsAxisRotation = true;
+			CurrentWorldActor->bIsAxisScale = false;
 			CurrentWorldActor->RotationVisivility();
 		}
+		else if ( CurrentWorldActor->bIsAxisScale )
+		{
+			CurrentWorldActor->bIsAxisLocation = false;
+			CurrentWorldActor->bIsAxisRotation = false;
+			CurrentWorldActor->bIsAxisScale = true;
+			CurrentWorldActor->ScaleVisivility();
+		}
 	}
+
+	// 마지막으로 상호작용한 WorldActor 업데이트
+	LastInteractedWorldActor = CurrentWorldActor;
 }
 
 void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 {
 	if ( outHit.GetComponent() != nullptr && CurrentWorldActor != nullptr )
 	{
-		CurrentWorldActor->bIsAxisLocation = false;
-		CurrentWorldActor->bIsAxisRotation = false;
-		CurrentWorldActor->bIsAxisScale = false;
 		// Gizmo 회전이 끝난 후 마우스 커서를 다시 표시하고 UI 모드로 전환
 		if ( pc )
 		{
-			bIsGizmoRotationActive = false;
-			bIsGizmoScaleActive = false;
 			pc->bShowMouseCursor = true;
 			pc->SetInputMode(FInputModeGameAndUI());
 		}
+
+		bIsGizmoLocationActive = false;
+		bIsGizmoRotationActive = false;
+		bIsGizmoScaleActive = false;
+
+		if ( CurrentWorldActor )
+		{
+			CurrentWorldActor->bIsAxisLocation = false;
+			CurrentWorldActor->bIsAxisRotation = false;
+			CurrentWorldActor->bIsAxisScale = false;
+		}
+
 		GetCharacterMovement()->MaxFlySpeed = 1800;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("4444"), CurrentWorldActor->bIsAxisLocation);
 	}
@@ -347,10 +393,14 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 1")); // IA_changeNum 확인
 	if ( CurrentWorldActor )
 	{
-		CurrentWorldActor->LocationVisibility();
 		CurrentWorldActor->bIsVisibleLocation = true;
 		CurrentWorldActor->bIsVisibleRotation = false;
+		CurrentWorldActor->bIsVisibleScale = false;
+		CurrentWorldActor->bIsAxisLocation = true;
+		CurrentWorldActor->bIsAxisRotation = false;
 		CurrentWorldActor->bIsAxisScale = false;
+		CurrentWorldActor->LocationVisibility();
+		LocationGizmoForSetCollision();
 	}
 }
 
@@ -360,10 +410,14 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 2")); // IA_changeNum 확인
 	if ( CurrentWorldActor )
 	{
-		CurrentWorldActor->RotationVisivility();
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = true;
+		CurrentWorldActor->bIsVisibleScale = false;
+		CurrentWorldActor->bIsAxisLocation = false;
+		CurrentWorldActor->bIsAxisRotation = true;
 		CurrentWorldActor->bIsAxisScale = false;
+		CurrentWorldActor->RotationVisivility();
+		RotationGizmoForSetCollision();
 	}
 }
 
@@ -373,10 +427,14 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 3")); // IA_changeNum 확인
 	if ( CurrentWorldActor )
 	{
-		CurrentWorldActor->ScaleVisivility();
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = false;
+		CurrentWorldActor->bIsVisibleScale = true;
+		CurrentWorldActor->bIsAxisLocation = false;
+		CurrentWorldActor->bIsAxisRotation = false;
 		CurrentWorldActor->bIsAxisScale = true;
+		CurrentWorldActor->ScaleVisivility();
+		ScaleGizmoForSetCollision();
 	}
 }
 
@@ -483,7 +541,7 @@ void AAJH_EditorCharacter::OnMyHandleGizmoScale()
 	pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
 
 	float baseScaleFactor = 0.01f; // 기본 Scale 변화 속도
-	float maxScaleFactor = 0.1f;   // 최대 Scale 변화 속도
+	float maxScaleFactor = 1.0f;   // 최대 Scale 변화 속도
 	float scaleFactor = baseScaleFactor;
 
 	// 마우스 입력이 임계값을 초과하면 ScaleFactor를 증가
@@ -492,7 +550,11 @@ void AAJH_EditorCharacter::OnMyHandleGizmoScale()
 		scaleFactor = maxScaleFactor;
 	}
 
-	newScale = actorInitialScale;
+	// 이전 스케일 값을 가져와서 업데이트
+	FVector currentScale = CurrentWorldActor->GetActorScale3D();
+	newScale = currentScale; // 이전 스케일 값으로 설정
+
+	// newScale = actorInitialScale;
 
 	// 선택된 축에 따라 Scale 값 수정
 	if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Scale")) )
@@ -605,6 +667,7 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 				}
 				// 좌표 갱신
 				CurrentWorldActor->SetActorLocation(newLocation);
+				GizmoUI->OnMyEdit_Location();
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Location: ") + newLocation.ToString());
 			}
 		}
@@ -664,6 +727,7 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 	// 모든 상태 초기화
 	CurrentWorldActor->bIsAxisLocation = false;
 	CurrentWorldActor->bIsAxisRotation = false;
+	CurrentWorldActor->bIsAxisScale = false;
 	CurrentWorldActor->GizmoVisibility();
 
 	// 충돌 초기화: 모든 Gizmo 충돌을 제거
@@ -676,18 +740,21 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 	{
 	case EGizmoState::Location:
 		CurrentWorldActor->bIsAxisLocation = true;
+		bIsGizmoLocationActive = true;
 		pc->bShowMouseCursor = true; // 마우스 커서 표시
 		CurrentWorldActor->LocationVisibility();
 		LocationGizmoForSetCollision();
 		break;
 	case EGizmoState::Rotation:
 		CurrentWorldActor->bIsAxisRotation = true;
+		bIsGizmoRotationActive = true;
 		pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->RotationVisivility();
 		RotationGizmoForSetCollision();
 		break;
 	case EGizmoState::Scale:
 		CurrentWorldActor->bIsAxisScale = true;
+		bIsGizmoScaleActive = true;
 		pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->ScaleVisivility();
 		ScaleGizmoForSetCollision();
