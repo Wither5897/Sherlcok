@@ -129,7 +129,7 @@ public:
 	FVector actorInitialScale;
 	FVector worldScale;
 
-	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
+	void OnMyEditorActorSpawn(bool bIsSpawn);
 	void OnMyLineTrace();
 	void OnMyHandleGizmoRotation();
 	void OnMyHandleGizmoScale();

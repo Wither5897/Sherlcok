@@ -24,9 +24,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Character;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Main_Btn_Weapon;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Back;
 	UFUNCTION()
 	void OnMyMain_Btn_Character();
+	UFUNCTION()
+	void OnMyMain_Btn_Weapon();
 	UFUNCTION()
 	void OnMyMain_Btn_Back();
 
@@ -39,6 +43,13 @@ public:
 	class UButton* Btn_Character_2;
 	UFUNCTION()
 	void OnMyBtn_Character_2();
+
+	// Weapon
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Weapon_1;
+
+	void OnMyBtn_Weapon_1();
+
 	
 	UPROPERTY()
 	APlayerController* pc;
@@ -46,6 +57,8 @@ public:
 	TSubclassOf<class AAJH_EditorActor> EditorActorFactory;
 	UPROPERTY()
 	class AAJH_EditorActor* EditorActor;
+
+
 	ETraceTypeQuery query;
 	FHitResult outHit;
 	UPROPERTY()

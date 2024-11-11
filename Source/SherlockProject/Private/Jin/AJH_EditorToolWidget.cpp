@@ -17,14 +17,21 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	me = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorCharacter::StaticClass()));
 
 	Main_Btn_Character->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Character);
+	Main_Btn_Weapon->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Weapon);
 	Main_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 	Btn_Character_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_1);
+	Btn_Weapon_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Weapon_1);
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Character()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(1);
+}
+
+void UAJH_EditorToolWidget::OnMyMain_Btn_Weapon()
+{
+	EditorWidgetSwitcher->SetActiveWidgetIndex(2);
 }
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
@@ -62,11 +69,11 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 	}*/
 	if ( me->bIsEditorActor == false )
 	{
-		me->OnMyEditorActorSpawn(true, 0);
+		me->OnMyEditorActorSpawn(true);
 	}
 	else
 	{
-		me->OnMyEditorActorSpawn(false, 0);
+		me->OnMyEditorActorSpawn(false);
 	}
 }
 
@@ -74,11 +81,25 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 {
 	if ( me->bIsEditorActor == false )
 	{
-		me->OnMyEditorActorSpawn(true, 1);
+		me->OnMyEditorActorSpawn(true);
 	}
 	else
 	{
-		me->OnMyEditorActorSpawn(false, 1);
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyBtn_Weapon_1()
+{
+	/*WidgetFactoryChange = me->weaponFactory_1;
+	me->FactoryChange = WidgetFactoryChange;*/
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
 	}
 }
 
