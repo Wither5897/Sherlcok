@@ -26,7 +26,7 @@
 #include "GameFramework/PlayerState.h"
 #include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
-#include "Editor/GroupActor.h"
+// #include "Editor/GroupActor.h"
 #include "GameFramework/GameStateBase.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/StatisticsWidget.h"
@@ -34,6 +34,12 @@
 #include "Jin/AJH_TravelClientWidget.h"
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "SK/NoteItemWidget.h"
+
+// 에디터 전용 코드 분리
+#if WITH_EDITOR
+#include "Editor/GroupActor.h"
+// 에디터 전용 작업 수행
+#endif
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
