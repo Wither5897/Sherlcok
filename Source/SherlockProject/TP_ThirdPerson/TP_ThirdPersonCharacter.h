@@ -211,6 +211,11 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
+
+	// Sound ======================================================================================
+
+	UFUNCTION(Server, Reliable)
+	void ServerPlaySound();
 	
 };
 
