@@ -40,6 +40,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpotLightComponent* SpotLight;
+
+	UPROPERTY(EditAnywhere)
+	class USkeletalMeshComponent* CoatMesh;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* HatMesh;
 	
 	UPROPERTY()
 	class AEvidenceActor* EvidenceActor;
@@ -211,6 +217,17 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSetSummaryMulti(int32 Category, UTexture2D* SavedTexture, int32 PlayerID);
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<class UMaterial*> MaterialArray;
 	
+	UFUNCTION()
+	void SetCharacterMaterial();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetCharacterMaterial();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetCharacterMaterial();
 };
 

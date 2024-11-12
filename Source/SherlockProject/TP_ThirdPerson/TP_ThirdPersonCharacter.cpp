@@ -32,7 +32,6 @@
 #include "SK/StatisticsWidget.h"
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
 #include "Jin/AJH_TravelClientWidget.h"
-#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "SK/NoteItemWidget.h"
 
 // 에디터 전용 코드 분리
@@ -88,6 +87,13 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	SpotLight->InnerConeAngle = 20.f;
 	SpotLight->SetVisibility(false);
 
+	CoatMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CoatMesh"));
+	CoatMesh->SetupAttachment(GetMesh());
+
+	HatMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HatMesh"));
+	HatMesh->SetupAttachment(GetMesh());
+	HatMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hatSocket"));
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
@@ -152,6 +158,8 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+	ServerSetCharacterMaterial();
+	SetCharacterMaterial();
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
@@ -473,7 +481,7 @@ void ATP_ThirdPersonCharacter::SetSummaryMulti(int32 Category, UTexture2D* Saved
 }
 
 void ATP_ThirdPersonCharacter::ServerSetSummaryMulti_Implementation(int32 Category, UTexture2D* SavedTexture,
-																	int32 PlayerID){
+                                                                    int32 PlayerID){
 	MulticastSetSummaryMulti(Category, SavedTexture, PlayerID);
 	SetSummaryMulti(Category, SavedTexture, PlayerID);
 }
@@ -483,4 +491,28 @@ void ATP_ThirdPersonCharacter::MulticastSetSummaryMulti_Implementation(int32 Cat
 	SetSummaryMulti(Category, SavedTexture, PlayerID);
 }
 
+void ATP_ThirdPersonCharacter::SetCharacterMaterial(){
+	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
+	auto* ps = Cast<AMultiPlayerState>(GetPlayerState());
+	if(!gi){
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("%d"), ps->GetPlayerIdNum());
+	if(gi->CustomizingDataArray.IsValidIndex(ps->GetPlayerIdNum())){
+		FCustomizingData myData = gi->CustomizingDataArray[ps->GetPlayerIdNum()];
+		CoatMesh->SetMaterial(0, MaterialArray[myData.CoatIdx]);
+		for (int32 i = 0; i < 4; i++){
+			HatMesh->SetMaterial(i, MaterialArray[myData.HatIdx]);
+		}
+	}
+}
+
+void ATP_ThirdPersonCharacter::ServerSetCharacterMaterial_Implementation(){
+	MulticastSetCharacterMaterial();
+	SetCharacterMaterial();
+}
+
+void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(){
+	SetCharacterMaterial();
+}
 

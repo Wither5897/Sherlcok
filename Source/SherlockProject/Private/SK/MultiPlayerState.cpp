@@ -11,9 +11,7 @@ AMultiPlayerState::AMultiPlayerState()
 }
 
 void AMultiPlayerState::SetPlayerIdNum(int32 newPlayerID){
-	if(HasAuthority()){
-		PlayerIDNum = newPlayerID;
-	}
+	PlayerIDNum = newPlayerID;
 }
 
 void AMultiPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const{

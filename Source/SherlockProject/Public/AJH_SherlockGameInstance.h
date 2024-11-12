@@ -12,6 +12,20 @@
  * 
  */
 
+USTRUCT(BlueprintType)
+struct FCustomizingData{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 PlayerIdNum;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CoatIdx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 HatIdx;
+};
+
 UCLASS()
 class SHERLOCKPROJECT_API UAJH_SherlockGameInstance : public UGameInstance
 {
@@ -64,6 +78,9 @@ public:
 	bool bShouldLoadLevel = false;
 
 	FString LoadLevelName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+	TArray<FCustomizingData> CustomizingDataArray;
 	
 private:
 	FName mySessionName = FName("first Session");
