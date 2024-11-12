@@ -25,40 +25,44 @@ void UCustomizingWidget::NativeConstruct(){
 }
 
 void UCustomizingWidget::CoatLeftButtonClicked(){
+	CoatIdx--;
 	if(CoatIdx < 0){
+		CoatIdx = 0;
 		return;
 	}
-	CoatIdx--;
 	me->SetCoatMaterial(MaterialColor[CoatIdx]);
 }
 
 void UCustomizingWidget::CoatRightButtonClicked(){
+	CoatIdx++;
 	if(CoatIdx > 3){
+		CoatIdx = 3;
 		return;
 	}
-	CoatIdx++;
 	me->SetCoatMaterial(MaterialColor[CoatIdx]);
 }
 
 void UCustomizingWidget::HatLeftButtonClicked(){
+	HatIdx--;
 	if(HatIdx < 0){
+		HatIdx = 0;
 		return;
 	}
-	HatIdx--;
 	me->SetHatMaterial(MaterialColor[HatIdx]);
 }
 
 void UCustomizingWidget::HatRightButtonClicked(){
+	HatIdx++;
 	if(HatIdx > 3){
+		HatIdx = 3;
 		return;
 	}
-	HatIdx++;
 	me->SetHatMaterial(MaterialColor[HatIdx]);
 }
 
 void UCustomizingWidget::PlayButtonClicked(){
 	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
-	auto* ps = Cast<AMultiPlayerState>(GetOwningPlayer()->GetCharacter()->GetPlayerState());
+	auto* ps = GetOwningPlayer()->GetPlayerState<AMultiPlayerState>();
 	FCustomizingData newData;
 	if(!ps){
 		newData.PlayerIdNum = 0;

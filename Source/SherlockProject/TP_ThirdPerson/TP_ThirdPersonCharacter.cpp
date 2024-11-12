@@ -158,8 +158,7 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-	ServerSetCharacterMaterial();
-	SetCharacterMaterial();
+	//ServerSetCharacterMaterial();
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
@@ -493,8 +492,8 @@ void ATP_ThirdPersonCharacter::MulticastSetSummaryMulti_Implementation(int32 Cat
 
 void ATP_ThirdPersonCharacter::SetCharacterMaterial(){
 	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
-	auto* ps = Cast<AMultiPlayerState>(GetPlayerState());
-	if(!gi){
+	auto* ps = GetController()->GetPlayerState<AMultiPlayerState>();
+	if(!gi || !ps){
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("%d"), ps->GetPlayerIdNum());
@@ -509,7 +508,6 @@ void ATP_ThirdPersonCharacter::SetCharacterMaterial(){
 
 void ATP_ThirdPersonCharacter::ServerSetCharacterMaterial_Implementation(){
 	MulticastSetCharacterMaterial();
-	SetCharacterMaterial();
 }
 
 void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(){
