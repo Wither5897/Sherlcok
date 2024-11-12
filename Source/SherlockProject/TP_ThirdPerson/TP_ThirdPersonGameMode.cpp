@@ -35,15 +35,17 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	if(NewPlayer){
+	if(NewPlayer)
+	{
 		FTimerHandle TimerHandle;
 		FTimerDelegate TimerDel;
-		TimerDel.BindLambda([this, NewPlayer](){
+		TimerDel.BindLambda([this, NewPlayer]()
+		{
 			if (AMultiPlayerState* ps = NewPlayer->GetPlayerState<AMultiPlayerState>())
 			{
 				ps->SetPlayerIdNum(NumPlayers);
 				NumPlayers++;
-                
+
 				UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID: %d"), ps->GetPlayerIdNum());
 			}
 		});

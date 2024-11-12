@@ -3,6 +3,7 @@
 
 #include "SK/MultiPlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 
 AMultiPlayerState::AMultiPlayerState()
 {
@@ -12,10 +13,19 @@ AMultiPlayerState::AMultiPlayerState()
 
 void AMultiPlayerState::SetPlayerIdNum(int32 newPlayerID){
 	PlayerIDNum = newPlayerID;
+	if(HasAuthority()){
+		OnRep_PlayerIDNum();
+	}
 }
 
 void AMultiPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const{
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMultiPlayerState, PlayerIDNum);
+}
+
+void AMultiPlayerState::OnRep_PlayerIDNum(){
+	if(auto* me = Cast<ATP_ThirdPersonCharacter>(GetPawn())){
+		me->ServerSetCharacterMaterial();
+	}
 }

@@ -4,6 +4,7 @@
 #include "UW_ReportBoard.h"
 
 #include "SherlockPlayerController.h"
+#include "Components/Button.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
@@ -148,7 +149,9 @@ void UUW_ReportBoard::CheckCondition(){
 			GetWorld(), LevelSequence, PlaybackSettings, OutActor);
 		if (LevelSequencePlayer){
 			AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
-			AnimPawn->SetActorHiddenInGame(false);
+			if(AnimPawn){
+				AnimPawn->SetActorHiddenInGame(false);
+			}
 			LevelSequencePlayer->OnFinished.AddDynamic(this, &UUW_ReportBoard::SetAnimPawnVisibility);
 			LevelSequencePlayer->Play();
 		}

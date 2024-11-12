@@ -23,8 +23,11 @@ public:
 	int32 GetPlayerIdNum() const { return PlayerIDNum; }
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	void OnRep_PlayerIDNum();
 	
 private:
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerIDNum)
 	int32 PlayerIDNum;
 };
