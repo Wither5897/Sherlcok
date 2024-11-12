@@ -111,5 +111,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class ULevelSequence* LevelSequence;
 	
-	
+	UPROPERTY(EditDefaultsOnly)
+	class AAnimPawn* AnimPawn;
+
+	UFUNCTION()
+	void SetAnimPawnVisibility();
 };
