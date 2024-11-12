@@ -24,6 +24,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Character;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Main_Btn_Evidence;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Weapon;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Place;
@@ -31,6 +33,8 @@ public:
 	class UButton* Main_Btn_Back;
 	UFUNCTION()
 	void OnMyMain_Btn_Character();
+	UFUNCTION()
+	void OnMyMain_Btn_Evidence();
 	UFUNCTION()
 	void OnMyMain_Btn_Weapon();
 	UFUNCTION()
@@ -47,6 +51,13 @@ public:
 	class UButton* Btn_Character_2;
 	UFUNCTION()
 	void OnMyBtn_Character_2();
+
+	// Evidence
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Evidence_0;
+	UFUNCTION()
+	void OnMyBtn_Evidence_0();
+
 
 	// Weapon
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -92,7 +103,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> WorldActorFactory;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AAJH_WorldActor> weaponFactory_1;
+	TSubclassOf<class AActor> EvidenceFactory_0;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> weaponFactory_1;
 	UPROPERTY()
 	class AAJH_EditorActor* EditorActor;
 

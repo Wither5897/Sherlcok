@@ -268,6 +268,18 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	{
 		FString hitActorName = outHit.GetActor()->GetName();
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("Hit Actor: ") + hitActorName);
+		// CurrentWorldActor 설정 및 디버깅
+		CurrentWorldActor = Cast<AAJH_WorldActor>(outHit.GetActor());
+		if ( CurrentWorldActor )
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("CurrentWorldActor Set Successfully"));
+			// Gizmo 상호작용 호출
+			OnMyGizmoInteraction();
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("CurrentWorldActor is nullptr!"));
+		}
 	}
 	else
 	{
@@ -289,7 +301,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		
 
 		// Gizmo 상호작용 처리
-		OnMyGizmoInteraction();
+		//OnMyGizmoInteraction();
 
 		if ( IA_changeNum == 1 )
 		{
@@ -397,9 +409,16 @@ void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 
 void AAJH_EditorCharacter::OnMyIA_changeLocation()
 {
+	// Gizmo가 이미 활성화된 상태라면 함수 실행을 중단
+	if ( IA_changeNum == 1 && CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
+		return; // 이미 활성화된 상태이므로 중단
+	}
+
 	IA_changeNum = 1;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 1")); // IA_changeNum 확인
-	if ( CurrentWorldActor )
+	if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = true;
 		CurrentWorldActor->bIsVisibleRotation = false;
@@ -414,9 +433,16 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 
 void AAJH_EditorCharacter::OnMyIA_changeRotation()
 {
+	// Gizmo가 이미 활성화된 상태라면 함수 실행을 중단
+	if ( IA_changeNum == 2 && CurrentWorldActor && CurrentWorldActor->bIsAxisRotation )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
+		return; // 이미 활성화된 상태이므로 중단
+	}
+
 	IA_changeNum = 2;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 2")); // IA_changeNum 확인
-	if ( CurrentWorldActor )
+	if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = true;
@@ -431,9 +457,16 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 
 void AAJH_EditorCharacter::OnMyIA_changeScale()
 {
+	// Gizmo가 이미 활성화된 상태라면 함수 실행을 중단
+	if ( IA_changeNum == 3 && CurrentWorldActor && CurrentWorldActor->bIsAxisScale )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
+		return; // 이미 활성화된 상태이므로 중단
+	}
+
 	IA_changeNum = 3;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 3")); // IA_changeNum 확인
-	if ( CurrentWorldActor )
+	if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = false;
@@ -705,6 +738,7 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 		if ( IA_changeNum == 1 )
 		{
 			SetGizmoState(EGizmoState::Location); // Location 상태 설정
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Location"));
 		}
 	}
 	else if ( HitComponent->ComponentHasTag(TEXT("X_Rot")) || HitComponent->ComponentHasTag(TEXT("Y_Rot")) || HitComponent->ComponentHasTag(TEXT("Z_Rot")) )
@@ -712,6 +746,7 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 		if ( IA_changeNum == 2 )
 		{
 			SetGizmoState(EGizmoState::Rotation); // Rotation 상태 설정
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Rotation"));
 		}
 	}
 	// 스케일 Gizmo를 추가할 경우
@@ -720,6 +755,7 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 		if (IA_changeNum == 3)
 		{
 			SetGizmoState(EGizmoState::Scale); // Scale 상태 설정
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Scale"));
 		}
 	}
 

@@ -19,10 +19,17 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	me = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorCharacter::StaticClass()));
 
 	Main_Btn_Character->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Character);
+	Main_Btn_Evidence->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Evidence);
 	Main_Btn_Weapon->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Weapon);
 	Main_Btn_Place->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Place);
 	Main_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	// Character
 	Btn_Character_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_1);
+
+	// Evidence
+	Btn_Evidence_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Evidence_0);
+
+	// Weapon
 	Btn_Weapon_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Weapon_1);
 	Weapon_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
@@ -40,14 +47,19 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Character()
 	EditorWidgetSwitcher->SetActiveWidgetIndex(1);
 }
 
-void UAJH_EditorToolWidget::OnMyMain_Btn_Weapon()
+void UAJH_EditorToolWidget::OnMyMain_Btn_Evidence()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(2);
 }
 
-void UAJH_EditorToolWidget::OnMyMain_Btn_Place()
+void UAJH_EditorToolWidget::OnMyMain_Btn_Weapon()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(3);
+}
+
+void UAJH_EditorToolWidget::OnMyMain_Btn_Place()
+{
+	EditorWidgetSwitcher->SetActiveWidgetIndex(4);
 	Place_Vertical_0->SetVisibility(ESlateVisibility::Visible);
 	Place_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -72,6 +84,19 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 
 void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 {
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyBtn_Evidence_0()
+{
+	me->FactoryChange = EvidenceFactory_0;
 	if ( me->bIsEditorActor == false )
 	{
 		me->OnMyEditorActorSpawn(true);
