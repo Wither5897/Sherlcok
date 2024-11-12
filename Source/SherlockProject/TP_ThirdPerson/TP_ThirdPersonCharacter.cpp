@@ -153,10 +153,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	if ( HasAuthority() )
-	{
-		ServerPlaySound();
-	}
+	//if ( HasAuthority() )
+	//{
+	//	ServerPlaySound();
+	//}
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
@@ -165,6 +165,7 @@ void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
 
 	PerformLineTrace();
 	PerformHighLight();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,21 +489,21 @@ void ATP_ThirdPersonCharacter::MulticastSetSummaryMulti_Implementation(int32 Cat
 	SetSummaryMulti(Category, SavedTexture, PlayerID);
 }
 
-void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
-{
-	static USoundWave* MainSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
-	static USoundWave* IncidentSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Incident_scene.Incident_scene'"));
-
-	FString CurrentLevelName = GetWorld()->GetMapName();
-	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
-
-	if ( CurrentLevelName == "Main" && MainSound )
-	{
-		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
-	}
-	if ( CurrentLevelName == "Case" && IncidentSound )
-	{
-		UGameplayStatics::PlaySound2D(GetWorld(), IncidentSound);
-	}
-}
+//void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
+//{
+//	static USoundWave* MainSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
+//	static USoundWave* IncidentSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Incident_scene.Incident_scene"));
+//
+//	FString CurrentLevelName = GetWorld()->GetMapName();
+//	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+//
+//	if ( CurrentLevelName == "Main" && MainSound )
+//	{
+//		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
+//	}
+//	if ( CurrentLevelName == "Case" && IncidentSound )
+//	{
+//		UGameplayStatics::PlaySound2D(GetWorld(), IncidentSound);
+//	}
+//}
 

@@ -214,8 +214,8 @@ public:
 
 	// Sound ======================================================================================
 
-	UFUNCTION(Server, Reliable)
-	void ServerPlaySound();
+	//UFUNCTION(Server, Reliable)
+	//void ServerPlaySound();
 	
 };
 
