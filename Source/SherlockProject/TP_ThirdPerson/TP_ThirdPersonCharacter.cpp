@@ -159,6 +159,11 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 	//ServerSetCharacterMaterial();
+
+	//if ( HasAuthority() )
+	//{
+	//	ServerPlaySound();
+	//}
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
@@ -514,3 +519,40 @@ void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(){
 	SetCharacterMaterial();
 }
 
+void ATP_ThirdPersonCharacter::PlayInventorySound()
+{
+	static USoundWave* InventorySound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Fast_book_paging.Fast_book_paging"));
+
+	if ( InventorySound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), InventorySound);
+	}
+}
+
+void ATP_ThirdPersonCharacter::PlayEvidenceSound()
+{
+	static USoundWave* EvidenceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Camera_shutter_click.Camera_shutter_click"));
+
+	if ( EvidenceSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), EvidenceSound);
+	}
+}
+
+//void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
+//{
+//	static USoundWave* MainSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
+//	static USoundWave* CaseSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Incident_scene.Incident_scene"));
+//
+//	FString CurrentLevelName = GetWorld()->GetMapName();
+//	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+//
+//	if ( CurrentLevelName == "Main" && MainSound )
+//	{
+//		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
+//	}
+//	if ( CurrentLevelName == "Case" && CaseSound )
+//	{
+//		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
+//	}
+//} // 배치에서 사건현장으로 넘어갈 때 터짐
