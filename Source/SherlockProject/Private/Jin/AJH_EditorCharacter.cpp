@@ -186,8 +186,15 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 	// 기존의 액터 스폰 로직 유지
 	if ( bIsActorSpawn && EditorActor != nullptr )
 	{
-		GetWorld()->SpawnActor<AAJH_WorldActor>(WorldActorFactory, EditorActor->GetActorTransform());
-		//GetWorld()->SpawnActor<AAJH_WorldActor>(FactoryChange, EditorActor->GetActorTransform());
+		if ( FactoryChange )
+		{
+			GetWorld()->SpawnActor<AAJH_WorldActor>(FactoryChange, EditorActor->GetActorTransform());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("FactoryChange is nullptr! Cannot spawn actor."));
+		}
+		//GetWorld()->SpawnActor<AAJH_WorldActor>(WorldActorFactory, EditorActor->GetActorTransform());
 		EditorActor->bIsSpawn = false;
 		EditorActor->Destroy();
 		bIsEditorActor = false;

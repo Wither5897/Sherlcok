@@ -97,6 +97,9 @@ public:
 	class UAJH_GizmoUI* GizmoUI;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> GizmoUIFactory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> FactoryChange;
+
 
 	UPROPERTY()
 	class USaveLevelUI* SaveLevelWidget;
