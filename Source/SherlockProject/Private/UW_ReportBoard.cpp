@@ -36,7 +36,7 @@ void UUW_ReportBoard::NativeConstruct(){
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
 	ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
+	
 }
 
 void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
@@ -147,6 +147,7 @@ void UUW_ReportBoard::CheckCondition(){
 		ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
 			GetWorld(), LevelSequence, PlaybackSettings, OutActor);
 		if (LevelSequencePlayer){
+			AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
 			AnimPawn->SetActorHiddenInGame(false);
 			LevelSequencePlayer->OnFinished.AddDynamic(this, &UUW_ReportBoard::SetAnimPawnVisibility);
 			LevelSequencePlayer->Play();

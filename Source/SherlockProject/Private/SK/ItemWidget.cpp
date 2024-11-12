@@ -35,7 +35,7 @@ void UItemWidget::NativeConstruct() {
 	//=======================================================================
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-	if ( me->check.Num() == 0 ) {
+	if ( me && me->check.Num() == 0 ) {
 		me->check.Init(false, 9);
 	}
 }
