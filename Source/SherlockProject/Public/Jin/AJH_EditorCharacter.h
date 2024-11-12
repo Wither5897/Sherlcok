@@ -97,6 +97,9 @@ public:
 	class UAJH_GizmoUI* GizmoUI;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> GizmoUIFactory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> FactoryChange;
+
 
 	UPROPERTY()
 	class USaveLevelUI* SaveLevelWidget;
@@ -129,7 +132,7 @@ public:
 	FVector actorInitialScale;
 	FVector worldScale;
 
-	void OnMyEditorActorSpawn(bool bIsSpawn, int32 num);
+	void OnMyEditorActorSpawn(bool bIsSpawn);
 	void OnMyLineTrace();
 	void OnMyHandleGizmoRotation();
 	void OnMyHandleGizmoScale();

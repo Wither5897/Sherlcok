@@ -186,7 +186,15 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 	// 기존의 액터 스폰 로직 유지
 	if ( bIsActorSpawn && EditorActor != nullptr )
 	{
-		GetWorld()->SpawnActor<AAJH_WorldActor>(WorldActorFactory, EditorActor->GetActorTransform());
+		if ( FactoryChange )
+		{
+			GetWorld()->SpawnActor<AAJH_WorldActor>(FactoryChange, EditorActor->GetActorTransform());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("FactoryChange is nullptr! Cannot spawn actor."));
+		}
+		//GetWorld()->SpawnActor<AAJH_WorldActor>(WorldActorFactory, EditorActor->GetActorTransform());
 		EditorActor->bIsSpawn = false;
 		EditorActor->Destroy();
 		bIsEditorActor = false;
@@ -438,7 +446,7 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 	}
 }
 
-void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn, int32 num)
+void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
 {
 	// 새로운 액터 스폰
 	if ( bIsSpawn)
@@ -446,7 +454,7 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn, int32 num)
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
 		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
-		EditorActor->OnMyMeshPath(num);
+		// EditorActor->OnMyMeshPath(num);
 		EditorActor->bIsSpawn = true;
 		bIsActorSpawn = true;
 		bIsEditorActor = true;
