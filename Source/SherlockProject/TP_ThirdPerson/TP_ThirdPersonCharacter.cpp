@@ -307,7 +307,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
 		}
 		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
-			int32 playerId = ps->GetPlayerId();
+			int32 playerId = ps->GetPlayerIdNum();
 
 			ServerItemFound(actorNum, playerId);
 			if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {

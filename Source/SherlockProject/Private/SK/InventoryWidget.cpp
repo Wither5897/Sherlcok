@@ -106,7 +106,7 @@ void UInventoryWidget::SuspectButtonClicked()
 	}
 	SuspectImage->SetBrushFromTexture(SavedTexture);
 	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	me->ServerSetSummaryMulti(0, SavedTexture, ps->GetPlayerId());
+	me->ServerSetSummaryMulti(0, SavedTexture, ps->GetPlayerIdNum());
 	SavedTexture = nullptr;
 }
 
@@ -118,7 +118,7 @@ void UInventoryWidget::WeaponButtonClicked()
 	}
 	WeaponImage->SetBrushFromTexture(SavedTexture);
 	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	me->ServerSetSummaryMulti(1, SavedTexture, ps->GetPlayerId());
+	me->ServerSetSummaryMulti(1, SavedTexture, ps->GetPlayerIdNum());
 	SavedTexture = nullptr;
 }
 
@@ -130,7 +130,7 @@ void UInventoryWidget::MainEvidenceButtonClicked()
 	}
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
 	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	me->ServerSetSummaryMulti(2, SavedTexture, ps->GetPlayerId());
+	me->ServerSetSummaryMulti(2, SavedTexture, ps->GetPlayerIdNum());
 	SavedTexture = nullptr;
 }
 
@@ -142,7 +142,7 @@ void UInventoryWidget::SpecialThingButtonClicked()
 	}
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
 	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	me->ServerSetSummaryMulti(3, SavedTexture, ps->GetPlayerId());
+	me->ServerSetSummaryMulti(3, SavedTexture, ps->GetPlayerIdNum());
 	SavedTexture = nullptr;
 }
 
