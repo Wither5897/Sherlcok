@@ -41,10 +41,10 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 		TimerDel.BindLambda([this, NewPlayer](){
 			if (AMultiPlayerState* ps = NewPlayer->GetPlayerState<AMultiPlayerState>())
 			{
-				ps->SetPlayerId(NumPlayers);
+				ps->SetPlayerIdNum(NumPlayers);
 				NumPlayers++;
                 
-				UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID: %d"), ps->GetPlayerId());
+				UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID: %d"), ps->GetPlayerIdNum());
 			}
 		});
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.1f, false);

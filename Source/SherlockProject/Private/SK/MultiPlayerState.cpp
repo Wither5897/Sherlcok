@@ -10,7 +10,7 @@ AMultiPlayerState::AMultiPlayerState()
 	bReplicates = true;
 }
 
-void AMultiPlayerState::SetPlayerId(int32 newPlayerID){
+void AMultiPlayerState::SetPlayerIdNum(int32 newPlayerID){
 	if(HasAuthority()){
 		PlayerIDNum = newPlayerID;
 	}

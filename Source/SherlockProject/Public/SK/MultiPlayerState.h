@@ -17,8 +17,10 @@ class SHERLOCKPROJECT_API AMultiPlayerState : public APlayerState
 public:
 	AMultiPlayerState();
 	
-	void SetPlayerId(int32 newPlayerID);
-	int32 GetPlayerId() const { return PlayerIDNum; }
+	void SetPlayerIdNum(int32 newPlayerID);
+
+	UFUNCTION(BlueprintCallable, Category = "MultiPlayerState")
+	int32 GetPlayerIdNum() const { return PlayerIDNum; }
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	

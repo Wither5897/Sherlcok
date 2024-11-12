@@ -54,7 +54,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 
 	if (me && me->InventoryUI && ps){
 		if (me->InventoryUI->ItemArray.IsValidIndex(0) && me->InventoryUI->ItemArray[0]){
-			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
+			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerIdNum());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0]){
@@ -62,7 +62,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 		}
 
 		if (me->InventoryUI->ItemArray.IsValidIndex(1) && me->InventoryUI->ItemArray[1]){
-			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
+			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerIdNum());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(1) && me->InventoryUI->NoteItemArray[1]){
@@ -70,7 +70,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 		}
 
 		if (me->InventoryUI->ItemArray.IsValidIndex(2) && me->InventoryUI->ItemArray[2]){
-			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
+			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerIdNum());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2]){
