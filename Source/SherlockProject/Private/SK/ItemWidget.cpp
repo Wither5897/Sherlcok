@@ -11,6 +11,8 @@
 #include "SK/DescriptionWidget.h"
 #include "UW_ReportBoard.h"
 #include "Board.h"
+#include "Kismet/GameplayStatics.h"
+
 
 
 void UItemWidget::NativeConstruct() {
@@ -72,6 +74,7 @@ void UItemWidget::VisibleBoard()
 	if ( MyNumber > 0 && MyNumber <= me->check.Num() )
 	{
 		me->check[MyNumber - 1] = true;
+		me->PlayEvidenceSound();
 	}
 	me->reportboard->CheckCondition(); // UI
 	me->Board->reportboard->CheckCondition(); // board
@@ -83,3 +86,5 @@ void UItemWidget::ItemButtonClicked() {
 		Inven->DescriptionUI->WhenItemClicked(GetMyNumber());
 	}
 }
+
+

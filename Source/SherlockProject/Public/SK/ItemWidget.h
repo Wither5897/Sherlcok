@@ -60,4 +60,5 @@ public:
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
 
+
 };

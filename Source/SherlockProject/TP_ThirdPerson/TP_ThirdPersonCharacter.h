@@ -229,5 +229,17 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSetCharacterMaterial();
+
+	//============================================
+
+	UFUNCTION()
+	void PlayInventorySound();
+
+	UFUNCTION()
+	void PlayEvidenceSound();
+
+	//UFUNCTION(Server, Reliable)
+	//void ServerPlaySound();
+	
 };
 
