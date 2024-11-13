@@ -63,7 +63,7 @@ void UAJH_SherlockGameInstance::CreateMySession()
 	SessionSettings->bAllowInvites = true; //초대기능 사용
 	SessionSettings->bAllowJoinInProgress = true; // 진행중에도 들어오는것을 사용
 	SessionSettings->bAllowJoinViaPresence = true;
-	SessionSettings->bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
+	SessionSettings->bIsLANMatch = false;
 	// 접속하는 방법이 랜 경유 , 스팀서버 경유 두가지 있는데 랜 경유이면 null 문자열 반환, 스팀이면 steam 문자열 반환
 	SessionSettings->bUsesPresence = true;
 	SessionSettings->bShouldAdvertise = true; //다른사람이 세션검색할경우 노출되도록 ( 검색이 가능하도록 )
@@ -105,7 +105,7 @@ void UAJH_SherlockGameInstance::FindMySession()
 	// 세션 검색 조건을 설정하기
 	sessionSearch = MakeShareable(new FOnlineSessionSearch());
 	check(sessionSearch);
-	sessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
+	sessionSearch->bIsLanQuery = false;
 	sessionSearch->MaxSearchResults = 3;
 	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 
