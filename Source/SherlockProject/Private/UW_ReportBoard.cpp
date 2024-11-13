@@ -143,22 +143,6 @@ void UUW_ReportBoard::CheckCondition(){
 		bWitnessReport = true;
 		ShowWitness();
 	}
-	
-	if (me->check[3] && me->check[5] && me->check[8] && !bSequence){
-		FMovieSceneSequencePlaybackSettings PlaybackSettings;
-		ALevelSequenceActor* OutActor;
-		ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
-			GetWorld(), LevelSequence, PlaybackSettings, OutActor);
-		if (LevelSequencePlayer){
-			AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
-			if(AnimPawn){
-				AnimPawn->SetActorHiddenInGame(false);
-			}
-			LevelSequencePlayer->OnFinished.AddDynamic(this, &UUW_ReportBoard::SetAnimPawnVisibility);
-			LevelSequencePlayer->Play();
-		}
-		bSequence = true;
-	}
 }
 
 
@@ -177,8 +161,4 @@ void UUW_ReportBoard::HideNotifyWidget(){
 	if (me->Notify){
 		me->Notify->SetVisibility(ESlateVisibility::Hidden);
 	}
-}
-
-void UUW_ReportBoard::SetAnimPawnVisibility(){
-	AnimPawn->SetActorHiddenInGame(true);
 }
