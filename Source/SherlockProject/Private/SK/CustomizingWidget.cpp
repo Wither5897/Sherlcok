@@ -66,7 +66,9 @@ void UCustomizingWidget::PlayButtonClicked(){
 		FCustomizingData newData;
 		newData.CoatIdx = CoatIdx;
 		newData.HatIdx = HatIdx;
-
+		if(me && me->LoadingUI){
+			me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+		}
 		gi->CustomizingDataArray.Add(newData);
 
 		gi->FindMySession();

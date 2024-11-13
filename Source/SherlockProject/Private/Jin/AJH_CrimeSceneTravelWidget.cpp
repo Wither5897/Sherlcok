@@ -138,6 +138,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 	if ( gm != nullptr && SherlockPC->HasAuthority() )
 	{
 		gm->ServerTravelToLevel("/Game/TJ/Case?Listen");
+		player->LoadingUI->SetVisibility(ESlateVisibility::Visible);
 		if ( player && player->IsLocallyControlled() )
 		{
 			SherlockPC->SetInputMode(FInputModeGameOnly());

@@ -186,7 +186,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-
+	
+	LoadingUI = Cast<UUserWidget>(CreateWidget(GetWorld(), LoadingUIFactory));
+	if(LoadingUI){
+		LoadingUI->AddToViewport();
+		LoadingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
 	PlayMapSound();
 	
 	if(HasAuthority()){

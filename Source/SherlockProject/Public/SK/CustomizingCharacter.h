@@ -44,4 +44,8 @@ public:
 	UFUNCTION()
 	void SetHatMaterial(class UMaterial* Material);
 
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> LoadingUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UUserWidget* LoadingUI;
 };

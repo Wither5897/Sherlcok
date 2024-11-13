@@ -125,6 +125,11 @@ public:
 	TSubclassOf<class UUserWidget> StatisticsUIFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UStatisticsWidget* StatisticsUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> LoadingUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UUserWidget* LoadingUI;
 	
 	//====================================================================================================
 	
