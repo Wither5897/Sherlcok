@@ -188,6 +188,7 @@ void AAJH_EditorCharacter::OnMyIA_LeftClick()
 	{
 		if ( FactoryChange )
 		{
+			UGameplayStatics::PlaySound2D(GetWorld(), HeavystompSound);
 			GetWorld()->SpawnActor<AAJH_WorldActor>(FactoryChange, EditorActor->GetActorTransform());
 		}
 		else

@@ -20,6 +20,7 @@ void UAJH_LoginWidget::NativeConstruct()
 
 void UAJH_LoginWidget::OnClickedFindSessionsButton()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), MainbuttonSound);
 	if (gi != nullptr)
 	{
 		// 누를때 닉네임과 캐릭터 선택값을 저장하기
