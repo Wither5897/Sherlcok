@@ -28,6 +28,8 @@ public:
 
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* player;
+	UPROPERTY()
+	class ASherlockPlayerController* pc;
 
 	UFUNCTION()
 	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
