@@ -217,6 +217,9 @@ void UStatisticsWidget::CalcSpecialRank(){
 void UStatisticsWidget::OnClickedExit(){
 	SetVisibility(ESlateVisibility::Hidden);
 	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
+	if(me && me->LoadingUI){
+		me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+	}
 	pc->SetShowMouseCursor(false);
 	pc->SetInputMode(FInputModeGameOnly());
 	GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);

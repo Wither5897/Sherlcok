@@ -66,7 +66,7 @@ void AAJH_EditorCharacter::BeginPlay()
 	{
 		GizmoUI->AddToViewport();
 	}
-
+	
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	EditorSpawn = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	IA_changeNum = 1;

@@ -4,6 +4,7 @@
 #include "SK/CustomizingCharacter.h"
 
 #include "MovieSceneTracksComponentTypes.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -31,7 +32,12 @@ ACustomizingCharacter::ACustomizingCharacter()
 void ACustomizingCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	LoadingUI = Cast<UUserWidget>(CreateWidget(GetWorld(), LoadingUIFactory));
+	if(LoadingUI){
+		LoadingUI->AddToViewport();
+		LoadingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 // Called every frame
