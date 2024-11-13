@@ -253,8 +253,8 @@ public:
 	UFUNCTION()
 	void PlayPaperSound();
 	
-	UFUNCTION(Server, Reliable)
-	void ServerPlaySound();
+	UFUNCTION()
+	void PlayMapSound();
 
 	UPROPERTY()
 	class USoundWave* MainSound;

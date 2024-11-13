@@ -185,10 +185,7 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	if ( HasAuthority() )
-	{
-		ServerPlaySound();
-	}
+	PlayMapSound();
 	
 	if(HasAuthority()){
 		gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
@@ -600,7 +597,7 @@ void ATP_ThirdPersonCharacter::PlayPaperSound(){
 	}
 }
 
-void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
+void ATP_ThirdPersonCharacter::PlayMapSound()
 {
 	if ( !GetWorld() )
 	{
