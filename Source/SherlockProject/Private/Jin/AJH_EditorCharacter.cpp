@@ -12,6 +12,7 @@
 #include "Camera/CameraComponent.h"
 #include "SK/SaveLevelUI.h"
 #include "AJH_GizmoUI.h"
+#include "Jin/AJH_EscapeWidget.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -46,6 +47,13 @@ void AAJH_EditorCharacter::BeginPlay()
 	if ( EditorWidget )
 	{
 		EditorWidget->AddToViewport();
+	}
+
+	EscapeWidget = Cast<UAJH_EscapeWidget>(CreateWidget(GetWorld(), EscapeWidgetFactory));
+	if ( EscapeWidget )
+	{
+		EscapeWidget->AddToViewport();
+		EscapeWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	SaveLevelWidget = Cast<USaveLevelUI>(CreateWidget(GetWorld(), SaveLevelWidgetFactory));
@@ -100,6 +108,7 @@ void AAJH_EditorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		input->BindAction(IA_changeLocation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeLocation);
 		input->BindAction(IA_changeRotation, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeRotation);
 		input->BindAction(IA_changeScale, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_changeScale);
+		input->BindAction(IA_Escape, ETriggerEvent::Started, this, &AAJH_EditorCharacter::OnMyIA_Escape);
 	}
 
 }
@@ -478,6 +487,11 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 		CurrentWorldActor->ScaleVisivility();
 		ScaleGizmoForSetCollision();
 	}
+}
+
+void AAJH_EditorCharacter::OnMyIA_Escape()
+{
+	EscapeWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
