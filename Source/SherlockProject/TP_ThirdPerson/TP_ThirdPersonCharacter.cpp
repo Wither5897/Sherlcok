@@ -39,6 +39,7 @@
 #endif
 #include "Sound/SoundWave.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Jin/AJH_CreatorToolTravel.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -169,6 +170,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if (TravelClientWidget){
 		TravelClientWidget->AddToViewport();
 		TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	CreatorToolTravel = Cast<UAJH_CreatorToolTravel>(CreateWidget(GetWorld(), CreatorToolTravelFactory));
+	if ( CreatorToolTravel )
+	{
+		CreatorToolTravel->AddToViewport();
+		CreatorToolTravel->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	StatisticsUI = Cast<UStatisticsWidget>(CreateWidget(GetWorld(), StatisticsUIFactory));

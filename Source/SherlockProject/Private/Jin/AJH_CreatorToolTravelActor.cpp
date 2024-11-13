@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Jin/AJH_CreatorToolTravel.h"
+#include "SherlockPlayerController.h"
 
 // Sets default values
 AAJH_CreatorToolTravelActor::AAJH_CreatorToolTravelActor()
@@ -24,7 +25,7 @@ void AAJH_CreatorToolTravelActor::BeginPlay()
 	
 	TravelboxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyBeginOverlap);
 	TravelboxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyEndOverlap);
-
+	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 }
 
 // Called every frame
@@ -40,7 +41,9 @@ void AAJH_CreatorToolTravelActor::OnMyBeginOverlap(UPrimitiveComponent* Overlapp
 
 	if (player && player->IsLocallyControlled() )
 	{
-		
+		player->CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
+		pc->bShowMouseCursor = true;
+		pc->SetInputMode(FInputModeGameAndUI());
 	}
 }
 
@@ -50,7 +53,9 @@ void AAJH_CreatorToolTravelActor::OnMyEndOverlap(UPrimitiveComponent* Overlapped
 
 	if (player && player->IsLocallyControlled() )
 	{
-
+		player->CreatorToolTravel->SetVisibility(ESlateVisibility::Collapsed);
+		pc->bShowMouseCursor = false;
+		pc->SetInputMode(FInputModeGameOnly());
 	}
 }
 

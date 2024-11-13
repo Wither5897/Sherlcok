@@ -116,6 +116,10 @@ public:
 	TSubclassOf<class UUserWidget> TravelClientWidgetFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UAJH_TravelClientWidget* TravelClientWidget;
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> CreatorToolTravelFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UAJH_CreatorToolTravel* CreatorToolTravel;
 
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<class UUserWidget> StatisticsUIFactory;
