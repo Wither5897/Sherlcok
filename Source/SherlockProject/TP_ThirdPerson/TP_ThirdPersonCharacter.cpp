@@ -37,6 +37,8 @@
 #include "Editor/GroupActor.h"
 // 에디터 전용 작업 수행
 #endif
+#include "Sound/SoundWave.h"
+#include "UObject/ConstructorHelpers.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -97,7 +99,24 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	Comp = CreateDefaultSubobject<UHighlightComponent>(TEXT("HighlighComp"));
+
+
+
+	ConstructorHelpers::FObjectFinder<USoundWave> MainSoundObj(TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
+	if ( MainSoundObj.Succeeded() )
+	{
+		MainSound = MainSoundObj.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundWave> CaseSoundObj(TEXT("/Game/KHH/Sound/Incident_scene.Incident_scene"));
+	if ( CaseSoundObj.Succeeded() )
+	{
+		CaseSound = CaseSoundObj.Object;
+	}
+
+	EvidenceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Camera_shutter_click.Camera_shutter_click"));
 }
+
 
 void ATP_ThirdPersonCharacter::BeginPlay(){
 	// Call the base class  
@@ -158,10 +177,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	//if ( HasAuthority() )
-	//{
-	//	ServerPlaySound();
-	//}
+	if ( HasAuthority() )
+	{
+		ServerPlaySound();
+	}
 	
 	if(HasAuthority()){
 		gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
@@ -334,6 +353,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
 			}
 			interactionUI->SetVisibility(ESlateVisibility::Visible);
 			interactionUI->WhenItemClick(actorNum);
+			PlayEvidenceSound();
 			pc->SetShowMouseCursor(true);
 			pc->SetInputMode(FInputModeGameAndUI());
 			GetCharacterMovement()->DisableMovement();
@@ -406,7 +426,7 @@ void ATP_ThirdPersonCharacter::PerformLineTrace(){
 
 void ATP_ThirdPersonCharacter::OpenInventory(){
 	auto* pc = Cast<APlayerController>(GetController());
-	// PlayInventorySound();
+	PlayInventorySound();
 	if (!pc){
 		return;
 	}
@@ -537,38 +557,42 @@ void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(int3
 
 void ATP_ThirdPersonCharacter::PlayInventorySound()
 {
-	static USoundWave* InventorySound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Fast_book_paging.Fast_book_paging"));
-
-	if ( InventorySound )
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), InventorySound);
+		USoundWave* InventorySound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Fast_book_paging.Fast_book_paging"));
+		// UE_LOG(LogTemp, Warning, FString::Printf(TEXT("%s"), *InventorySound->GetPathName()));
+
+		if ( InventorySound )
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), InventorySound);
+		}
 	}
 }
 
 void ATP_ThirdPersonCharacter::PlayEvidenceSound()
 {
-	static USoundWave* EvidenceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Camera_shutter_click.Camera_shutter_click"));
-
 	if ( EvidenceSound )
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), EvidenceSound);
 	}
 }
 
-//void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
-//{
-//	static USoundWave* MainSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
-//	static USoundWave* CaseSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Incident_scene.Incident_scene"));
-//
-//	FString CurrentLevelName = GetWorld()->GetMapName();
-//	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
-//
-//	if ( CurrentLevelName == "Main" && MainSound )
-//	{
-//		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
-//	}
-//	if ( CurrentLevelName == "Case" && CaseSound )
-//	{
-//		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
-//	}
-//} // 배치에서 사건현장으로 넘어갈 때 터짐
+void ATP_ThirdPersonCharacter::ServerPlaySound_Implementation()
+{
+	if ( !GetWorld() )
+	{
+		return; 
+	}
+
+	FString CurrentLevelName = GetWorld()->GetMapName();
+	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	if ( CurrentLevelName == "Main" && MainSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
+	}
+	else if ( CurrentLevelName == "Case" && CaseSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
+	}
+
+} 

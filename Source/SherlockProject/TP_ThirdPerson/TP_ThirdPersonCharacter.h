@@ -242,12 +242,20 @@ public:
 
 	UFUNCTION()
 	void PlayInventorySound();
-
+	
 	UFUNCTION()
 	void PlayEvidenceSound();
 
-	//UFUNCTION(Server, Reliable)
-	//void ServerPlaySound();
+	UFUNCTION(Server, Reliable)
+	void ServerPlaySound();
+
+	UPROPERTY()
+	class USoundWave* MainSound;
+
+	UPROPERTY()
+	class USoundWave* CaseSound;
 	
+	UPROPERTY()
+	class USoundWave* EvidenceSound;
 };
 
