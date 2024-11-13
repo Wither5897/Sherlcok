@@ -55,6 +55,8 @@ public:
 	class UInputAction* IA_changeRotation;
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_changeScale;
+	UPROPERTY(EditDefaultsOnly)
+	class UInputAction* IA_Escape;
 
 	FVector2D MouseValue;
 
@@ -69,6 +71,7 @@ public:
 	void OnMyIA_changeLocation();
 	void OnMyIA_changeRotation();
 	void OnMyIA_changeScale();
+	void OnMyIA_Escape();
 
 	UPROPERTY()
 	class APlayerController* pc;
@@ -83,6 +86,10 @@ public:
 	TSubclassOf<class UUserWidget> EditorWidgetFactory;
 	UPROPERTY()
 	class UAJH_EditorToolWidget* EditorWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> EscapeWidgetFactory;
+	UPROPERTY()
+	class UAJH_EscapeWidget* EscapeWidget;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> EditorActorFactory;
 	UPROPERTY()
