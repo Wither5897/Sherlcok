@@ -25,4 +25,10 @@ public:
 
 	UFUNCTION()
 	void ConfirmButtonClicked();
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CloseButton;
+
+	UFUNCTION()
+	void CloseButtonClicked();
 };

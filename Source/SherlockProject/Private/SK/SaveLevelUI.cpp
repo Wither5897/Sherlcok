@@ -23,3 +23,9 @@ void USaveLevelUI::ConfirmButtonClicked(){
 	gi->SaveLevel(LevelNameEdit->GetText().ToString());
 	SetVisibility(ESlateVisibility::Hidden);
 }
+
+void USaveLevelUI::CloseButtonClicked(){
+	FText text = FText::FromString("");
+	LevelNameEdit->SetText(text);
+	SetVisibility(ESlateVisibility::Hidden);
+}
