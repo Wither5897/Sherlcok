@@ -442,45 +442,57 @@ void ATP_ThirdPersonCharacter::SetSummaryMulti(int32 Category, UTexture2D* Saved
 			switch (Category){
 			case 0:
 				if (PlayerID == 0){
+					Character->SummaryWidget->Img_SuspectImage1->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SuspectImage1->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_SuspectImage2->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SuspectImage2->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_SuspectImage3->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SuspectImage3->SetBrushFromTexture(SavedTexture);
 				}
 				break;
 			case 1:
 				if (PlayerID == 0){
+					Character->SummaryWidget->Img_WeaponImage1->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_WeaponImage1->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_WeaponImage2->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_WeaponImage2->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_WeaponImage3->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_WeaponImage3->SetBrushFromTexture(SavedTexture);
 				}
 				break;
 			case 2:
 				if (PlayerID == 0){
+					Character->SummaryWidget->Img_MainEvidenceImage1->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_MainEvidenceImage1->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_MainEvidenceImage2->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_MainEvidenceImage2->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_MainEvidenceImage3->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_MainEvidenceImage3->SetBrushFromTexture(SavedTexture);
 				}
 				break;
 			case 3:
 				if (PlayerID == 0){
+					Character->SummaryWidget->Img_SpecialThingImage1->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SpecialThingImage1->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 1){
+					Character->SummaryWidget->Img_SpecialThingImage2->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SpecialThingImage2->SetBrushFromTexture(SavedTexture);
 				}
 				else if (PlayerID == 2){
+					Character->SummaryWidget->Img_SpecialThingImage3->SetOpacity(1.0f);
 					Character->SummaryWidget->Img_SpecialThingImage3->SetBrushFromTexture(SavedTexture);
 				}
 				break;
@@ -513,12 +525,9 @@ void ATP_ThirdPersonCharacter::OnRep_PlayerState(){
 }
 
 void ATP_ThirdPersonCharacter::SetCharacterMaterial(int32 PlayerID){
-	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, "SetCharacterMaterial");
 	if(gi->CustomizingDataArray.IsValidIndex(PlayerID)){
-		GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, FString::Printf(TEXT("PlayerID: %d"), PlayerID));
 		const FCustomizingData& myData = gi->CustomizingDataArray[PlayerID];
 		if(CoatMesh && HatMesh && MaterialArray.IsValidIndex(myData.CoatIdx) && MaterialArray.IsValidIndex(myData.HatIdx)){
-			GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, FString::Printf(TEXT("Coat: %d, Hat: %d"), myData.CoatIdx, myData.HatIdx));
 			CoatMesh->SetMaterial(0, MaterialArray[myData.CoatIdx]);
 			for (int32 i = 0; i < 4; i++){
 				HatMesh->SetMaterial(i, MaterialArray[myData.HatIdx]);
