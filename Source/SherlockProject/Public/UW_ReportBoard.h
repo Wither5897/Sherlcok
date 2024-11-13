@@ -109,12 +109,5 @@ public:
 	bool bWitnessReport = false;
 	bool bSequence = false;
 	
-	UPROPERTY(EditDefaultsOnly)
-	class ULevelSequence* LevelSequence;
 	
-	UPROPERTY(EditDefaultsOnly)
-	class AAnimPawn* AnimPawn;
-
-	UFUNCTION()
-	void SetAnimPawnVisibility();
 };

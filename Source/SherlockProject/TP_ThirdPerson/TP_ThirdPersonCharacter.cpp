@@ -37,9 +37,11 @@
 #include "Editor/GroupActor.h"
 // 에디터 전용 작업 수행
 #endif
+#include "LevelSequencePlayer.h"
 #include "Sound/SoundWave.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Jin/AJH_CreatorToolTravel.h"
+#include "SK/AnimPawn.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -337,40 +339,65 @@ void ATP_ThirdPersonCharacter::PerformHighLight(){
 }
 
 void ATP_ThirdPersonCharacter::Interaction(){
-	auto* pc = Cast<APlayerController>(GetController());
-	//PerformLineTrace();
-	if (!interactionUI || !pc){
-		return;
-	}
-	if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
-		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
+    auto* pc = Cast<APlayerController>(GetController());
+    if (!interactionUI || !pc){
+        return;
+    }
 
-		if (!actor || !ps){
-			return;
-		}
-		if (!bPick){
-			int32 actorNum = actor->Comp->GetTagNum();
-			int32 playerId = ps->GetPlayerId();
+    if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
+        AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
 
-			ServerItemFound(actorNum, playerId);
-			if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
-				InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
-			}
-			interactionUI->SetVisibility(ESlateVisibility::Visible);
-			interactionUI->WhenItemClick(actorNum);
-			PlayEvidenceSound();
-			pc->SetShowMouseCursor(true);
-			pc->SetInputMode(FInputModeGameAndUI());
-			GetCharacterMovement()->DisableMovement();
-		}
-		else{
-			interactionUI->SetVisibility(ESlateVisibility::Hidden);
-			pc->SetShowMouseCursor(false);
-			pc->SetInputMode(FInputModeGameOnly());
-			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-		}
-		bPick = !bPick;
-	}
+        if (!actor || !ps){
+            return;
+        }
+
+        if (!bPick){
+            int32 actorNum = actor->Comp->GetTagNum();
+            int32 playerId = ps->GetPlayerId();
+
+            ServerItemFound(actorNum, playerId);
+            if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
+                InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
+            }
+
+            interactionUI->SetVisibility(ESlateVisibility::Visible);
+            interactionUI->WhenItemClick(actorNum);
+            PlayEvidenceSound();
+            pc->SetShowMouseCursor(true);
+            pc->SetInputMode(FInputModeGameAndUI());
+            GetCharacterMovement()->DisableMovement();
+        }
+        else {
+            // UI가 닫힐 때 실행
+            interactionUI->SetVisibility(ESlateVisibility::Hidden);
+            pc->SetShowMouseCursor(false);
+            pc->SetInputMode(FInputModeGameOnly());
+            GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+
+            // UI가 닫힌 후 조건에 따라 레벨 시퀀스 실행
+            if (check[3] && check[5] && check[8] && !bSequence) {
+                FMovieSceneSequencePlaybackSettings PlaybackSettings;
+                ALevelSequenceActor* OutActor;
+                ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+                    GetWorld(), LevelSequence, PlaybackSettings, OutActor);
+                
+                if (LevelSequencePlayer) {
+                    AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
+                    if(AnimPawn) {
+                        AnimPawn->SetActorHiddenInGame(false);
+                    }
+                    LevelSequencePlayer->OnFinished.AddDynamic(this, &ATP_ThirdPersonCharacter::SetAnimPawnVisibility);
+                    LevelSequencePlayer->Play();
+                }
+                bSequence = true;
+            }
+        }
+        bPick = !bPick;
+    }
+}
+
+void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
+	AnimPawn->SetActorHiddenInGame(true);
 }
 
 void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
