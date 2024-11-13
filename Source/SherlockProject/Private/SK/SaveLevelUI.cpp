@@ -13,6 +13,7 @@ void USaveLevelUI::NativeConstruct(){
 	SetVisibility(ESlateVisibility::Hidden);
 	
 	ConfirmButton->OnClicked.AddDynamic(this, &USaveLevelUI::ConfirmButtonClicked);
+	CloseButton->OnClicked.AddDynamic(this, &USaveLevelUI::CloseButtonClicked);
 }
 
 void USaveLevelUI::ConfirmButtonClicked(){
