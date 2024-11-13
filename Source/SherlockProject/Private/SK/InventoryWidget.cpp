@@ -41,6 +41,7 @@ void UInventoryWidget::NativeConstruct()
 	MainEvidenceButton->OnClicked.AddDynamic(this, &UInventoryWidget::MainEvidenceButtonClicked);
 	SpecialThingButton->OnClicked.AddDynamic(this, &UInventoryWidget::SpecialThingButtonClicked);
 	ResetButton->OnClicked.AddDynamic(this, &UInventoryWidget::ResetButtonClicked);
+	CompleteButton->OnClicked.AddDynamic(this, &UInventoryWidget::CompleteButtonClicked);
 
 	InitTexture = nullptr;
 
@@ -89,6 +90,16 @@ void UInventoryWidget::ShowEvidenceButtonClicked()
 	if ( CaseRecordScreen->IsVisible() ) {
 		return;
 	}
+	FWidgetTransform NewTransform;
+	NewTransform.Angle = 90;
+	NewTransform.Translation = FVector2D(20, 0);
+	ShowEvidenceButton->SetRenderTransform(NewTransform);
+	EvidenceButtonBackground->SetRenderTransform(NewTransform);
+	
+	NewTransform.Translation = FVector2D(-20, 0);
+	ShowNoteButton->SetRenderTransform(NewTransform);
+	NoteButtonBackground->SetRenderTransform(NewTransform);
+	
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Hidden);
 	
@@ -100,6 +111,16 @@ void UInventoryWidget::ShowNoteButtonClicked()
 	if ( CaseGuessScreen->IsVisible() ) {
 		return;
 	}
+	FWidgetTransform NewTransform;
+	NewTransform.Angle = 90;
+	NewTransform.Translation = FVector2D(20, 0);
+	ShowNoteButton->SetRenderTransform(NewTransform);
+	NoteButtonBackground->SetRenderTransform(NewTransform);
+
+	NewTransform.Translation = FVector2D(-20, 0);
+	ShowEvidenceButton->SetRenderTransform(NewTransform);
+	EvidenceButtonBackground->SetRenderTransform(NewTransform);
+	
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Hidden);
 
@@ -160,6 +181,30 @@ void UInventoryWidget::ResetButtonClicked()
 	WeaponImage->SetBrushFromTexture(InitTexture);
 	MainEvidenceImage->SetBrushFromTexture(InitTexture);
 	SpecialThingImage->SetBrushFromTexture(InitTexture);
+	auto* ps = me->GetPlayerState();
+	if(ps->GetPlayerId() == 0){
+		me->SummaryWidget->Img_SuspectImage1->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_WeaponImage1->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_MainEvidenceImage1->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_SpecialThingImage1->SetBrushFromTexture(InitTexture);
+	}
+	else if (ps->GetPlayerId() == 1){
+		me->SummaryWidget->Img_SuspectImage2->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_WeaponImage2->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_MainEvidenceImage2->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_SpecialThingImage2->SetBrushFromTexture(InitTexture);
+	}
+	else{
+		me->SummaryWidget->Img_SuspectImage3->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_WeaponImage3->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_MainEvidenceImage3->SetBrushFromTexture(InitTexture);
+		me->SummaryWidget->Img_SpecialThingImage3->SetBrushFromTexture(InitTexture);
+	}
+}
+
+void UInventoryWidget::CompleteButtonClicked(){
+	SetVisibility(ESlateVisibility::Hidden);
+	me->SummaryWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UInventoryWidget::InitDoubleClick()

@@ -91,6 +91,11 @@ public:
 	void ResetButtonClicked();
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* CompleteButton;
+	UFUNCTION()
+	void CompleteButtonClicked();
+	
+	UPROPERTY(meta = (BindWidget))
 	class UMultiLineEditableText* SuspectTextField;
 
 	UPROPERTY(meta = (BindWidget))
@@ -120,6 +125,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* SpecialThingImage;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UImage* EvidenceButtonBackground;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UImage* NoteButtonBackground;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UItemWidget*> ItemArray;
 
