@@ -42,8 +42,16 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Place_Btn_Furnitures_Down_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1);
 	Place_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
-	// Wall
-	Place_Btn_Wall_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Wall_1);
+	// Footway
+	Place_Btn_Footway_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_1);
+	Place_Btn_Footway_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_2);
+	Place_Btn_Footway_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_3);
+	// Road
+	Place_Btn_Road_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Road_1);
+	Place_Btn_Road_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Road_2);
+	Place_Btn_Road_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Road_3);
+	// Station
+	Place_Btn_Station_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Station_1);
 
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
@@ -118,6 +126,7 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 
 void UAJH_EditorToolWidget::OnMyBtn_Evidence_0()
 {
+	me->EditorChange = EditorEvidenceFactory_0;
 	me->FactoryChange = EvidenceFactory_0;
 	if ( me->bIsEditorActor == false )
 	{
@@ -167,9 +176,94 @@ void UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1()
 	Place_Vertical_1->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UAJH_EditorToolWidget::OnMyPlace_Btn_Wall_1()
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_1()
 {
-	me->FactoryChange = Wall_1Factory;
+	me->EditorChange = EditFootway_1Factory;
+	me->FactoryChange = Footway_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_2()
+{
+	me->EditorChange = EditFootway_2Factory;
+	me->FactoryChange = Footway_2Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_3()
+{
+	me->EditorChange = EditFootway_3Factory;
+	me->FactoryChange = Footway_3Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Road_1()
+{
+	me->EditorChange = EditRoad_1Factory;
+	me->FactoryChange = Road_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Road_2()
+{
+	me->EditorChange = EditRoad_2Factory;
+	me->FactoryChange = Road_2Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Road_3()
+{
+	me->EditorChange = EditRoad_3Factory;
+	me->FactoryChange = Road_3Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Station_1()
+{
+	me->EditorChange = EditStation_1Factory;
+	me->FactoryChange = Station_1Factory;
 	if ( me->bIsEditorActor == false )
 	{
 		me->OnMyEditorActorSpawn(true);

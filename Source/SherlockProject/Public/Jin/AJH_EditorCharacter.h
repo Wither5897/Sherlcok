@@ -96,6 +96,8 @@ public:
 	TSubclassOf<class AActor> EditorChange;
 	UPROPERTY()
 	class AAJH_EditorActor* EditorActor;
+	UPROPERTY()
+	class AAJH_EditorActor* EditorSpawn;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> WorldActorFactory;
 	UPROPERTY()
@@ -126,6 +128,7 @@ public:
 	bool bIsGizmoLocationActive = false;
 	bool bIsGizmoRotationActive = false;
 	bool bIsGizmoScaleActive = false;
+	bool bHasInteractedWithGizmo;
 
 	FVector initialWorldLocation;
 	FVector actorInitialLocation;
@@ -154,6 +157,7 @@ public:
 
 	void OnMyGizmoInteraction();
 	void SetGizmoState(EGizmoState GizmoState);
+	void UpdateGizmoScale();
 	// 상태 정보를 저장할 변수 추가
 	EGizmoState CurrentGizmoState = EGizmoState::Location;
 

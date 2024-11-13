@@ -71,6 +71,8 @@ public:
 	class UButton* Btn_Evidence_0;
 	UPROPERTY(EditDefaultsOnly, Category = "EvidenceFactory")
 	TSubclassOf<class AActor> EvidenceFactory_0;
+	UPROPERTY(EditDefaultsOnly, Category = "EvidenceFactory")
+	TSubclassOf<class AActor> EditorEvidenceFactory_0;
 	UFUNCTION()
 	void OnMyBtn_Evidence_0();
 
@@ -116,14 +118,67 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UVerticalBox* Place_Vertical_1;
 
-	// Wall
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "WallFactory")
-	class UButton* Place_Btn_Wall_1;
+	// Place_Footway
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	class UButton* Place_Btn_Footway_1;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	class UButton* Place_Btn_Footway_2;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	class UButton* Place_Btn_Footway_3;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AActor> Wall_1Factory;
+	TSubclassOf<class AActor> EditFootway_1Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Footway_1Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditFootway_2Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Footway_2Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditFootway_3Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Footway_3Factory;
 	UFUNCTION()
-	void OnMyPlace_Btn_Wall_1();
+	void OnMyPlace_Btn_Footway_1();
+	UFUNCTION()
+	void OnMyPlace_Btn_Footway_2();
+	UFUNCTION()
+	void OnMyPlace_Btn_Footway_3();
 
+	// Place_Road
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	class UButton* Place_Btn_Road_1;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	class UButton* Place_Btn_Road_2;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	class UButton* Place_Btn_Road_3;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditRoad_1Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Road_1Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditRoad_2Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Road_2Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditRoad_3Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Road_3Factory;
+	UFUNCTION()
+	void OnMyPlace_Btn_Road_1();
+	UFUNCTION()
+	void OnMyPlace_Btn_Road_2();
+	UFUNCTION()
+	void OnMyPlace_Btn_Road_3();
+
+	// Place_Station
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "StationFactory")
+	class UButton* Place_Btn_Station_1;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditStation_1Factory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Station_1Factory;
+	UFUNCTION()
+	void OnMyPlace_Btn_Station_1();
 
 	
 	UPROPERTY()
