@@ -27,6 +27,8 @@ public:
 	class UAJH_SherlockGameInstance* gi;
 	UPROPERTY(BlueprintReadOnly)
 	class ATP_ThirdPersonGameMode* gm;
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* PaperscrollSound;
 
 	UPROPERTY(BlueprintReadOnly)
 	class UMapSaveGame* LoadGameInstance;

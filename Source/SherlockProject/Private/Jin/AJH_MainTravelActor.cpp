@@ -29,7 +29,6 @@ void AAJH_MainTravelActor::BeginPlay()
 	
 	mainTravelBoxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap);
 	mainTravelBoxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap);
-	// player = Cast<ATP_ThirdPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 
 }
@@ -43,48 +42,12 @@ void AAJH_MainTravelActor::Tick(float DeltaTime)
 
 void AAJH_MainTravelActor::ShowCrimeSceneTravelWidget_Server(AActor* OtherActor)
 {
-	/*if ( CrimeSceneTravelWidgetFactory )
-	{
-		if ( !CrimeSceneTravelWidget )
-		{
-			CrimeSceneTravelWidget = CreateWidget<UAJH_CrimeSceneTravelWidget>(GetWorld(), CrimeSceneTravelWidgetFactory);
-			if ( CrimeSceneTravelWidget )
-			{
-				CrimeSceneTravelWidget->AddToViewport();
-				pc->bShowMouseCursor = true;
-				pc->SetInputMode(FInputModeGameAndUI());
-			}
-		}
-		else
-		{
-			CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
-			pc->bShowMouseCursor = true;
-			pc->SetInputMode(FInputModeGameAndUI());
-		}
-	}*/
+	
 }
 
 void AAJH_MainTravelActor::ShowCrimeSceneTravelWidget_Client(AActor* OtherActor)
 {
-	/*if ( TravelClientWidgetFactory )
-	{
-		if ( !TravelClientWidget )
-		{
-			TravelClientWidget = CreateWidget<UAJH_TravelClientWidget>(GetWorld(), TravelClientWidgetFactory);
-			if ( TravelClientWidget )
-			{
-				TravelClientWidget->AddToViewport();
-				pc->bShowMouseCursor = true;
-				pc->SetInputMode(FInputModeGameAndUI());
-			}
-		}
-		else
-		{
-			TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
-			pc->bShowMouseCursor = true;
-			pc->SetInputMode(FInputModeGameAndUI());
-		}
-	}*/
+	
 }
 
 void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -92,7 +55,6 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
-		//player->MainTravel(OtherActor);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
 		player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
 		pc->bShowMouseCursor = true;
@@ -111,7 +73,6 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* Over
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
-		// player->MainTravel(OtherActor);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = false;
 		pc->SetInputMode(FInputModeGameOnly());
