@@ -65,6 +65,8 @@ void UInventoryWidget::PageDownButtonClicked()
 		EvidenceList1->SetVisibility(ESlateVisibility::Visible);
 		EvidenceList2->SetVisibility(ESlateVisibility::Hidden);
 		EvidencePage->SetText(FText::FromString("1"));
+
+		me->PlayPaperSound();
 	}
 }
 
@@ -77,6 +79,8 @@ void UInventoryWidget::PageUpButtonClicked()
 		EvidenceList1->SetVisibility(ESlateVisibility::Hidden);
 		EvidenceList2->SetVisibility(ESlateVisibility::Visible);
 		EvidencePage->SetText(FText::FromString("2"));
+		
+		me->PlayPaperSound();
 	}
 }
 
@@ -87,6 +91,8 @@ void UInventoryWidget::ShowEvidenceButtonClicked()
 	}
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Hidden);
+	
+	me->PlayPaperSound();
 }
 
 void UInventoryWidget::ShowNoteButtonClicked()
@@ -96,6 +102,8 @@ void UInventoryWidget::ShowNoteButtonClicked()
 	}
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Hidden);
+
+	me->PlayPaperSound();
 }
 
 void UInventoryWidget::SuspectButtonClicked()

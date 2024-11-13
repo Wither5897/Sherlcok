@@ -116,8 +116,8 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	}
 
 	EvidenceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Camera_shutter_click.Camera_shutter_click"));
+	PaperSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/paper.paper"));
 }
-
 
 void ATP_ThirdPersonCharacter::BeginPlay(){
 	// Call the base class  
@@ -590,6 +590,13 @@ void ATP_ThirdPersonCharacter::PlayEvidenceSound()
 	if ( EvidenceSound )
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), EvidenceSound);
+	}
+}
+
+void ATP_ThirdPersonCharacter::PlayPaperSound(){
+	if ( PaperSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), PaperSound);
 	}
 }
 

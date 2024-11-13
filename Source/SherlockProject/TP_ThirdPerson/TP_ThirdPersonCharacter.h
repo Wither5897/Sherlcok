@@ -250,6 +250,9 @@ public:
 	UFUNCTION()
 	void PlayEvidenceSound();
 
+	UFUNCTION()
+	void PlayPaperSound();
+	
 	UFUNCTION(Server, Reliable)
 	void ServerPlaySound();
 
@@ -261,5 +264,8 @@ public:
 	
 	UPROPERTY()
 	class USoundWave* EvidenceSound;
+
+	UPROPERTY()
+	class USoundWave* PaperSound;
 };
 
