@@ -26,7 +26,7 @@ void UAJH_LoginWidget::OnClickedFindSessionsButton()
 		// 누를때 닉네임과 캐릭터 선택값을 저장하기
 		gi->UserNickName = Edit_hostName->GetText().ToString();
 		auto* pc = GetOwningPlayer();
-		pc->ClientTravel("/Game/KHH/CharacterCustom/EditMap?Listen", TRAVEL_Absolute);
+		pc->ClientTravel("/Game/KHH/CharacterCustom/EditMap1?Listen", TRAVEL_Absolute);
 		// gi->FindMySession();
 	}
 }
