@@ -501,7 +501,8 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
 	{
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
-		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+		//EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorChange, transform);
 		// EditorActor->OnMyMeshPath(num);
 		EditorActor->bIsSpawn = true;
 		bIsActorSpawn = true;

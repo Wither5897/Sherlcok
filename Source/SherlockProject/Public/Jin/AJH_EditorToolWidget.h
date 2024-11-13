@@ -82,6 +82,8 @@ public:
 	class UButton* Btn_Weapon_1;
 	UPROPERTY(EditDefaultsOnly, Category = "WeaponFactory")
 	TSubclassOf<class AActor> weaponFactory_1;
+	UPROPERTY(EditDefaultsOnly, Category = "WeaponFactory")
+	TSubclassOf<class AActor> EditorWeaponFactory_1;
 	UFUNCTION()
 	void OnMyBtn_Weapon_1();
 
