@@ -44,32 +44,51 @@ public:
 
 	// Character
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Character_Btn_Back;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Character_0;
+	UPROPERTY(EditDefaultsOnly, Category = "CharacterFactory")
+	TSubclassOf<class AActor> Character_0Factory;
+	UFUNCTION()
+	void OnMyBtn_Character_0();
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_Character_1;
+	UPROPERTY(EditDefaultsOnly, Category = "CharacterFactory")
+	TSubclassOf<class AActor> Character_1Factory;
 	UFUNCTION()
 	void OnMyBtn_Character_1();
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_Character_2;
+	UPROPERTY(EditDefaultsOnly, Category = "CharacterFactory")
+	TSubclassOf<class AActor> Character_2Factory;
 	UFUNCTION()
 	void OnMyBtn_Character_2();
 
 	// Evidence
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Evidence_Btn_Back;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_Evidence_0;
+	UPROPERTY(EditDefaultsOnly, Category = "EvidenceFactory")
+	TSubclassOf<class AActor> EvidenceFactory_0;
 	UFUNCTION()
 	void OnMyBtn_Evidence_0();
 
 
 	// Weapon
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
-	class UButton* Btn_Weapon_1;
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Weapon_Btn_Back;
-	
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Btn_Weapon_1;
+	UPROPERTY(EditDefaultsOnly, Category = "WeaponFactory")
+	TSubclassOf<class AActor> weaponFactory_1;
 	UFUNCTION()
 	void OnMyBtn_Weapon_1();
 
 	//Place_Furnitures
 	// Up
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Place_Btn_Back;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Furnitures_Up_0;
 	UFUNCTION()
@@ -95,17 +114,20 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UVerticalBox* Place_Vertical_1;
 
+	// Wall
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "WallFactory")
+	class UButton* Place_Btn_Wall_1;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> Wall_1Factory;
+	UFUNCTION()
+	void OnMyPlace_Btn_Wall_1();
+
+
 	
 	UPROPERTY()
 	APlayerController* pc;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AAJH_EditorActor> EditorActorFactory;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AActor> WorldActorFactory;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AActor> EvidenceFactory_0;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AActor> weaponFactory_1;
 	UPROPERTY()
 	class AAJH_EditorActor* EditorActor;
 
