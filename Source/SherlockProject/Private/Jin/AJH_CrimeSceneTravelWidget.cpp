@@ -61,10 +61,12 @@ void UAJH_CrimeSceneTravelWidget::OnTextCrimeName()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	Switcherindex->SetActiveWidgetIndex(1);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_CrimeSecond(){
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	if (LoadGameInstance->DataList.Num() < 1){
 		return;
 	}
@@ -72,6 +74,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_CrimeSecond(){
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_CrimeThird(){
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	if (LoadGameInstance->DataList.Num() < 2){
 		return;
 	}
@@ -105,11 +108,13 @@ void UAJH_CrimeSceneTravelWidget::OnMyAnim_Canvas_Second()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	Switcherindex->SetActiveWidgetIndex(0);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	SherlockPC->ServerReadyCount(1);
 
@@ -119,6 +124,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Ready()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Cancel()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	SherlockPC->ServerReadyCount(-1);
 
@@ -128,6 +134,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Cancel()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	if ( gm != nullptr && SherlockPC->HasAuthority() )
 	{
 		gm->ServerTravelToLevel("/Game/TJ/Case?Listen");
@@ -139,6 +146,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_FirstCrimeTravel()
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_SecondCrimeTravel(){
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	if (LoadGameInstance->DataList.Num() < 1){
 		return;
 	}
@@ -155,6 +163,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_SecondCrimeTravel(){
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_ThirdCrimeTravel(){
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	if (LoadGameInstance->DataList.Num() < 2){
 		return;
 	}
@@ -172,6 +181,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_ThirdCrimeTravel(){
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
 	if ( gi != nullptr && pc->IsLocalPlayerController() )
 	{

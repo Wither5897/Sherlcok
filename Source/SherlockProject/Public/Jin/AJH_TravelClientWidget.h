@@ -38,5 +38,7 @@ public:
 
 	UPROPERTY()
 	class ASherlockPlayerController* SherlockPC;
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* PaperscrollSound;
 
 };

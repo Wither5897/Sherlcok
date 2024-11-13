@@ -100,6 +100,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> FactoryChange;
 
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* HeavystompSound;
 
 	UPROPERTY()
 	class USaveLevelUI* SaveLevelWidget;

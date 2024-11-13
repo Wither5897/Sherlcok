@@ -6,6 +6,7 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonGameMode.h"
 #include "SherlockPlayerController.h"
 #include "Components/WidgetSwitcher.h"
+#include "Kismet/GameplayStatics.h"
 
 void UAJH_TravelClientWidget::NativeConstruct()
 {
@@ -20,6 +21,7 @@ void UAJH_TravelClientWidget::NativeConstruct()
 
 void UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	SherlockPC->ServerReadyCount(1);
 	Btn_FirstCrimeReady->SetVisibility(ESlateVisibility::Collapsed);
@@ -28,6 +30,7 @@ void UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady()
 
 void UAJH_TravelClientWidget::OnMyBtn_Cancel()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	SherlockPC = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	SherlockPC->ServerReadyCount(-1);
 	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
@@ -36,5 +39,6 @@ void UAJH_TravelClientWidget::OnMyBtn_Cancel()
 
 void UAJH_TravelClientWidget::OnMyBtn_Crimefirst()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	Switcherindex->SetActiveWidgetIndex(1);
 }

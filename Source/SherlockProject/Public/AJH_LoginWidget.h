@@ -31,6 +31,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UAJH_SherlockGameInstance* gi;
 
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings")
+	class USoundBase* MainbuttonSound;
 	//UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
 	//class UButton* ResetButton;
 	
