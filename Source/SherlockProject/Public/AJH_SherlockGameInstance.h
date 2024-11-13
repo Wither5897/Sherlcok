@@ -15,15 +15,14 @@
 USTRUCT(BlueprintType)
 struct FCustomizingData{
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 PlayerIdNum;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CoatIdx;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 HatIdx;
+
+	FCustomizingData() : CoatIdx(0), HatIdx(0) {}
 };
 
 UCLASS()

@@ -31,14 +31,14 @@ void UAJH_SummaryWidget::NativeConstruct()
 	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 	FString PlayerName = gi->UserNickName;
 
-	auto* ps = Cast<AMultiPlayerState>(me->GetPlayerState());
-	if ( ps->GetPlayerIdNum() == 0 ) {
+	auto* ps = me->GetPlayerState();
+	if ( ps->GetPlayerId() == 0 ) {
 		// Player1Name->SetText(FText::FromString(PlayerName));
 	}
-	else if ( ps->GetPlayerIdNum() == 1 ) {
+	else if ( ps->GetPlayerId() == 1 ) {
 		// Player2Name->SetText(FText::FromString(PlayerName));
 	}
-	else if ( ps->GetPlayerIdNum() == 2 ) {
+	else if ( ps->GetPlayerId() == 2 ) {
 		// Player3Name->SetText(FText::FromString(PlayerName));
 	}
 

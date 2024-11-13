@@ -88,7 +88,7 @@ public:
 	class ATP_ThirdPersonCharacter* me;
 
 	UPROPERTY()
-	class AMultiPlayerState* ps;
+	class APlayerState* ps;
 
 	void CheckCondition();
 
@@ -98,6 +98,9 @@ public:
 	UFUNCTION()
 	void HideNotifyWidget();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowWitness();
+	
 public:
 
 	bool bHandReport = false;

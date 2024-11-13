@@ -62,18 +62,13 @@ void UCustomizingWidget::HatRightButtonClicked(){
 
 void UCustomizingWidget::PlayButtonClicked(){
 	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
-	auto* ps = GetOwningPlayer()->GetPlayerState<AMultiPlayerState>();
-	FCustomizingData newData;
-	if(!ps){
-		newData.PlayerIdNum = 0;
-	}
-	else{
-		newData.PlayerIdNum = ps->GetPlayerIdNum();
-	}
-	newData.CoatIdx = CoatIdx;
-	newData.HatIdx = HatIdx;
+	if(gi){
+		FCustomizingData newData;
+		newData.CoatIdx = CoatIdx;
+		newData.HatIdx = HatIdx;
 
-	gi->CustomizingDataArray.Add(newData);
+		gi->CustomizingDataArray.Add(newData);
 
-	gi->FindMySession();
+		gi->FindMySession();
+	}
 }

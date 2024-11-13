@@ -36,7 +36,7 @@ void UUW_ReportBoard::NativeConstruct(){
 	OpenReportB4->OnClicked.AddDynamic(this, &UUW_ReportBoard::OpenEvidence4);
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-	ps = Cast<AMultiPlayerState>(me->GetPlayerState());
+	ps = me->GetPlayerState();
 	
 }
 
@@ -55,7 +55,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 
 	if (me && me->InventoryUI && ps){
 		if (me->InventoryUI->ItemArray.IsValidIndex(0) && me->InventoryUI->ItemArray[0]){
-			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerIdNum());
+			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0]){
@@ -63,7 +63,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 		}
 
 		if (me->InventoryUI->ItemArray.IsValidIndex(1) && me->InventoryUI->ItemArray[1]){
-			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerIdNum());
+			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(1) && me->InventoryUI->NoteItemArray[1]){
@@ -71,7 +71,7 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 		}
 
 		if (me->InventoryUI->ItemArray.IsValidIndex(2) && me->InventoryUI->ItemArray[2]){
-			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerIdNum());
+			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
 		}
 
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2]){
@@ -141,7 +141,9 @@ void UUW_ReportBoard::CheckCondition(){
 		ShowNotifyWidget(1);
 		WitnessReport->SetVisibility(ESlateVisibility::Visible);
 		bWitnessReport = true;
+		ShowWitness();
 	}
+	
 	if (me->check[3] && me->check[5] && me->check[8] && !bSequence){
 		FMovieSceneSequencePlaybackSettings PlaybackSettings;
 		ALevelSequenceActor* OutActor;

@@ -26,6 +26,6 @@ void AMultiPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 
 void AMultiPlayerState::OnRep_PlayerIDNum(){
 	if(auto* me = Cast<ATP_ThirdPersonCharacter>(GetPawn())){
-		me->ServerSetCharacterMaterial();
+		me->ServerSetCharacterMaterial(GetPlayerIdNum());
 	}
 }

@@ -18,7 +18,7 @@ public:
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	
-	int32 NumPlayers = 0;
+	int32 NumPlayers;
 
 	UFUNCTION(Server, Reliable)
 	void ServerTravelToLevel(const FString& LevelName);

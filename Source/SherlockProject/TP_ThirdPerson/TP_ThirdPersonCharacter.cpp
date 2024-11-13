@@ -22,9 +22,7 @@
 #include "SK/ItemWidget.h"
 #include "SK/HighlightComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/TextRenderComponent.h"
 #include "GameFramework/PlayerState.h"
-#include "SK/MultiPlayerState.h"
 #include "UW_ReportBoard.h"
 // #include "Editor/GroupActor.h"
 #include "GameFramework/GameStateBase.h"
@@ -53,7 +51,8 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	bReplicates = true;
+	
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
@@ -158,12 +157,22 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		StatisticsUI->AddToViewport();
 		StatisticsUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-	//ServerSetCharacterMaterial();
 
 	//if ( HasAuthority() )
 	//{
 	//	ServerPlaySound();
 	//}
+	
+	if(HasAuthority()){
+		gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
+		ps = GetPlayerState<APlayerState>();
+		if(ps){
+			int32 PlayerIndex = ps->GetPlayerId();
+			ServerSetCharacterMaterial(PlayerIndex);
+		}
+	}
+	
+	// ServerSetCharacterMaterial(ps->GetPlayerId());
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
@@ -311,15 +320,13 @@ void ATP_ThirdPersonCharacter::Interaction(){
 	}
 	if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
 		AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
-		AMultiPlayerState* ps = Cast<AMultiPlayerState>(GetPlayerState());
-
 
 		if (!actor || !ps){
 			return;
 		}
 		if (!bPick){
 			int32 actorNum = actor->Comp->GetTagNum();
-			int32 playerId = ps->GetPlayerIdNum();
+			int32 playerId = ps->GetPlayerId();
 
 			ServerItemFound(actorNum, playerId);
 			if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
@@ -380,7 +387,6 @@ void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum,
 	if (IsLocallyControlled()){
 		if (InventoryUI && InventoryUI->ItemArray.IsValidIndex((ActorNum - 1))){
 			InventoryUI->ItemArray[ActorNum - 1]->VisibleBoard();
-			
 		}
 	}
 	ItemFound(ActorNum, PlayerID);
@@ -400,6 +406,7 @@ void ATP_ThirdPersonCharacter::PerformLineTrace(){
 
 void ATP_ThirdPersonCharacter::OpenInventory(){
 	auto* pc = Cast<APlayerController>(GetController());
+	// PlayInventorySound();
 	if (!pc){
 		return;
 	}
@@ -495,28 +502,37 @@ void ATP_ThirdPersonCharacter::MulticastSetSummaryMulti_Implementation(int32 Cat
 	SetSummaryMulti(Category, SavedTexture, PlayerID);
 }
 
-void ATP_ThirdPersonCharacter::SetCharacterMaterial(){
-	auto* gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
-	auto* ps = GetController()->GetPlayerState<AMultiPlayerState>();
-	if(!gi || !ps){
-		return;
+void ATP_ThirdPersonCharacter::OnRep_PlayerState(){
+	Super::OnRep_PlayerState();
+
+	if (ps)
+	{
+		int32 PlayerIndex = ps->GetPlayerId();
+		ServerSetCharacterMaterial(PlayerIndex);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%d"), ps->GetPlayerIdNum());
-	if(gi->CustomizingDataArray.IsValidIndex(ps->GetPlayerIdNum())){
-		FCustomizingData myData = gi->CustomizingDataArray[ps->GetPlayerIdNum()];
-		CoatMesh->SetMaterial(0, MaterialArray[myData.CoatIdx]);
-		for (int32 i = 0; i < 4; i++){
-			HatMesh->SetMaterial(i, MaterialArray[myData.HatIdx]);
+}
+
+void ATP_ThirdPersonCharacter::SetCharacterMaterial(int32 PlayerID){
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, "SetCharacterMaterial");
+	if(gi->CustomizingDataArray.IsValidIndex(PlayerID)){
+		GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, FString::Printf(TEXT("PlayerID: %d"), PlayerID));
+		const FCustomizingData& myData = gi->CustomizingDataArray[PlayerID];
+		if(CoatMesh && HatMesh && MaterialArray.IsValidIndex(myData.CoatIdx) && MaterialArray.IsValidIndex(myData.HatIdx)){
+			GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, FString::Printf(TEXT("Coat: %d, Hat: %d"), myData.CoatIdx, myData.HatIdx));
+			CoatMesh->SetMaterial(0, MaterialArray[myData.CoatIdx]);
+			for (int32 i = 0; i < 4; i++){
+				HatMesh->SetMaterial(i, MaterialArray[myData.HatIdx]);
+			}
 		}
 	}
 }
 
-void ATP_ThirdPersonCharacter::ServerSetCharacterMaterial_Implementation(){
-	MulticastSetCharacterMaterial();
+void ATP_ThirdPersonCharacter::ServerSetCharacterMaterial_Implementation(int32 PlayerID){
+	MulticastSetCharacterMaterial(PlayerID);
 }
 
-void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(){
-	SetCharacterMaterial();
+void ATP_ThirdPersonCharacter::MulticastSetCharacterMaterial_Implementation(int32 PlayerID){
+	SetCharacterMaterial(PlayerID);
 }
 
 void ATP_ThirdPersonCharacter::PlayInventorySound()

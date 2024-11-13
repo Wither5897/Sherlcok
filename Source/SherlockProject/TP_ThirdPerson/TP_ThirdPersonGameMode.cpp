@@ -16,6 +16,8 @@ ATP_ThirdPersonGameMode::ATP_ThirdPersonGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	
+	NumPlayers = 0;
 }
 
 void ATP_ThirdPersonGameMode::BeginPlay(){
@@ -35,21 +37,12 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	if(NewPlayer)
-	{
-		FTimerHandle TimerHandle;
-		FTimerDelegate TimerDel;
-		TimerDel.BindLambda([this, NewPlayer]()
-		{
-			if (AMultiPlayerState* ps = NewPlayer->GetPlayerState<AMultiPlayerState>())
-			{
-				ps->SetPlayerIdNum(NumPlayers);
-				NumPlayers++;
-
-				UE_LOG(LogTemp, Warning, TEXT("Assigned PlayerID: %d"), ps->GetPlayerIdNum());
-			}
-		});
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.1f, false);
+	if(NumPlayers < 3){
+		APlayerState* ps = NewPlayer->GetPlayerState<APlayerState>();
+		if(ps){
+			ps->SetPlayerId(NumPlayers);
+			NumPlayers++;
+		}
 	}
 }
 

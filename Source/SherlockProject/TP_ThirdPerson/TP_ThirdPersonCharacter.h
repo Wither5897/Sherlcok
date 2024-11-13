@@ -220,15 +220,23 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<class UMaterial*> MaterialArray;
+
+	UPROPERTY()
+	class UAJH_SherlockGameInstance* gi;
+
+	UPROPERTY()
+	class APlayerState* ps;
+
+	virtual void OnRep_PlayerState() override;
 	
 	UFUNCTION()
-	void SetCharacterMaterial();
+	void SetCharacterMaterial(int32 PlayerID);
 
 	UFUNCTION(Server, Reliable)
-	void ServerSetCharacterMaterial();
+	void ServerSetCharacterMaterial(int32 PlayerID);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastSetCharacterMaterial();
+	void MulticastSetCharacterMaterial(int32 PlayerID);
 
 	//============================================
 
