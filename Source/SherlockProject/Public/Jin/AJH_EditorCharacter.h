@@ -92,6 +92,8 @@ public:
 	class UAJH_EscapeWidget* EscapeWidget;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> EditorActorFactory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AActor> EditorChange;
 	UPROPERTY()
 	class AAJH_EditorActor* EditorActor;
 	UPROPERTY(EditDefaultsOnly)

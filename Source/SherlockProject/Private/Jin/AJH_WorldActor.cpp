@@ -96,9 +96,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 	if ( tempX_Scale.Succeeded() )
 	{
 		X_Scale->SetStaticMesh(tempX_Scale.Object);
-		X_Scale->SetRelativeLocation(FVector(200.0f, 0.0f, 0.0f)); 
+		X_Scale->SetRelativeLocation(FVector(50.0f, 0.0f, 0.0f)); 
 		X_Scale->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
-		X_Scale->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f)); 
+		X_Scale->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f)); 
 	}
 	Y_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Scale"));
 	Y_Scale->SetupAttachment(MeshComp);
@@ -107,9 +107,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 	if ( tempY_Scale.Succeeded() )
 	{
 		Y_Scale->SetStaticMesh(tempY_Scale.Object);
-		Y_Scale->SetRelativeLocation(FVector(0.0f, 200.0f, 0.0f));
+		Y_Scale->SetRelativeLocation(FVector(0.0f, 50.0f, 0.0f));
 		Y_Scale->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f)); 
-		Y_Scale->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
+		Y_Scale->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f));
 	}
 	Z_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Scale"));
 	Z_Scale->SetupAttachment(MeshComp);
@@ -118,9 +118,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 	if ( tempZ_Scale.Succeeded() )
 	{
 		Z_Scale->SetStaticMesh(tempZ_Scale.Object);
-		Z_Scale->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+		Z_Scale->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
 		Z_Scale->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f)); // (Pitch=90.000000,Yaw=0.000000,Roll=0.000000)
-		Z_Scale->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
+		Z_Scale->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f));
 	}
 
 }

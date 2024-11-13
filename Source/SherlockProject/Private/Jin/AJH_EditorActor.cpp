@@ -4,6 +4,8 @@
 #include "Jin/AJH_EditorActor.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "Jin/AJH_EditorCharacter.h"
 
 // Sets default values
 AAJH_EditorActor::AAJH_EditorActor()
@@ -13,11 +15,11 @@ AAJH_EditorActor::AAJH_EditorActor()
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	SetRootComponent(MeshComp);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMeshComp(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
+	/*ConstructorHelpers::FObjectFinder<UStaticMesh> tempMeshComp(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
 	if ( tempMeshComp.Succeeded() )
 	{
 		MeshComp->SetStaticMesh(tempMeshComp.Object);
-	}
+	}*/
 
 }
 
@@ -27,9 +29,10 @@ void AAJH_EditorActor::BeginPlay()
 	Super::BeginPlay();
 	
 	pc = GetWorld()->GetFirstPlayerController();
-	MeshPath = TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'");
-	LoadeMesh = LoadObject<UStaticMesh>(nullptr, MeshPath);
-	MeshComp->SetStaticMesh(LoadeMesh);
+	me = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorCharacter::StaticClass()));
+	/*MeshPath = TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'");
+	LoadeMesh = LoadObject<UStaticMesh>(nullptr, MeshPath);*/
+	//MeshComp->SetStaticMesh(LoadeMesh);
 
 }
 
