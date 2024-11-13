@@ -24,10 +24,12 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Main_Btn_Place->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Place);
 	Main_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 	// Character
-	Btn_Character_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_1);
+	Btn_Character_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_0);
+	Character_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
 	// Evidence
 	Btn_Evidence_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Evidence_0);
+	Evidence_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
 	// Weapon
 	Btn_Weapon_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Weapon_1);
@@ -38,6 +40,7 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Place_Btn_Furnitures_Up_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Up_1);
 	Place_Btn_Furnitures_Down_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_0);
 	Place_Btn_Furnitures_Down_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1);
+	Place_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
@@ -69,9 +72,22 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
 }
 
+void UAJH_EditorToolWidget::OnMyBtn_Character_0()
+{
+	me->FactoryChange = Character_0Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
 void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 {
-	me->FactoryChange = WorldActorFactory;
+	me->FactoryChange = Character_1Factory;
 	if ( me->bIsEditorActor == false )
 	{
 		me->OnMyEditorActorSpawn(true);
@@ -84,6 +100,7 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 
 void UAJH_EditorToolWidget::OnMyBtn_Character_2()
 {
+	me->FactoryChange = Character_2Factory;
 	if ( me->bIsEditorActor == false )
 	{
 		me->OnMyEditorActorSpawn(true);
@@ -142,6 +159,19 @@ void UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1()
 {
 	Place_Vertical_0->SetVisibility(ESlateVisibility::Collapsed);
 	Place_Vertical_1->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_EditorToolWidget::OnMyPlace_Btn_Wall_1()
+{
+	me->FactoryChange = Wall_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
 }
 
 void UAJH_EditorToolWidget::LevelSaveButtonClicked(){
