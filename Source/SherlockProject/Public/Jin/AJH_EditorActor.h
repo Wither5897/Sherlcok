@@ -25,6 +25,8 @@ public:
 
 	UPROPERTY()
 	APlayerController* pc;
+	UPROPERTY()
+	class AAJH_EditorCharacter* me;
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* MeshComp;
 	const TCHAR* MeshPath;

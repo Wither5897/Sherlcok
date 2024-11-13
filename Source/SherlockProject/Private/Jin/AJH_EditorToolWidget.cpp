@@ -42,6 +42,9 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Place_Btn_Furnitures_Down_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1);
 	Place_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
 
+	// Wall
+	Place_Btn_Wall_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Wall_1);
+
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
 
@@ -75,6 +78,7 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 void UAJH_EditorToolWidget::OnMyBtn_Character_0()
 {
 	me->FactoryChange = Character_0Factory;
+	me->FactoryChange = Character_0Factory;
 	if ( me->bIsEditorActor == false )
 	{
 		me->OnMyEditorActorSpawn(true);
@@ -87,6 +91,7 @@ void UAJH_EditorToolWidget::OnMyBtn_Character_0()
 
 void UAJH_EditorToolWidget::OnMyBtn_Character_1()
 {
+	me->EditorChange = Character_1Factory;
 	me->FactoryChange = Character_1Factory;
 	if ( me->bIsEditorActor == false )
 	{
@@ -126,6 +131,7 @@ void UAJH_EditorToolWidget::OnMyBtn_Evidence_0()
 
 void UAJH_EditorToolWidget::OnMyBtn_Weapon_1()
 {
+	me->EditorChange = EditorWeaponFactory_1;
 	me->FactoryChange = weaponFactory_1;
 	if ( me->bIsEditorActor == false )
 	{
