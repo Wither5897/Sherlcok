@@ -68,7 +68,7 @@ void AAJH_EditorCharacter::BeginPlay()
 	}
 
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
-	//WorldActor = Cast<AAJH_WorldActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_WorldActor::StaticClass()));
+	EditorSpawn = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	IA_changeNum = 1;
 
 }
@@ -83,10 +83,12 @@ void AAJH_EditorCharacter::Tick(float DeltaTime)
 	AddMovementInput(direction);
 	direction = FVector::ZeroVector;
 
-	if ( CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
+	if ( CurrentWorldActor && IA_changeNum == 1 && CurrentWorldActor->bIsAxisLocation )
 	{
 		OnMyLocationGizmoMovement();
 	}
+
+	UpdateGizmoScale();
 }
 
 // Called to bind functionality to input
@@ -273,6 +275,16 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		}
 	}
 
+	if ( outHit.GetActor() != nullptr)
+	{
+		bHasInteractedWithGizmo = true; // Gizmo와 상호작용이 감지되었을 때 true로 설정
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("Gizmo interaction detected!"));
+	}
+	else
+	{
+		bHasInteractedWithGizmo = false; // Gizmo와 상호작용하지 않은 경우 false
+	}
+
 	// 디버그 메시지: 라인 트레이스 결과 출력
 	if ( outHit.GetActor() != nullptr )
 	{
@@ -420,7 +432,7 @@ void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 void AAJH_EditorCharacter::OnMyIA_changeLocation()
 {
 	// Gizmo가 이미 활성화된 상태라면 함수 실행을 중단
-	if ( IA_changeNum == 1 && CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
+	if ( IA_changeNum == 1 && CurrentWorldActor && CurrentWorldActor->bIsAxisLocation && !bHasInteractedWithGizmo )
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
 		return; // 이미 활성화된 상태이므로 중단
@@ -428,7 +440,12 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 
 	IA_changeNum = 1;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 1")); // IA_changeNum 확인
-	if ( CurrentWorldActor)
+
+	if ( bHasInteractedWithGizmo )
+	{
+		SetGizmoState(EGizmoState::Location);
+	}
+	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = true;
 		CurrentWorldActor->bIsVisibleRotation = false;
@@ -438,7 +455,7 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 		CurrentWorldActor->bIsAxisScale = false;
 		CurrentWorldActor->LocationVisibility();
 		LocationGizmoForSetCollision();
-	}
+	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_changeRotation()
@@ -452,7 +469,8 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 
 	IA_changeNum = 2;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 2")); // IA_changeNum 확인
-	if ( CurrentWorldActor)
+	SetGizmoState(EGizmoState::Rotation);
+	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = true;
@@ -462,7 +480,7 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 		CurrentWorldActor->bIsAxisScale = false;
 		CurrentWorldActor->RotationVisivility();
 		RotationGizmoForSetCollision();
-	}
+	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_changeScale()
@@ -476,7 +494,8 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 
 	IA_changeNum = 3;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 3")); // IA_changeNum 확인
-	if ( CurrentWorldActor)
+	SetGizmoState(EGizmoState::Scale);
+	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
 		CurrentWorldActor->bIsVisibleRotation = false;
@@ -486,7 +505,7 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 		CurrentWorldActor->bIsAxisScale = true;
 		CurrentWorldActor->ScaleVisivility();
 		ScaleGizmoForSetCollision();
-	}
+	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_Escape()
@@ -501,12 +520,18 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
 	{
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
+		//transform.SetTranslation(FVector(0.5f, 0.5f, 0.5f));
+		// transform = EditorSpawn->GetActorTransform();
 		//EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
 		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorChange, transform);
-		// EditorActor->OnMyMeshPath(num);
-		EditorActor->bIsSpawn = true;
-		bIsActorSpawn = true;
-		bIsEditorActor = true;
+		if ( EditorActor )
+		{
+			//EditorActor->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
+			// EditorActor->OnMyMeshPath(num);
+			EditorActor->bIsSpawn = true;
+			bIsActorSpawn = true;
+			bIsEditorActor = true;
+		}
 	}
 	else
 	{
@@ -688,6 +713,27 @@ void AAJH_EditorCharacter::ScaleGizmoForSetCollision()
 
 void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 {
+	// CurrentWorldActor와 pc가 널인지 확인
+	if ( !CurrentWorldActor || !pc )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("CurrentWorldActor or PlayerController is null!"));
+		return; // 안전한 반환
+	}
+
+	// 추가 체크: outHit의 컴포넌트가 널이 아닌지 확인
+	if ( !outHit.GetComponent() )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("outHit.GetComponent() is null!"));
+		return;
+	}
+
+	// Gizmo와 실제로 상호작용했는지 확인
+	if ( !bHasInteractedWithGizmo )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("No interaction with Gizmo detected."));
+		return; // Gizmo와 상호작용하지 않았다면 함수 실행 중단
+	}
+
 	float currentMouseX, currentMouseY;
 	if ( pc && pc->GetMousePosition(currentMouseX, currentMouseY) )
 	{
@@ -695,7 +741,10 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 		{
 			if ( IA_changeNum == 1 )
 			{
-				deltaLocation = worldLocation - initialWorldLocation;
+				// World 좌표를 Local 좌표로 변환
+				//FVector LocalLocation = CurrentWorldActor->GetRootComponent()->GetComponentTransform().InverseTransformPosition(worldLocation);
+				 deltaLocation = worldLocation - initialWorldLocation;
+				//deltaLocation = LocalLocation - initialWorldLocation;
 				if ( deltaLocation.IsNearlyZero(0.01f) ) return; // 이동 값이 작으면 무시
 
 				float scaleFactor = 23.0f; // 이동 속도 조절
@@ -722,8 +771,16 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 					newLocation += deltaLocation;
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along XYZ Axis"));
 				}
+				// Actor의 현재 회전 상태를 가져옴
+				FRotator ActorRotation = CurrentWorldActor->GetActorRotation();
+				// 이동 벡터를 Actor의 현재 회전 상태에 맞춰 변환
+				FVector AdjustedDeltaLocation = ActorRotation.RotateVector(deltaLocation);
+
+				// 새로운 위치를 초기 위치에서 변환된 이동 벡터를 추가하여 갱신
+				newLocation = actorInitialLocation + AdjustedDeltaLocation;
 				// 좌표 갱신
 				CurrentWorldActor->SetActorLocation(newLocation);
+				//CurrentWorldActor->SetActorLocation(CurrentWorldActor->GetRootComponent()->GetComponentTransform().TransformPosition(newLocation));
 				GizmoUI->OnMyEdit_Location();
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Location: ") + newLocation.ToString());
 			}
@@ -790,6 +847,11 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 	CurrentWorldActor->bIsAxisScale = false;
 	CurrentWorldActor->GizmoVisibility();
 
+	// Gizmo 상태 플래그 초기화
+	bIsGizmoLocationActive = false;
+	bIsGizmoRotationActive = false;
+	bIsGizmoScaleActive = false;
+
 	// 충돌 초기화: 모든 Gizmo 충돌을 제거
 	CurrentWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 
@@ -808,19 +870,26 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 	case EGizmoState::Rotation:
 		CurrentWorldActor->bIsAxisRotation = true;
 		bIsGizmoRotationActive = true;
-		pc->bShowMouseCursor = false; // 마우스 커서 숨기기
+		//pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->RotationVisivility();
 		RotationGizmoForSetCollision();
 		break;
 	case EGizmoState::Scale:
 		CurrentWorldActor->bIsAxisScale = true;
 		bIsGizmoScaleActive = true;
-		pc->bShowMouseCursor = false; // 마우스 커서 숨기기
+		//pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->ScaleVisivility();
 		ScaleGizmoForSetCollision();
 		break;
 	default:
 		break;
+	}
+
+	// 모든 포인터가 유효한지 체크
+	if ( !CurrentWorldActor )
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("CurrentWorldActor is null after setting Gizmo state."));
+		return;
 	}
 
 	// 디버그 메시지로 상태 전환 확인
@@ -829,5 +898,40 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 
 	// 이동 속도를 0으로 설정하여 캐릭터 이동 방지
 	GetCharacterMovement()->MaxFlySpeed = 0;
+}
+
+void AAJH_EditorCharacter::UpdateGizmoScale()
+{
+	if ( !CurrentWorldActor || !pc )
+	{
+		return; // Gizmo 또는 PlayerController가 없는 경우 반환
+	}
+
+	// Player의 위치와 Gizmo(현재 World Actor)의 위치를 가져옵니다.
+	FVector PlayerLocation = GetActorLocation();
+	FVector GizmoLocation = CurrentWorldActor->GetActorLocation();
+
+	//// Gizmo의 RootComponent를 사용하여 World 좌표를 Local 좌표로 변환합니다.
+	//FVector PlayerLocalLocation = CurrentWorldActor->GetRootComponent()->GetComponentTransform().InverseTransformPosition(PlayerLocation);
+
+	// 거리 계산
+	float Distance = FVector::Distance(PlayerLocation, GizmoLocation);
+	// // 거리 계산 (이제 Local 좌표를 사용)
+	//float Distance = FVector::Distance(PlayerLocalLocation, FVector::ZeroVector); // Gizmo의 Local 기준으로 거리
+
+	// 거리 기반으로 스케일을 조정 (조정 가능한 상수값 사용)
+	float ScaleFactor = FMath::Clamp(Distance / 1000.0f, 0.5f, 5.0f); // 최소 0.5, 최대 5.0
+
+	// Gizmo의 각 축 컴포넌트에 개별적으로 스케일 설정
+	CurrentWorldActor->X_Axis->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Y_Axis->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Z_Axis->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->XYZ_Axis->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->X_Rot->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Y_Rot->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Z_Rot->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->X_Scale->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Y_Scale->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
+	CurrentWorldActor->Z_Scale->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));
 }
 
