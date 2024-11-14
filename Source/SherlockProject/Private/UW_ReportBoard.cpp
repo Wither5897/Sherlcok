@@ -55,25 +55,20 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 
 	if (me && me->InventoryUI && ps){
 		if (me->InventoryUI->ItemArray.IsValidIndex(0) && me->InventoryUI->ItemArray[0]){
-			me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
+			me->ServerItemFound(1, ps->GetPlayerId());
 		}
-
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0]){
 			me->InventoryUI->NoteItemArray[0]->WhenFindItem();
 		}
-
 		if (me->InventoryUI->ItemArray.IsValidIndex(1) && me->InventoryUI->ItemArray[1]){
-			me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
+			me->ServerItemFound(2, ps->GetPlayerId());
 		}
-
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(1) && me->InventoryUI->NoteItemArray[1]){
 			me->InventoryUI->NoteItemArray[1]->WhenFindItem();
 		}
-
 		if (me->InventoryUI->ItemArray.IsValidIndex(2) && me->InventoryUI->ItemArray[2]){
-			me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
+			me->ServerItemFound(3, ps->GetPlayerId());
 		}
-
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2]){
 			me->InventoryUI->NoteItemArray[2]->WhenFindItem();
 		}

@@ -192,8 +192,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		LoadingUI->AddToViewport();
 		LoadingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-	
-	PlayMapSound();
+
+	if(GIsServer){
+		PlayMapSound();
+	}
 	
 	if(HasAuthority()){
 		gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
@@ -406,6 +408,52 @@ void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
 	AnimPawn->SetActorHiddenInGame(true);
 }
 
+void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage(int32 playerId){
+	if (!InventoryUI) return;
+
+	// 전체 아이템 개수와 수집된 아이템 개수
+	// int32 TotalItems = InventoryUI->ItemArray.Num();
+	int32 TotalItems = 9;
+	int32 CollectedItems = 0;
+
+	// 수집된 아이템(QuestionMark가 Hidden 상태인 아이템) 개수 세기
+	for (auto* Item : InventoryUI->ItemArray)
+	{
+		if (Item && Item->QuestionMark->Visibility == ESlateVisibility::Hidden)
+		{
+			CollectedItems++;
+		}
+	}
+
+	// 수집률 계산
+	float CollectionPercentage = (TotalItems > 0) ? (static_cast<float>(CollectedItems) / TotalItems) * 100.0f : 0.0f;
+
+	// 각 플레이어의 수집률 UI 업데이트 (예: Player1CollectionText, Player2CollectionText, Player3CollectionText)
+	switch (playerId)
+	{
+	case 0:
+		if (InventoryUI->Player1CollectionText)
+		{
+			InventoryUI->Player1CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
+		}
+		break;
+	case 1:
+		if (InventoryUI->Player2CollectionText)
+		{
+			InventoryUI->Player2CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
+		}
+		break;
+	case 2:
+		if (InventoryUI->Player3CollectionText)
+		{
+			InventoryUI->Player3CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 	InventoryUI->ItemArray[ActorNum - 1]->QuestionMark->SetVisibility(ESlateVisibility::Hidden);
 	
@@ -431,6 +479,7 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 				default:
 					break;
 				}
+				Character->UpdatePlayerCollectionPercentage(PlayerID);
 			}
 		}
 	}

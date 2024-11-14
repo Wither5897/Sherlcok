@@ -144,4 +144,13 @@ public:
 	class ATP_ThirdPersonCharacter* me;
 	UPROPERTY(EditDefaultsOnly)
 	class UAJH_SummaryWidget* SummaryWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Player1CollectionText;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Player2CollectionText;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Player3CollectionText;
 };

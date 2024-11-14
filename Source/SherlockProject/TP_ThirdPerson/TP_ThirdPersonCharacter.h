@@ -257,6 +257,9 @@ public:
 
 	UFUNCTION()
 	void SetAnimPawnVisibility();
+
+	UFUNCTION()
+	void UpdatePlayerCollectionPercentage(int32 playerId);
 	
 	//============================================
 
