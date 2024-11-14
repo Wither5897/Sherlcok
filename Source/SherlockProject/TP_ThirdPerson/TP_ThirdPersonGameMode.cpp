@@ -18,6 +18,7 @@ ATP_ThirdPersonGameMode::ATP_ThirdPersonGameMode()
 	}
 	
 	NumPlayers = 0;
+	bIsSoundOn = false;
 }
 
 void ATP_ThirdPersonGameMode::BeginPlay(){
@@ -31,7 +32,11 @@ void ATP_ThirdPersonGameMode::BeginPlay(){
 			gi->LoadLevelName = "";
 		}
 	}
-	bIsSoundOn = false;
+	if(!bIsSoundOn){
+		auto* me = Cast<ATP_ThirdPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+		me->PlayMapSound();
+		bIsSoundOn = true;
+	}
 }
 
 void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)

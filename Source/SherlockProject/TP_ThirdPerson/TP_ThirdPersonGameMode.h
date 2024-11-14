@@ -27,7 +27,7 @@ public:
 	int32 UserReady = 0;
 
 	UPROPERTY()
-	bool bIsSoundOn;
+	bool bIsSoundOn = false;
 	
 	UFUNCTION()
 	void OnMyReadyCount(int32 ReadyCount);

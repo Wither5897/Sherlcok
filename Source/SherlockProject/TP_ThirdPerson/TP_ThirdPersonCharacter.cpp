@@ -203,13 +203,6 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 			ServerSetCharacterMaterial(PlayerIndex);
 		}
 	}
-
-	auto* gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
-	
-	if(gm && !gm->bIsSoundOn){
-		PlayMapSound();
-		gi->bIsSoundOn = true;
-	}
 	
 	// ServerSetCharacterMaterial(ps->GetPlayerId());
 }
@@ -371,7 +364,13 @@ void ATP_ThirdPersonCharacter::Interaction(){
             int32 actorNum = actor->Comp->GetTagNum();
             int32 playerId = ps->GetPlayerId();
         	UE_LOG(LogTemp, Warning, TEXT("%d %d"), actorNum, playerId);
-        	ServerItemFound(actorNum, playerId);
+        	if(HasAuthority()){
+        		MulticastItemFound(actorNum, playerId);
+        	}
+        	else{
+        		ServerItemFound(actorNum, playerId);
+        	}
+        	
             if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
                 InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
             }
@@ -493,7 +492,7 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 
 void ATP_ThirdPersonCharacter::ServerItemFound_Implementation(int32 ActorNum, int32 PlayerID){
 	MulticastItemFound(ActorNum, PlayerID);
-	ItemFound(ActorNum, PlayerID);
+	// ItemFound(ActorNum, PlayerID);
 }
 
 void ATP_ThirdPersonCharacter::MulticastItemFound_Implementation(int32 ActorNum, int32 PlayerID){
