@@ -25,6 +25,11 @@ public:
 	class UButton* Btn_Cancel;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Btn_Crimefirst;
+	// Btn_Back(뒤로가기)
+	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	UButton* Btn_Back;
+	UFUNCTION()
+	void OnMyBtn_Back();
 
 	UPROPERTY(meta=(BindWidget))
 	class UWidgetSwitcher* Switcherindex;

@@ -43,9 +43,9 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 
 	// 공통 버튼 바인딩
 	Btn_Back->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
-	Btn_Back_0->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
-	Btn_Back_1->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
-	Btn_Back_2->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back);
+	Btn_Back_0->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back_1);
+	Btn_Back_1->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back_1);
+	Btn_Back_2->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Back_1);
 	Btn_Cancel->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Cancel);
 
 	// Default Setting When Begin
@@ -107,6 +107,12 @@ void UAJH_CrimeSceneTravelWidget::OnMyAnim_Canvas_Second()
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
+	SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back_1()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	Switcherindex->SetActiveWidgetIndex(0);
