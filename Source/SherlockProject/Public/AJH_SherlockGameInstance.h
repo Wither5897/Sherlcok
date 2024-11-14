@@ -80,6 +80,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
 	TArray<FCustomizingData> CustomizingDataArray;
+
+	UPROPERTY()
+	bool bIsSoundOn = false;
 	
 private:
 	FName mySessionName = FName("first Session");

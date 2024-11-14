@@ -68,6 +68,11 @@ void UCustomizingWidget::PlayButtonClicked(){
 		newData.HatIdx = HatIdx;
 		if(me && me->LoadingUI){
 			me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+			CoatLeftButton->SetVisibility(ESlateVisibility::Hidden);
+			CoatRightButton->SetVisibility(ESlateVisibility::Hidden);
+			HatLeftButton->SetVisibility(ESlateVisibility::Hidden);
+			HatRightButton->SetVisibility(ESlateVisibility::Hidden);
+			PlayButton->SetVisibility(ESlateVisibility::Hidden);
 		}
 		gi->CustomizingDataArray.Add(newData);
 

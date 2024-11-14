@@ -45,29 +45,24 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 	Reports[0]->SetVisibility(ESlateVisibility::Visible);
 	BackgroundBlur_96->SetVisibility(ESlateVisibility::Visible);
 
-
-	//me->InventoryUI->ItemArray[0]->WhenFindItem(ps->GetPlayerId());
-	//me->InventoryUI->NoteItemArray[0]->WhenFindItem();
-	//me->InventoryUI->ItemArray[1]->WhenFindItem(ps->GetPlayerId());
-	//me->InventoryUI->NoteItemArray[1]->WhenFindItem();
-	//me->InventoryUI->ItemArray[2]->WhenFindItem(ps->GetPlayerId());
-	//me->InventoryUI->NoteItemArray[2]->WhenFindItem();
-
+	if(!me){
+		me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+	}
+	
+	if(!ps){
+		ps = me->ps;
+	}
+	
 	if (me && me->InventoryUI && ps){
-		if (me->InventoryUI->ItemArray.IsValidIndex(0) && me->InventoryUI->ItemArray[0]){
-			me->ServerItemFound(1, ps->GetPlayerId());
-		}
+		UE_LOG(LogTemp, Warning, TEXT("Calling ServerItemFound from client"));
+		me->ServerItemFound(1, ps->GetPlayerId());
+		me->ServerItemFound(2, ps->GetPlayerId());
+		me->ServerItemFound(3, ps->GetPlayerId());
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0]){
 			me->InventoryUI->NoteItemArray[0]->WhenFindItem();
 		}
-		if (me->InventoryUI->ItemArray.IsValidIndex(1) && me->InventoryUI->ItemArray[1]){
-			me->ServerItemFound(2, ps->GetPlayerId());
-		}
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(1) && me->InventoryUI->NoteItemArray[1]){
 			me->InventoryUI->NoteItemArray[1]->WhenFindItem();
-		}
-		if (me->InventoryUI->ItemArray.IsValidIndex(2) && me->InventoryUI->ItemArray[2]){
-			me->ServerItemFound(3, ps->GetPlayerId());
 		}
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2]){
 			me->InventoryUI->NoteItemArray[2]->WhenFindItem();

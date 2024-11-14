@@ -31,6 +31,7 @@ void ATP_ThirdPersonGameMode::BeginPlay(){
 			gi->LoadLevelName = "";
 		}
 	}
+	bIsSoundOn = false;
 }
 
 void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)

@@ -38,6 +38,7 @@
 // 에디터 전용 작업 수행
 #endif
 #include "LevelSequencePlayer.h"
+#include "TP_ThirdPersonGameMode.h"
 #include "Sound/SoundWave.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Jin/AJH_CreatorToolTravel.h"
@@ -193,17 +194,21 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		LoadingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	if(GIsServer){
-		PlayMapSound();
-	}
+	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
+	ps = GetPlayerState();
 	
 	if(HasAuthority()){
-		gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
-		ps = GetPlayerState<APlayerState>();
 		if(ps){
 			int32 PlayerIndex = ps->GetPlayerId();
 			ServerSetCharacterMaterial(PlayerIndex);
 		}
+	}
+
+	auto* gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
+	
+	if(gm && !gm->bIsSoundOn){
+		PlayMapSound();
+		gi->bIsSoundOn = true;
 	}
 	
 	// ServerSetCharacterMaterial(ps->GetPlayerId());
@@ -351,19 +356,22 @@ void ATP_ThirdPersonCharacter::Interaction(){
     if (!interactionUI || !pc){
         return;
     }
-
+	UE_LOG(LogTemp, Warning, TEXT("Interaction UI And Player Controller is not null"));
     if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
         AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
-
-        if (!actor || !ps){
+    	UE_LOG(LogTemp, Warning, TEXT("Line trace is operate normally"));
+        if (!actor){
             return;
         }
-
+    	if (!ps){
+    		ps = GetPlayerState();
+    	}
+    	UE_LOG(LogTemp, Warning, TEXT("actor and player state is not null"));
         if (!bPick){
             int32 actorNum = actor->Comp->GetTagNum();
             int32 playerId = ps->GetPlayerId();
-
-            ServerItemFound(actorNum, playerId);
+        	UE_LOG(LogTemp, Warning, TEXT("%d %d"), actorNum, playerId);
+        	ServerItemFound(actorNum, playerId);
             if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
                 InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
             }
@@ -408,14 +416,13 @@ void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
 	AnimPawn->SetActorHiddenInGame(true);
 }
 
-void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage(int32 playerId){
+void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage_Implementation(int32 playerId){
 	if (!InventoryUI) return;
 
 	// 전체 아이템 개수와 수집된 아이템 개수
 	// int32 TotalItems = InventoryUI->ItemArray.Num();
 	int32 TotalItems = 9;
 	int32 CollectedItems = 0;
-
 	// 수집된 아이템(QuestionMark가 Hidden 상태인 아이템) 개수 세기
 	for (auto* Item : InventoryUI->ItemArray)
 	{
@@ -424,7 +431,6 @@ void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage(int32 playerId){
 			CollectedItems++;
 		}
 	}
-
 	// 수집률 계산
 	float CollectionPercentage = (TotalItems > 0) ? (static_cast<float>(CollectedItems) / TotalItems) * 100.0f : 0.0f;
 
