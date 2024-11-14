@@ -15,8 +15,15 @@ void UAJH_TravelClientWidget::NativeConstruct()
 	Btn_FirstCrimeReady->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady);
 	Btn_Cancel->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Cancel);
 	Btn_Crimefirst->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Crimefirst);
+	Btn_Back->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Back);
 
 	Btn_Cancel->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_TravelClientWidget::OnMyBtn_Back()
+{
+	SetVisibility(ESlateVisibility::Collapsed);
+	
 }
 
 void UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady()

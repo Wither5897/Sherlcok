@@ -64,6 +64,8 @@ public:
 	UButton* Btn_Back_1;
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
 	UButton* Btn_Back_2;
+	UFUNCTION()
+	void OnMyBtn_Back_1();
 	
 	// Ready
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
