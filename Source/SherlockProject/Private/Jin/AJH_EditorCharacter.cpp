@@ -88,7 +88,7 @@ void AAJH_EditorCharacter::Tick(float DeltaTime)
 		OnMyLocationGizmoMovement();
 	}
 
-	UpdateGizmoScale();
+	// UpdateGizmoScale();
 }
 
 // Called to bind functionality to input
@@ -332,6 +332,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = false;
 			CurrentWorldActor->LocationVisibility();
 			LocationGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 		else if ( IA_changeNum == 2 )
 		{
@@ -340,6 +341,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = false;
 			CurrentWorldActor->RotationVisivility();
 			RotationGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 		else if ( IA_changeNum == 3 )
 		{
@@ -348,6 +350,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = true;
 			CurrentWorldActor->ScaleVisivility();
 			ScaleGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 	}
 	else
@@ -566,7 +569,7 @@ void AAJH_EditorCharacter::OnMyLineTrace()
 		FCollisionQueryParams param;
 		param.AddIgnoredActor(this);
 		bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, Start, End, ECC_Visibility, param);
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
+		// DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
 		if ( bHit && outHit.GetActor() != nullptr )
 		{
 			FString objectName = outHit.GetActor()->GetName();
@@ -923,18 +926,6 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 		break;
 	}
 
-	//// 모드 전환 후 마우스 커서 처리
-	//if ( GizmoState == EGizmoState::Location )
-	//{
-	//	pc->bShowMouseCursor = true; // Location 모드에서는 마우스 커서 표시
-	//	pc->SetInputMode(FInputModeGameAndUI());
-	//}
-	//else
-	//{
-	//	pc->bShowMouseCursor = false; // Rotation 및 Scale 모드에서는 마우스 커서 숨김
-	//	pc->SetInputMode(FInputModeGameOnly());
-	//}
-
 	// 모든 포인터가 유효한지 체크
 	if ( !CurrentWorldActor )
 	{
@@ -947,7 +938,7 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 		FString::Printf(TEXT("Setting Gizmo State: %d"), static_cast< int32 >( GizmoState )));
 
 	// 이동 속도를 0으로 설정하여 캐릭터 이동 방지
-	GetCharacterMovement()->MaxFlySpeed = 0;
+	// GetCharacterMovement()->MaxFlySpeed = 0;
 }
 
 void AAJH_EditorCharacter::UpdateGizmoScale()
