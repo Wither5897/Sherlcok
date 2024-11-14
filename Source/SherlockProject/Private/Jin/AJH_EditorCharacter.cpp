@@ -88,7 +88,7 @@ void AAJH_EditorCharacter::Tick(float DeltaTime)
 		OnMyLocationGizmoMovement();
 	}
 
-	UpdateGizmoScale();
+	// UpdateGizmoScale();
 }
 
 // Called to bind functionality to input
@@ -332,6 +332,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = false;
 			CurrentWorldActor->LocationVisibility();
 			LocationGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 		else if ( IA_changeNum == 2 )
 		{
@@ -340,6 +341,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = false;
 			CurrentWorldActor->RotationVisivility();
 			RotationGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 		else if ( IA_changeNum == 3 )
 		{
@@ -348,6 +350,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			bIsGizmoScaleActive = true;
 			CurrentWorldActor->ScaleVisivility();
 			ScaleGizmoForSetCollision();
+			GetCharacterMovement()->MaxFlySpeed = 0;
 		}
 	}
 	else
@@ -432,19 +435,22 @@ void AAJH_EditorCharacter::OnMyIA_EndLineTraceLeftClick()
 void AAJH_EditorCharacter::OnMyIA_changeLocation()
 {
 	// Gizmo가 이미 활성화된 상태라면 함수 실행을 중단
-	if ( IA_changeNum == 1 && CurrentWorldActor && CurrentWorldActor->bIsAxisLocation && !bHasInteractedWithGizmo )
+	if ( IA_changeNum == 1 && CurrentWorldActor && CurrentWorldActor->bIsAxisLocation )
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
 		return; // 이미 활성화된 상태이므로 중단
 	}
 
+	if ( bIsGizmoLocationStart ) return;
+
 	IA_changeNum = 1;
+	bIsGizmoRotationStart = false;
+	bIsGizmoScaleStart = false;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 1")); // IA_changeNum 확인
 
-	if ( bHasInteractedWithGizmo )
-	{
-		SetGizmoState(EGizmoState::Location);
-	}
+
+	SetGizmoState(EGizmoState::Location);
+
 	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = true;
@@ -467,9 +473,15 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 		return; // 이미 활성화된 상태이므로 중단
 	}
 
+	if( bIsGizmoRotationStart ) return;
+
 	IA_changeNum = 2;
+	bIsGizmoLocationStart = false;
+	bIsGizmoScaleStart = false;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 2")); // IA_changeNum 확인
+
 	SetGizmoState(EGizmoState::Rotation);
+
 	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
@@ -491,10 +503,16 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo is already in Location mode."));
 		return; // 이미 활성화된 상태이므로 중단
 	}
+	
+	if( bIsGizmoScaleStart ) return;
 
 	IA_changeNum = 3;
+	bIsGizmoLocationStart = false;
+	bIsGizmoRotationStart = false;
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 3")); // IA_changeNum 확인
+
 	SetGizmoState(EGizmoState::Scale);
+
 	/*if ( CurrentWorldActor)
 	{
 		CurrentWorldActor->bIsVisibleLocation = false;
@@ -551,7 +569,7 @@ void AAJH_EditorCharacter::OnMyLineTrace()
 		FCollisionQueryParams param;
 		param.AddIgnoredActor(this);
 		bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, Start, End, ECC_Visibility, param);
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
+		// DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
 		if ( bHit && outHit.GetActor() != nullptr )
 		{
 			FString objectName = outHit.GetActor()->GetName();
@@ -577,32 +595,40 @@ void AAJH_EditorCharacter::OnMyHandleGizmoRotation()
 		pc->SetInputMode(FInputModeGameOnly());
 	}
 
-	// 마우스 이동 값을 사용하여 회전값 계산
-	float MouseX, MouseY;
-	pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
-
-	deltaRotation = FRotator::ZeroRotator;
-
-	// 선택된 축에 따라 회전값 수정
-	if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Rot")) )
+	if ( bIsGizmoRotationStart )
 	{
-		deltaRotation.Pitch += MouseY * 5.0f; // 회전 속도 조절
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along X Rot"));
-	}
-	if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Rot")) )
-	{
-		deltaRotation.Roll += -MouseY * 5.0f;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Y Rot"));
-	}
-	if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Rot")) )
-	{
-		deltaRotation.Yaw += MouseX * 5.0f;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Z Rot"));
-	}
 
-	// 회전값 적용
-	CurrentWorldActor->AddActorLocalRotation(deltaRotation);
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Rotation: ") + CurrentWorldActor->GetActorRotation().ToString());
+		// 마우스 이동 값을 사용하여 회전값 계산
+		float MouseX, MouseY;
+		pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
+
+		deltaRotation = FRotator::ZeroRotator;
+
+		// 선택된 축에 따라 회전값 수정
+		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Rot")) )
+		{
+			deltaRotation.Pitch += MouseY * 5.0f; // 회전 속도 조절
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along X Rot"));
+		}
+		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Rot")) )
+		{
+			deltaRotation.Roll += -MouseY * 5.0f;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Y Rot"));
+		}
+		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Rot")) )
+		{
+			deltaRotation.Yaw += MouseX * 5.0f;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Z Rot"));
+		}
+
+		// 회전값 적용
+		CurrentWorldActor->AddActorLocalRotation(deltaRotation);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Rotation: ") + CurrentWorldActor->GetActorRotation().ToString());
+	}
+	else
+	{
+		return;
+	}
 }
 
 void AAJH_EditorCharacter::OnMyHandleGizmoScale()
@@ -618,46 +644,53 @@ void AAJH_EditorCharacter::OnMyHandleGizmoScale()
 		pc->SetInputMode(FInputModeGameOnly());
 	}
 
-	// 마우스 이동 값을 사용하여 Scale 값 계산
-	float MouseX, MouseY;
-	pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
-
-	float baseScaleFactor = 0.01f; // 기본 Scale 변화 속도
-	float maxScaleFactor = 1.0f;   // 최대 Scale 변화 속도
-	float scaleFactor = baseScaleFactor;
-
-	// 마우스 입력이 임계값을 초과하면 ScaleFactor를 증가
-	if ( FMath::Abs(MouseX) > 10.0f || FMath::Abs(MouseY) > 10.0f )
+	if ( bIsGizmoScaleStart )
 	{
-		scaleFactor = maxScaleFactor;
+		// 마우스 이동 값을 사용하여 Scale 값 계산
+		float MouseX, MouseY;
+		pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
+
+		float baseScaleFactor = 0.01f; // 기본 Scale 변화 속도
+		float maxScaleFactor = 1.0f;   // 최대 Scale 변화 속도
+		float scaleFactor = baseScaleFactor;
+
+		// 마우스 입력이 임계값을 초과하면 ScaleFactor를 증가
+		if ( FMath::Abs(MouseX) > 10.0f || FMath::Abs(MouseY) > 10.0f )
+		{
+			scaleFactor = maxScaleFactor;
+		}
+
+		// 이전 스케일 값을 가져와서 업데이트
+		FVector currentScale = CurrentWorldActor->GetActorScale3D();
+		newScale = currentScale; // 이전 스케일 값으로 설정
+
+		// newScale = actorInitialScale;
+
+		// 선택된 축에 따라 Scale 값 수정
+		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Scale")) )
+		{
+			newScale.X = FMath::Clamp(newScale.X + MouseX * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scalting along X Scale"));
+		}
+		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Scale")) )
+		{
+			newScale.Y = FMath::Clamp(newScale.Y + MouseX * scaleFactor, 0.1f, 10.0f);
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Y Scale"));
+		}
+		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Scale")) )
+		{
+			newScale.Z = FMath::Clamp(newScale.Z + MouseY * scaleFactor, 0.1f, 10.0f);
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Z Scale"));
+		}
+
+		// Scale 값 적용
+		CurrentWorldActor->SetActorScale3D(newScale);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Scale: ") + CurrentWorldActor->GetActorScale().ToString());
 	}
-
-	// 이전 스케일 값을 가져와서 업데이트
-	FVector currentScale = CurrentWorldActor->GetActorScale3D();
-	newScale = currentScale; // 이전 스케일 값으로 설정
-
-	// newScale = actorInitialScale;
-
-	// 선택된 축에 따라 Scale 값 수정
-	if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Scale")) )
+	else
 	{
-		newScale.X = FMath::Clamp(newScale.X + MouseX * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scalting along X Scale"));
+		return;
 	}
-	else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Scale")) )
-	{
-		newScale.Y = FMath::Clamp(newScale.Y + MouseX * scaleFactor, 0.1f, 10.0f);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Y Scale"));
-	}
-	else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Scale")) )
-	{
-		newScale.Z = FMath::Clamp(newScale.Z + MouseY * scaleFactor, 0.1f, 10.0f);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Z Scale"));
-	}
-
-	// Scale 값 적용
-	CurrentWorldActor->SetActorScale3D(newScale);
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Scale: ") + CurrentWorldActor->GetActorScale().ToString());
 }
 
 void AAJH_EditorCharacter::LocationGizmoForSetCollision()
@@ -735,52 +768,48 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 	}
 
 	float currentMouseX, currentMouseY;
-	if ( pc && pc->GetMousePosition(currentMouseX, currentMouseY) )
+	if ( pc && pc->GetMousePosition(currentMouseX, currentMouseY) && bIsGizmoLocationStart )
 	{
 		if ( pc->DeprojectScreenPositionToWorld(currentMouseX, currentMouseY, worldLocation, worldDirection) )
 		{
 			if ( IA_changeNum == 1 )
 			{
-				// World 좌표를 Local 좌표로 변환
-				//FVector LocalLocation = CurrentWorldActor->GetRootComponent()->GetComponentTransform().InverseTransformPosition(worldLocation);
 				 deltaLocation = worldLocation - initialWorldLocation;
-				//deltaLocation = LocalLocation - initialWorldLocation;
 				if ( deltaLocation.IsNearlyZero(0.01f) ) return; // 이동 값이 작으면 무시
 
 				float scaleFactor = 23.0f; // 이동 속도 조절
 				deltaLocation *= scaleFactor;
 
-				newLocation = actorInitialLocation;
+				newLocation = actorInitialLocation; // 초기 위치로 설정
 				if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) )
 				{
-					newLocation.X += deltaLocation.X;
+					newLocation.X += deltaLocation.X; // X축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along X Axis"));
 				}
-				if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
+				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
 				{
-					newLocation.Y += deltaLocation.Y;
+					newLocation.Y += deltaLocation.Y; // Y축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along Y Axis"));
 				}
-				if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
+				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
 				{
-					newLocation.Z += deltaLocation.Z;
+					newLocation.Z += deltaLocation.Z; // Z축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along Z Axis"));
 				}
-				if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
+				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
 				{
-					newLocation += deltaLocation;
+					newLocation += deltaLocation; // 모든 축 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along XYZ Axis"));
 				}
-				// Actor의 현재 회전 상태를 가져옴
-				FRotator ActorRotation = CurrentWorldActor->GetActorRotation();
-				// 이동 벡터를 Actor의 현재 회전 상태에 맞춰 변환
-				FVector AdjustedDeltaLocation = ActorRotation.RotateVector(deltaLocation);
+				//// Actor의 현재 회전 상태를 가져옴
+				//FRotator ActorRotation = CurrentWorldActor->GetActorRotation();
+				//// 이동 벡터를 Actor의 현재 회전 상태에 맞춰 변환
+				//FVector AdjustedDeltaLocation = ActorRotation.RotateVector(deltaLocation);
 
-				// 새로운 위치를 초기 위치에서 변환된 이동 벡터를 추가하여 갱신
-				newLocation = actorInitialLocation + AdjustedDeltaLocation;
+				//// 새로운 위치를 초기 위치에서 변환된 이동 벡터를 추가하여 갱신
+				//newLocation = actorInitialLocation + AdjustedDeltaLocation;
 				// 좌표 갱신
 				CurrentWorldActor->SetActorLocation(newLocation);
-				//CurrentWorldActor->SetActorLocation(CurrentWorldActor->GetRootComponent()->GetComponentTransform().TransformPosition(newLocation));
 				GizmoUI->OnMyEdit_Location();
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Location: ") + newLocation.ToString());
 			}
@@ -789,6 +818,10 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("outHit.GetComponent() is nullptr"));
 		}
+	}
+	else
+	{
+		return;
 	}
 }
 
@@ -810,6 +843,7 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 	{
 		if ( IA_changeNum == 1 )
 		{
+			bIsGizmoLocationStart = true;
 			SetGizmoState(EGizmoState::Location); // Location 상태 설정
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Location"));
 		}
@@ -818,15 +852,16 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 	{
 		if ( IA_changeNum == 2 )
 		{
+			bIsGizmoRotationStart = true;
 			SetGizmoState(EGizmoState::Rotation); // Rotation 상태 설정
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Rotation"));
 		}
 	}
-	// 스케일 Gizmo를 추가할 경우
 	else if ( HitComponent->ComponentHasTag(TEXT("X_Scale")) ||	 HitComponent->ComponentHasTag(TEXT("Y_Scale")) || HitComponent->ComponentHasTag(TEXT("Z_Scale")) )
 	{
 		if (IA_changeNum == 3)
 		{
+			bIsGizmoScaleStart = true;
 			SetGizmoState(EGizmoState::Scale); // Scale 상태 설정
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Scale"));
 		}
@@ -863,19 +898,25 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 	case EGizmoState::Location:
 		CurrentWorldActor->bIsAxisLocation = true;
 		bIsGizmoLocationActive = true;
+		bIsGizmoRotationActive = false;
+		bIsGizmoScaleActive = false;
 		pc->bShowMouseCursor = true; // 마우스 커서 표시
 		CurrentWorldActor->LocationVisibility();
 		LocationGizmoForSetCollision();
 		break;
 	case EGizmoState::Rotation:
 		CurrentWorldActor->bIsAxisRotation = true;
+		bIsGizmoLocationActive = false;
 		bIsGizmoRotationActive = true;
+		bIsGizmoScaleActive = false;
 		//pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->RotationVisivility();
 		RotationGizmoForSetCollision();
 		break;
 	case EGizmoState::Scale:
 		CurrentWorldActor->bIsAxisScale = true;
+		bIsGizmoLocationActive = false;
+		bIsGizmoRotationActive = false;
 		bIsGizmoScaleActive = true;
 		//pc->bShowMouseCursor = false; // 마우스 커서 숨기기
 		CurrentWorldActor->ScaleVisivility();
@@ -897,7 +938,7 @@ void AAJH_EditorCharacter::SetGizmoState(EGizmoState GizmoState)
 		FString::Printf(TEXT("Setting Gizmo State: %d"), static_cast< int32 >( GizmoState )));
 
 	// 이동 속도를 0으로 설정하여 캐릭터 이동 방지
-	GetCharacterMovement()->MaxFlySpeed = 0;
+	// GetCharacterMovement()->MaxFlySpeed = 0;
 }
 
 void AAJH_EditorCharacter::UpdateGizmoScale()
@@ -920,7 +961,7 @@ void AAJH_EditorCharacter::UpdateGizmoScale()
 	//float Distance = FVector::Distance(PlayerLocalLocation, FVector::ZeroVector); // Gizmo의 Local 기준으로 거리
 
 	// 거리 기반으로 스케일을 조정 (조정 가능한 상수값 사용)
-	float ScaleFactor = FMath::Clamp(Distance / 1000.0f, 0.5f, 5.0f); // 최소 0.5, 최대 5.0
+	float ScaleFactor = FMath::Clamp(Distance / 1000.0f, 2.0f, 10.0f); // 최소 2.0, 최대 10.0
 
 	// Gizmo의 각 축 컴포넌트에 개별적으로 스케일 설정
 	CurrentWorldActor->X_Axis->SetRelativeScale3D(FVector(ScaleFactor, ScaleFactor, ScaleFactor));

@@ -129,6 +129,9 @@ public:
 	bool bIsGizmoRotationActive = false;
 	bool bIsGizmoScaleActive = false;
 	bool bHasInteractedWithGizmo;
+	bool bIsGizmoLocationStart = false;
+	bool bIsGizmoRotationStart = false;
+	bool bIsGizmoScaleStart = false;
 
 	FVector initialWorldLocation;
 	FVector actorInitialLocation;
