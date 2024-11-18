@@ -16,9 +16,6 @@ struct FActorSaveData{
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
-	FName ActorName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	FVector Location;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
@@ -29,6 +26,13 @@ struct FActorSaveData{
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TSubclassOf<AActor> ActorClass;
+
+	FActorSaveData()
+		: Location(FVector::ZeroVector),
+		  Rotation(FRotator::ZeroRotator),
+		  Scale(FVector(1.f, 1.f, 1.f)),
+		  ActorClass(nullptr){
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -41,6 +45,10 @@ struct FLevelSaveData
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TArray<FActorSaveData> SavedActors;
+
+	FLevelSaveData()
+		: LevelName(TEXT(""))
+	{}
 };
 
 UCLASS()

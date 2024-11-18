@@ -11,8 +11,8 @@
  * 
  */
 
- class UImage;
- class UButton;
+class UImage;
+class UButton;
 
 USTRUCT(BlueprintType)
 struct FClueData{
@@ -33,13 +33,20 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 SpecialThingCount;
+
+	FClueData()
+		: ClueID(TEXT("")),
+		  SuspectCount(0),
+		  WeaponCount(0),
+		  MainEvidenceCount(0),
+		  SpecialThingCount(0){
+	}
 };
 
 UCLASS()
-class SHERLOCKPROJECT_API UAJH_SummaryWidget : public UUserWidget
-{
+class SHERLOCKPROJECT_API UAJH_SummaryWidget : public UUserWidget{
 	GENERATED_BODY()
-	
+
 public:
 	virtual void NativeConstruct() override;
 
@@ -52,28 +59,28 @@ public:
 	UImage* Img_SuspectImage2;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SuspectImage3;
-	
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_WeaponImage1;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_WeaponImage2;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_WeaponImage3;
-	
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_MainEvidenceImage1;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_MainEvidenceImage2;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_MainEvidenceImage3;
-	
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SpecialThingImage1;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SpecialThingImage2;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UImage* Img_SpecialThingImage3;
-	
+
 
 	UFUNCTION()
 	void OnSuspectImage(class UTexture2D* SavedTexture, int32 playerid);
@@ -96,12 +103,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	UDataTable* EvidenceDataTable;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UTexture2D*> AllTexture;
 
 	TArray<FClueData> ClueDataArray;
-	
+
 	void LoadClueData();
 
 	void SaveClueData();
