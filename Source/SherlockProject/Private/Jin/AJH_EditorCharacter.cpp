@@ -450,18 +450,6 @@ void AAJH_EditorCharacter::OnMyIA_changeLocation()
 
 
 	SetGizmoState(EGizmoState::Location);
-
-	/*if ( CurrentWorldActor)
-	{
-		CurrentWorldActor->bIsVisibleLocation = true;
-		CurrentWorldActor->bIsVisibleRotation = false;
-		CurrentWorldActor->bIsVisibleScale = false;
-		CurrentWorldActor->bIsAxisLocation = true;
-		CurrentWorldActor->bIsAxisRotation = false;
-		CurrentWorldActor->bIsAxisScale = false;
-		CurrentWorldActor->LocationVisibility();
-		LocationGizmoForSetCollision();
-	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_changeRotation()
@@ -481,18 +469,6 @@ void AAJH_EditorCharacter::OnMyIA_changeRotation()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 2")); // IA_changeNum 확인
 
 	SetGizmoState(EGizmoState::Rotation);
-
-	/*if ( CurrentWorldActor)
-	{
-		CurrentWorldActor->bIsVisibleLocation = false;
-		CurrentWorldActor->bIsVisibleRotation = true;
-		CurrentWorldActor->bIsVisibleScale = false;
-		CurrentWorldActor->bIsAxisLocation = false;
-		CurrentWorldActor->bIsAxisRotation = true;
-		CurrentWorldActor->bIsAxisScale = false;
-		CurrentWorldActor->RotationVisivility();
-		RotationGizmoForSetCollision();
-	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_changeScale()
@@ -512,18 +488,6 @@ void AAJH_EditorCharacter::OnMyIA_changeScale()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("IA_changeNum is 3")); // IA_changeNum 확인
 
 	SetGizmoState(EGizmoState::Scale);
-
-	/*if ( CurrentWorldActor)
-	{
-		CurrentWorldActor->bIsVisibleLocation = false;
-		CurrentWorldActor->bIsVisibleRotation = false;
-		CurrentWorldActor->bIsVisibleScale = true;
-		CurrentWorldActor->bIsAxisLocation = false;
-		CurrentWorldActor->bIsAxisRotation = false;
-		CurrentWorldActor->bIsAxisScale = true;
-		CurrentWorldActor->ScaleVisivility();
-		ScaleGizmoForSetCollision();
-	}*/
 }
 
 void AAJH_EditorCharacter::OnMyIA_Escape()
@@ -780,20 +744,23 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 				float scaleFactor = 23.0f; // 이동 속도 조절
 				deltaLocation *= scaleFactor;
 
+				// 이동 벡터를 액터의 로컬 좌표계로 변환
+				//FVector localDeltaLocation = CurrentWorldActor->GetTransform().InverseTransformVectorNoScale(deltaLocation);
+
 				newLocation = actorInitialLocation; // 초기 위치로 설정
 				if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Axis")) )
 				{
-					newLocation.X += deltaLocation.X; // X축만 이동
+					newLocation += CurrentWorldActor->GetActorForwardVector() * deltaLocation.X; // X축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along X Axis"));
 				}
 				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Axis")) )
 				{
-					newLocation.Y += deltaLocation.Y; // Y축만 이동
+					newLocation += CurrentWorldActor->GetActorRightVector() * deltaLocation.Y; // Y축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along Y Axis"));
 				}
 				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Axis")) )
 				{
-					newLocation.Z += deltaLocation.Z; // Z축만 이동
+					newLocation += CurrentWorldActor->GetActorUpVector() * deltaLocation.Z; // Z축만 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along Z Axis"));
 				}
 				else if ( outHit.GetComponent()->ComponentHasTag(TEXT("XYZ_Axis")) )
@@ -801,13 +768,7 @@ void AAJH_EditorCharacter::OnMyLocationGizmoMovement()
 					newLocation += deltaLocation; // 모든 축 이동
 					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Moving along XYZ Axis"));
 				}
-				//// Actor의 현재 회전 상태를 가져옴
-				//FRotator ActorRotation = CurrentWorldActor->GetActorRotation();
-				//// 이동 벡터를 Actor의 현재 회전 상태에 맞춰 변환
-				//FVector AdjustedDeltaLocation = ActorRotation.RotateVector(deltaLocation);
 
-				//// 새로운 위치를 초기 위치에서 변환된 이동 벡터를 추가하여 갱신
-				//newLocation = actorInitialLocation + AdjustedDeltaLocation;
 				// 좌표 갱신
 				CurrentWorldActor->SetActorLocation(newLocation);
 				GizmoUI->OnMyEdit_Location();
