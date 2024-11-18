@@ -44,6 +44,16 @@ public:
 	UFUNCTION()
 	void ItemButtonClicked();
 
-	UPROPERTY(EditDefaultsOnly)
-	FLinearColor SavedTexture;
+	UPROPERTY()
+	class UTexture* SavedTexture;
+
+	bool bIsDisabled = false;
+	
+	UFUNCTION()
+	void DisableInteraction();
+
+	UFUNCTION()
+	void EnableInteraction();
+
+	bool IsDisabled() const { return bIsDisabled; }
 };

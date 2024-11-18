@@ -153,4 +153,7 @@ public:
 	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Player3CollectionText;
+
+	UFUNCTION()
+	void RestoreNoteItemInteraction(UNoteItemWidget* NoteItem);
 };
