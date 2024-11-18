@@ -289,8 +289,8 @@ void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value){
 
 	if (Controller != nullptr){
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(LookAxisVector.X * 0.7);
+		AddControllerPitchInput(LookAxisVector.Y * 0.7);
 	}
 }
 
