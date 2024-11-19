@@ -2,19 +2,24 @@
 
 
 #include "Jin/AJH_WorldActor.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 AAJH_WorldActor::AAJH_WorldActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	GizmoRoot = CreateDefaultSubobject<USceneComponent>(TEXT("GizmoRoot"));
+	SetRootComponent(GizmoRoot);
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-	SetRootComponent(MeshComp);
+	MeshComp->SetupAttachment(GizmoRoot);
 	Tags.Add(TEXT("Actor"));
+	// Tags.Add(TEXT("InteractObj"));
 	X_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Axis"));
-	X_Axis->SetupAttachment(MeshComp);
+	X_Axis->SetupAttachment(GizmoRoot);
 	X_Axis->ComponentTags.Add(TEXT("X_Axis"));
+	X_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
 	if ( tempX_Axis.Succeeded() )
 	{
@@ -24,8 +29,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		X_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	}
 	Y_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Axis"));
-	Y_Axis->SetupAttachment(MeshComp);
+	Y_Axis->SetupAttachment(GizmoRoot);
 	Y_Axis->ComponentTags.Add(TEXT("Y_Axis"));
+	Y_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
 	if ( tempY_Axis.Succeeded() )
 	{
@@ -35,8 +41,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Y_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	}
 	Z_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Axis"));
-	Z_Axis->SetupAttachment(MeshComp);
+	Z_Axis->SetupAttachment(GizmoRoot);
 	Z_Axis->ComponentTags.Add(TEXT("Z_Axis"));
+	Z_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
 	if ( tempZ_Axis.Succeeded() )
 	{
@@ -46,8 +53,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f)); 
 	}
 	XYZ_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("XYZ_Axis"));
-	XYZ_Axis->SetupAttachment(MeshComp);
+	XYZ_Axis->SetupAttachment(GizmoRoot);
 	XYZ_Axis->ComponentTags.Add(TEXT("XYZ_Axis"));
+	XYZ_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempXYZ_Axis(TEXT("'/Engine/VREditor/TransformGizmo/UniformScaleHandle.UniformScaleHandle'"));
 	if ( tempXYZ_Axis.Succeeded() )
 	{
@@ -57,30 +65,33 @@ AAJH_WorldActor::AAJH_WorldActor()
 		XYZ_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f)); 
 	}
 	X_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Rot"));
-	X_Rot->SetupAttachment(MeshComp);
+	X_Rot->SetupAttachment(GizmoRoot);
 	X_Rot->ComponentTags.Add(TEXT("X_Rot"));
+	X_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
 	if ( tempX_Rot.Succeeded() )
 	{
 		X_Rot->SetStaticMesh(tempX_Rot.Object);
 		X_Rot->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-		X_Rot->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+		X_Rot->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 		X_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	Y_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Rot"));
-	Y_Rot->SetupAttachment(MeshComp);
+	Y_Rot->SetupAttachment(GizmoRoot);
 	Y_Rot->ComponentTags.Add(TEXT("Y_Rot"));
+	Y_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
 	if ( tempY_Rot.Succeeded() )
 	{
 		Y_Rot->SetStaticMesh(tempY_Rot.Object);
 		Y_Rot->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-		Y_Rot->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+		Y_Rot->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 		Y_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	Z_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Rot"));
-	Z_Rot->SetupAttachment(MeshComp);
+	Z_Rot->SetupAttachment(GizmoRoot);
 	Z_Rot->ComponentTags.Add(TEXT("Z_Rot"));
+	Z_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
 	if ( tempZ_Rot.Succeeded() )
 	{
@@ -90,8 +101,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	X_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Scale"));
-	X_Scale->SetupAttachment(MeshComp);
+	X_Scale->SetupAttachment(GizmoRoot);
 	X_Scale->ComponentTags.Add(TEXT("X_Scale"));
+	X_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
 	if ( tempX_Scale.Succeeded() )
 	{
@@ -101,8 +113,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		X_Scale->SetRelativeScale3D(FVector(7.0f, 7.0f, 7.0f)); 
 	}
 	Y_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Scale"));
-	Y_Scale->SetupAttachment(MeshComp);
+	Y_Scale->SetupAttachment(GizmoRoot);
 	Y_Scale->ComponentTags.Add(TEXT("Y_Scale"));
+	Y_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
 	if ( tempY_Scale.Succeeded() )
 	{
@@ -112,8 +125,9 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Y_Scale->SetRelativeScale3D(FVector(7.0f, 7.0f, 7.0f));
 	}
 	Z_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Scale"));
-	Z_Scale->SetupAttachment(MeshComp);
+	Z_Scale->SetupAttachment(GizmoRoot);
 	Z_Scale->ComponentTags.Add(TEXT("Z_Scale"));
+	Z_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
 	if ( tempZ_Scale.Succeeded() )
 	{
@@ -121,6 +135,41 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Scale->SetRelativeLocation(FVector(0.0f, 0.0f, 65.0f));
 		Z_Scale->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f)); // (Pitch=90.000000,Yaw=0.000000,Roll=0.000000)
 		Z_Scale->SetRelativeScale3D(FVector(7.0f, 7.0f, 7.0f));
+	}
+
+	// ======================Material==============================
+	ConstructorHelpers::FObjectFinder<UMaterial> tempX_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/X_Mat.X_Mat'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> tempGizmoX_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/Gizmo_X_Mat.Gizmo_X_Mat'"));
+	if ( tempX_Mat.Succeeded() && tempGizmoX_Mat.Succeeded() )
+	{
+		X_Axis->SetMaterial(0, tempX_Mat.Object);
+		X_Axis->SetMaterial(1, tempGizmoX_Mat.Object);
+		X_Rot->SetMaterial(0, tempX_Mat.Object);
+		X_Rot->SetMaterial(1, tempGizmoX_Mat.Object);
+		X_Scale->SetMaterial(0, tempX_Mat.Object);
+		X_Scale->SetMaterial(1, tempGizmoX_Mat.Object);
+	}
+	ConstructorHelpers::FObjectFinder<UMaterial> temY_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/Y_Mat.Y_Mat'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> tempGizmoY_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/Gizmo_Y_Mat.Gizmo_Y_Mat'"));
+	if ( temY_Mat.Succeeded() && tempGizmoY_Mat.Succeeded() )
+	{
+		Y_Axis->SetMaterial(0, temY_Mat.Object);
+		Y_Axis->SetMaterial(1, tempGizmoY_Mat.Object);
+		Y_Rot->SetMaterial(0, temY_Mat.Object);
+		Y_Rot->SetMaterial(1, tempGizmoY_Mat.Object);
+		Y_Scale->SetMaterial(0, temY_Mat.Object);
+		Y_Scale->SetMaterial(1, tempGizmoY_Mat.Object);
+	}
+	ConstructorHelpers::FObjectFinder<UMaterial> temZ_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/Z_Mat.Z_Mat'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> tempGizmoZ_Mat(TEXT("/Script/Engine.Material'/Game/Jin/Material/Gizmo_Z_Mat.Gizmo_Z_Mat'"));
+	if ( temZ_Mat.Succeeded() && tempGizmoZ_Mat.Succeeded() )
+	{
+		Z_Axis->SetMaterial(0, temZ_Mat.Object);
+		Z_Axis->SetMaterial(1, tempGizmoZ_Mat.Object);
+		Z_Rot->SetMaterial(0, temZ_Mat.Object);
+		Z_Rot->SetMaterial(1, tempGizmoZ_Mat.Object);
+		Z_Scale->SetMaterial(0, temZ_Mat.Object);
+		Z_Scale->SetMaterial(1, tempGizmoZ_Mat.Object);
 	}
 
 }
@@ -224,5 +273,21 @@ void AAJH_WorldActor::ScaleVisivility()
 	X_Scale->SetVisibility(true);
 	Y_Scale->SetVisibility(true);
 	Z_Scale->SetVisibility(true);
+}
+
+void AAJH_WorldActor::OnFixGizmoRotation()
+{
+	if ( GizmoRoot )
+	{
+		GizmoRoot->SetRelativeRotation(FRotator::ZeroRotator);
+	}
+}
+
+void AAJH_WorldActor::OnFixGizmoScale()
+{
+	if ( GizmoRoot )
+	{
+		GizmoRoot->SetRelativeScale3D(FVector::ZeroVector);
+	}
 }
 

@@ -258,8 +258,11 @@ public:
 	UFUNCTION()
 	void SetAnimPawnVisibility();
 
+	UFUNCTION()
+	void UpdatePlayerCollectionPercentage();
+
 	UFUNCTION(NetMulticast, Reliable)
-	void UpdatePlayerCollectionPercentage(int32 playerId);
+	void UpdateAllPlayerCollections();
 	
 	//============================================
 

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -14,4 +14,7 @@ class SHERLOCKPROJECT_API AAJH_EditerToolGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(Category = "Editor Tool")
+	void WorldActorLocation(const FVector& NewLocation);
 };

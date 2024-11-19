@@ -320,10 +320,10 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 
 		GizmoUI->actorLocation = actorInitialLocation;
 		GizmoUI->GetEdit_Location();
-		
-
-		// Gizmo 상호작용 처리
-		//OnMyGizmoInteraction();
+		GizmoUI->actorRotation = actorInitialRotation;
+		GizmoUI->GetEdit_Rotation(actorInitialRotation);
+		GizmoUI->actorScale = actorInitialScale;
+		GizmoUI->GetEdit_Scale(actorInitialScale);
 
 		if ( IA_changeNum == 1 )
 		{
@@ -502,14 +502,10 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
 	{
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
-		//transform.SetTranslation(FVector(0.5f, 0.5f, 0.5f));
-		// transform = EditorSpawn->GetActorTransform();
-		//EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+
 		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorChange, transform);
 		if ( EditorActor )
 		{
-			//EditorActor->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
-			// EditorActor->OnMyMeshPath(num);
 			EditorActor->bIsSpawn = true;
 			bIsActorSpawn = true;
 			bIsEditorActor = true;
@@ -533,7 +529,6 @@ void AAJH_EditorCharacter::OnMyLineTrace()
 		FCollisionQueryParams param;
 		param.AddIgnoredActor(this);
 		bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, Start, End, ECC_Visibility, param);
-		// DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
 		if ( bHit && outHit.GetActor() != nullptr )
 		{
 			FString objectName = outHit.GetActor()->GetName();
@@ -566,27 +561,59 @@ void AAJH_EditorCharacter::OnMyHandleGizmoRotation()
 		float MouseX, MouseY;
 		pc->GetInputMouseDelta(MouseX, MouseY); // 마우스 델타 값 가져오기
 
+		// 입력값 무시 임계값 설정
+		const float Threshold = 0.1f; // 임계값: 필요에 따라 조정 가능
+
+		// 임계값보다 작은 입력값은 무시
+		if ( FMath::Abs(MouseX) < Threshold )
+		{
+			MouseX = 0.0f; // MouseX 값 무시
+		}
+		if ( FMath::Abs(MouseY) < Threshold )
+		{
+			MouseY = 0.0f; // MouseY 값 무시
+		}
+
 		deltaRotation = FRotator::ZeroRotator;
 
 		// 선택된 축에 따라 회전값 수정
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Rot")) )
 		{
-			deltaRotation.Pitch += MouseY * 5.0f; // 회전 속도 조절
+			if(MouseX)
+				deltaRotation.Roll += MouseX * 5.0f; // 회전 속도 조절
+			else if(MouseY)
+				deltaRotation.Roll += MouseY * 5.0f; // 회전 속도 조절
+			else if(MouseX && MouseY)
+				deltaRotation.Roll += ((MouseX +MouseY) / 2) * 5.0f; // 회전 속도 조절
+
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along X Rot"));
-		}
+		} 
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Rot")) )
 		{
-			deltaRotation.Roll += -MouseY * 5.0f;
+			if(MouseX)
+				deltaRotation.Pitch += MouseX * 5.0f;
+			else if(MouseY)
+				deltaRotation.Pitch += MouseY * 5.0f;
+			else if ( MouseX && MouseY )
+				deltaRotation.Pitch += ( ( MouseX + MouseY ) / 2 ) * 5.0f; // 회전 속도 조절
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Y Rot"));
 		}
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Rot")) )
 		{
-			deltaRotation.Yaw += MouseX * 5.0f;
+			if ( MouseX )
+				deltaRotation.Yaw += MouseX * 5.0f;
+			else if ( MouseY )
+				deltaRotation.Yaw += MouseY * 5.0f;
+			else if ( MouseX && MouseY )
+				deltaRotation.Yaw += ( ( MouseX + MouseY ) / 2 ) * 5.0f; // 회전 속도 조절
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Z Rot"));
 		}
 
 		// 회전값 적용
-		CurrentWorldActor->AddActorLocalRotation(deltaRotation);
+		//CurrentWorldActor->AddActorLocalRotation(deltaRotation);
+		CurrentWorldActor->MeshComp->AddLocalRotation(deltaRotation);
+		//CurrentWorldActor->OnFixGizmoRotation();
+		GizmoUI->GetEdit_Rotation(CurrentWorldActor->MeshComp->GetComponentRotation());
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Rotation: ") + CurrentWorldActor->GetActorRotation().ToString());
 	}
 	else
@@ -618,37 +645,61 @@ void AAJH_EditorCharacter::OnMyHandleGizmoScale()
 		float maxScaleFactor = 1.0f;   // 최대 Scale 변화 속도
 		float scaleFactor = baseScaleFactor;
 
-		// 마우스 입력이 임계값을 초과하면 ScaleFactor를 증가
-		if ( FMath::Abs(MouseX) > 10.0f || FMath::Abs(MouseY) > 10.0f )
-		{
-			scaleFactor = maxScaleFactor;
-		}
-
 		// 이전 스케일 값을 가져와서 업데이트
-		FVector currentScale = CurrentWorldActor->GetActorScale3D();
+		//FVector currentScale = CurrentWorldActor->GetActorScale3D();
+		FVector currentScale = CurrentWorldActor->MeshComp->GetRelativeScale3D();
 		newScale = currentScale; // 이전 스케일 값으로 설정
+		
+		// 입력값 무시 임계값 설정
+		const float Threshold = 0.1f;
 
-		// newScale = actorInitialScale;
+		// 임계값보다 작은 입력값은 무시
+		if ( FMath::Abs(MouseX) < Threshold )
+		{
+			MouseX = 0.0f; // MouseX 값 무시
+		}
+		if ( FMath::Abs(MouseY) < Threshold )
+		{
+			MouseY = 0.0f; // MouseY 값 무시
+		}
 
 		// 선택된 축에 따라 Scale 값 수정
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Scale")) )
 		{
+			if(MouseX)
 			newScale.X = FMath::Clamp(newScale.X + MouseX * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if(MouseY)
+			newScale.X = FMath::Clamp(newScale.X + MouseY * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if(MouseX && MouseY)
+			newScale.X = FMath::Clamp(newScale.X + ((MouseX + MouseY) / 2 ) * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scalting along X Scale"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Scale")) )
 		{
-			newScale.Y = FMath::Clamp(newScale.Y + MouseX * scaleFactor, 0.1f, 10.0f);
+			if ( MouseX )
+				newScale.Y = FMath::Clamp(newScale.Y + MouseX * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if ( MouseY )
+				newScale.Y = FMath::Clamp(newScale.Y + MouseY * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if ( MouseX && MouseY )
+				newScale.Y = FMath::Clamp(newScale.Y + ( ( MouseX + MouseY ) / 2 ) * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Y Scale"));
 		}
 		else if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Scale")) )
 		{
-			newScale.Z = FMath::Clamp(newScale.Z + MouseY * scaleFactor, 0.1f, 10.0f);
+			if ( MouseX )
+				newScale.Z = FMath::Clamp(newScale.Z + MouseX * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if ( MouseY )
+				newScale.Z = FMath::Clamp(newScale.Z + MouseY * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
+			else if ( MouseX && MouseY )
+				newScale.Z = FMath::Clamp(newScale.Z + ( ( MouseX + MouseY ) / 2 ) * scaleFactor, 0.1f, 10.0f); // 안전한 범위 내에서 변화
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Scaling along Z Scale"));
 		}
 
 		// Scale 값 적용
-		CurrentWorldActor->SetActorScale3D(newScale);
+		//CurrentWorldActor->SetActorScale3D(newScale);
+		//CurrentWorldActor->OnFixGizmoScale();
+		CurrentWorldActor->MeshComp->SetRelativeScale3D(newScale);
+		GizmoUI->GetEdit_Scale(CurrentWorldActor->MeshComp->GetRelativeScale3D());
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Scale: ") + CurrentWorldActor->GetActorScale().ToString());
 	}
 	else

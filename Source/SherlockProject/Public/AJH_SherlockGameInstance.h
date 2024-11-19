@@ -83,7 +83,9 @@ public:
 
 	UPROPERTY()
 	bool bIsSoundOn = false;
-	
+
+	UPROPERTY()
+	TArray<float> PlayerCollection;
 private:
 	FName mySessionName = FName("first Session");
 	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 

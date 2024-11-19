@@ -20,7 +20,7 @@ protected:
 public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UWidgetSwitcher* EditorWidgetSwitcher;
-	// Main
+	// =================================Main=====================================
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Character;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -31,6 +31,10 @@ public:
 	class UButton* Main_Btn_Place;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Back;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Main_Btn_PrePage;
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
+	class UButton* Main_Btn_NextPage;
 	UFUNCTION()
 	void OnMyMain_Btn_Character();
 	UFUNCTION()
@@ -41,8 +45,12 @@ public:
 	void OnMyMain_Btn_Place();
 	UFUNCTION()
 	void OnMyMain_Btn_Back();
+	UFUNCTION()
+	void OnMyMain_Btn_PrePage();
+	UFUNCTION()
+	void OnMyMain_Btn_NextPage();
 
-	// Character
+	// =============================================Character================================
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Character_Btn_Back;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -64,7 +72,7 @@ public:
 	UFUNCTION()
 	void OnMyBtn_Character_2();
 
-	// Evidence
+	// ==========================================Evidence======================================
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Evidence_Btn_Back;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -77,7 +85,7 @@ public:
 	void OnMyBtn_Evidence_0();
 
 
-	// Weapon
+	// ============================================Weapon=====================================
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Weapon_Btn_Back;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -89,8 +97,8 @@ public:
 	UFUNCTION()
 	void OnMyBtn_Weapon_1();
 
-	//Place_Furnitures
-	// Up
+	//===========================================Place======================================
+	//////////////////////////////////////////////Up////////////////////////////////
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Back;
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
@@ -101,7 +109,7 @@ public:
 	class UButton* Place_Btn_Furnitures_Up_1;
 	UFUNCTION()
 	void OnMyPlace_Btn_Furnitures_Up_1();
-	// Down
+	//////////////////////////////////////////////Down////////////////////////////////////////
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Furnitures_Down_0;
 	UFUNCTION()
@@ -110,32 +118,32 @@ public:
 	class UButton* Place_Btn_Furnitures_Down_1;
 	UFUNCTION()
 	void OnMyPlace_Btn_Furnitures_Down_1();
-	// Place_Vertical
-	// Place_Vertical_0
+	//////////////////////////////////////Place_Vertical///////////////////////////////////////
+	//////////////////////////////////////Place_Vertical_0////////////////////////////////////
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UVerticalBox* Place_Vertical_0;
-	// Place_Vertical_1
+	//////////////////////////////////////Place_Vertical_1//////////////////////////////////
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UVerticalBox* Place_Vertical_1;
 
-	// Place_Footway
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	//====================================Place_Footway======================================
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Footway_1;
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Footway_2;
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "FootwayFactory")
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Footway_3;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> EditFootway_1Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> Footway_1Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> EditFootway_2Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> Footway_2Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> EditFootway_3Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Footway")
 	TSubclassOf<class AActor> Footway_3Factory;
 	UFUNCTION()
 	void OnMyPlace_Btn_Footway_1();
@@ -144,24 +152,24 @@ public:
 	UFUNCTION()
 	void OnMyPlace_Btn_Footway_3();
 
-	// Place_Road
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	//========================================Place_Road===================================
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Road_1;
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Road_2;
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "RoadFactory")
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Road_3;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> EditRoad_1Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> Road_1Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> EditRoad_2Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> Road_2Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> EditRoad_3Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Road")
 	TSubclassOf<class AActor> Road_3Factory;
 	UFUNCTION()
 	void OnMyPlace_Btn_Road_1();
@@ -170,19 +178,234 @@ public:
 	UFUNCTION()
 	void OnMyPlace_Btn_Road_3();
 
-	// Place_Station
-	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ), Category = "StationFactory")
+	//======================================Place_Station=======================================
+	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Place_Btn_Station_1;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Station")
 	TSubclassOf<class AActor> EditStation_1Factory;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Place_Station")
 	TSubclassOf<class AActor> Station_1Factory;
 	UFUNCTION()
 	void OnMyPlace_Btn_Station_1();
 
-	
+	//=====================================Furnitures==========================================
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Back;
+	////////////////////////////////Furnitures_Vertical//////////////////////////
+	UPROPERTY(meta = ( BindWidget ))
+	class UVerticalBox* Furnitures_Vertical;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Up;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Bed;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> EditBedFactory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> BedFactory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Carpet;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> EditCarpetFactory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> CarpetFactory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_sofa;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> EditsofaFactory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> sofaFactory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Ottoman;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> EditOttomanFactory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical")
+	TSubclassOf<class AActor> OttomanFactory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Down;
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Up();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Bed();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Carpet();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_sofa();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Ottoman();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Down();
+	////////////////////////////////Furnitures_Vertical_1//////////////////////////
+	UPROPERTY(meta = ( BindWidget ))
+	class UVerticalBox* Furnitures_Vertical_1;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Up_1;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Chair_1;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> EditChair_1Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> Chair_1Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Chair_2;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> EditChair_2Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> Chair_2Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Chair_3;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> EditChair_3Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> Chair_3Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Chair_4;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> EditChair_4Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_1")
+	TSubclassOf<class AActor> Chair_4Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Down_1;
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Up_1();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Chair_1();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Chair_2();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Chair_3();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Chair_4();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Down_1();
+	////////////////////////////////Furnitures_Vertical_2//////////////////////////
+	UPROPERTY(meta = ( BindWidget ))
+	class UVerticalBox* Furnitures_Vertical_2;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Up_2;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Table_1;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> EditTable_1Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> Table_1Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Table_2;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> EditTable_2Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> Table_2Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Table_3;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> EditTable_3Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> Table_3Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Table_4;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> EditTable_4Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_2")
+	TSubclassOf<class AActor> Table_4Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Down_2;
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Up_2();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Table_1();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Table_2();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Table_3();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Table_4();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Down_2();
+	////////////////////////////////Furnitures_Vertical_3//////////////////////////
+	UPROPERTY(meta = ( BindWidget ))
+	class UVerticalBox* Furnitures_Vertical_3;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Up_3;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Tv;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> EditTVFactory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> TVFactory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_1;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> EditVase_1Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> Vase_1Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_2;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> EditVase_2Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> Vase_2Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_3;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> EditVase_3Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_3")
+	TSubclassOf<class AActor> Vase_3Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Down_3;
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Up_3();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Tv();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_1();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_2();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_3();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Down_3();
+	////////////////////////////////Furnitures_Vertical_4//////////////////////////
+	UPROPERTY(meta = ( BindWidget ))
+	class UVerticalBox* Furnitures_Vertical_4;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Up_4;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_4;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> EditVase_4Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> Vase_4Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_5;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> EditVase_5Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> Vase_5Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_6;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> EditVase_6Factory;
+	UPROPERTY(EditDefaultsOnly, Category = "Furnitures_Vertical_4")
+	TSubclassOf<class AActor> Vase_6Factory;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Vase_7;
+	UPROPERTY(meta = ( BindWidget ))
+	class UButton* Furnitures_Btn_Down_4;
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Up_4();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_4();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_5();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_6();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Vase_7();
+	UFUNCTION()
+	void OnMyFurnitures_Btn_Down_4();
+
+
 	UPROPERTY()
-	APlayerController* pc;
+	class APlayerController* pc;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AAJH_EditorActor> EditorActorFactory;
 	UPROPERTY()

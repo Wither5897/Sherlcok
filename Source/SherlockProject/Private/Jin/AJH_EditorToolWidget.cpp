@@ -23,6 +23,8 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Main_Btn_Weapon->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Weapon);
 	Main_Btn_Place->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Place);
 	Main_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Main_Btn_PrePage->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_PrePage);
+	Main_Btn_NextPage->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_NextPage);
 	// Character
 	Btn_Character_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_0);
 	Character_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
@@ -53,6 +55,45 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	// Station
 	Place_Btn_Station_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Station_1);
 
+	// Furnitures
+	Furnitures_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	///////////////////////////////////////////Furnitures_Vertical///////////////////////////////////////////
+	Furnitures_Btn_Up->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up);
+	Furnitures_Btn_Bed->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Bed);
+	Furnitures_Btn_Carpet->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Carpet);
+	Furnitures_Btn_sofa->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_sofa);
+	Furnitures_Btn_Ottoman->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Ottoman);
+	Furnitures_Btn_Down->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down);
+	///////////////////////////////////////////Furnitures_Vertical_1//////////////////////////////////////
+	Furnitures_Btn_Up_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_1);
+	Furnitures_Btn_Chair_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_1);
+	Furnitures_Btn_Chair_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_2);
+	Furnitures_Btn_Chair_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_3);
+	Furnitures_Btn_Chair_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_4);
+	Furnitures_Btn_Down_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_1);
+	///////////////////////////////////////////Furnitures_Vertical_2//////////////////////////////////////
+	Furnitures_Btn_Up_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_2);
+	Furnitures_Btn_Table_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_1);
+	Furnitures_Btn_Table_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_2);
+	Furnitures_Btn_Table_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_3);
+	Furnitures_Btn_Table_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_4);
+	Furnitures_Btn_Down_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_2);
+	///////////////////////////////////////////Furnitures_Vertical_3//////////////////////////////////////
+	Furnitures_Btn_Up_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_3);
+	Furnitures_Btn_Tv->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Tv);
+	Furnitures_Btn_Vase_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_1);
+	Furnitures_Btn_Vase_2->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_2);
+	Furnitures_Btn_Vase_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_3);
+	Furnitures_Btn_Down_3->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_3);
+	///////////////////////////////////////////Furnitures_Vertical_4//////////////////////////////////////
+	Furnitures_Btn_Up_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_4);
+	Furnitures_Btn_Vase_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_4);
+	Furnitures_Btn_Vase_5->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_5);
+	Furnitures_Btn_Vase_6->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_6);
+	Furnitures_Btn_Down_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_4);
+
+	
+
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
 
@@ -81,6 +122,21 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Place()
 void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+}
+
+void UAJH_EditorToolWidget::OnMyMain_Btn_PrePage()
+{
+	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+}
+
+void UAJH_EditorToolWidget::OnMyMain_Btn_NextPage()
+{
+	EditorWidgetSwitcher->SetActiveWidgetIndex(5);
+	Furnitures_Vertical->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_4->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UAJH_EditorToolWidget::OnMyBtn_Character_0()
@@ -272,6 +328,336 @@ void UAJH_EditorToolWidget::OnMyPlace_Btn_Station_1()
 	{
 		me->OnMyEditorActorSpawn(false);
 	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up()
+{
+	Furnitures_Vertical->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Bed()
+{
+	me->EditorChange = EditBedFactory;
+	me->FactoryChange = BedFactory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Carpet()
+{
+	me->EditorChange = EditCarpetFactory;
+	me->FactoryChange = CarpetFactory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_sofa()
+{
+	me->EditorChange = EditsofaFactory;
+	me->FactoryChange = sofaFactory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Ottoman()
+{
+	me->EditorChange = EditOttomanFactory;
+	me->FactoryChange = OttomanFactory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down()
+{
+	Furnitures_Vertical->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_1()
+{
+	Furnitures_Vertical->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_1()
+{
+	me->EditorChange = EditChair_1Factory;
+	me->FactoryChange = Chair_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_2()
+{
+	me->EditorChange = EditChair_2Factory;
+	me->FactoryChange = Chair_2Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_3()
+{
+	me->EditorChange = EditChair_3Factory;
+	me->FactoryChange = Chair_3Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Chair_4()
+{
+	me->EditorChange = EditChair_4Factory;
+	me->FactoryChange = Chair_4Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_1()
+{
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_2()
+{
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_1()
+{
+	me->EditorChange = EditTable_1Factory;
+	me->FactoryChange = Table_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_2()
+{
+	me->EditorChange = EditTable_2Factory;
+	me->FactoryChange = Table_2Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_3()
+{
+	me->EditorChange = EditTable_3Factory;
+	me->FactoryChange = Table_3Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Table_4()
+{
+	me->EditorChange = EditTable_4Factory;
+	me->FactoryChange = Table_4Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_2()
+{
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_3()
+{
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Tv()
+{
+	me->EditorChange = EditTVFactory;
+	me->FactoryChange = TVFactory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_1()
+{
+	me->EditorChange = EditVase_1Factory;
+	me->FactoryChange = Vase_1Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_2()
+{
+	me->EditorChange = EditVase_2Factory;
+	me->FactoryChange = Vase_2Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_3()
+{
+	me->EditorChange = EditVase_3Factory;
+	me->FactoryChange = Vase_3Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_3()
+{
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_4->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up_4()
+{
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_4->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_4()
+{
+	me->EditorChange = EditVase_4Factory;
+	me->FactoryChange = Vase_4Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_5()
+{
+	me->EditorChange = EditVase_5Factory;
+	me->FactoryChange = Vase_5Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_6()
+{
+	me->EditorChange = EditVase_6Factory;
+	me->FactoryChange = Vase_6Factory;
+	if ( me->bIsEditorActor == false )
+	{
+		me->OnMyEditorActorSpawn(true);
+	}
+	else
+	{
+		me->OnMyEditorActorSpawn(false);
+	}
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_7()
+{
+
+}
+
+void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_4()
+{
+	
 }
 
 void UAJH_EditorToolWidget::LevelSaveButtonClicked(){

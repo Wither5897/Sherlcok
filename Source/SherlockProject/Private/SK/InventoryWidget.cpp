@@ -9,14 +9,13 @@
 #include "Components/CanvasPanel.h"
 #include "Components/MultiLineEditableText.h"
 #include "Components/Image.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Engine/Engine.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SK/MultiPlayerState.h"
+#include "SK/NoteItemWidget.h"
 
-void UInventoryWidget::NativeConstruct()
-{
+void UInventoryWidget::NativeConstruct(){
 	Super::NativeConstruct();
 
 	DescriptionUI = Cast<UDescriptionWidget>(CreateWidget(GetWorld(), DescriptionUIFactory));
@@ -45,70 +44,57 @@ void UInventoryWidget::NativeConstruct()
 
 	InitTexture = nullptr;
 
-	if ( check.Num() == 0 )
-	{
+	if (check.Num() == 0){
 		check.Init(false, 20);
 	}
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-	if ( !me || !me->SummaryWidget) 
-	{
-		return;
-	}
-} 
-
-void UInventoryWidget::PageDownButtonClicked()
-{
-	if ( EvidencePage->GetText().ToString() == "1" ) {
-		return;
-	}
-	else {
-		EvidenceList1->SetVisibility(ESlateVisibility::Visible);
-		EvidenceList2->SetVisibility(ESlateVisibility::Hidden);
-		EvidencePage->SetText(FText::FromString("1"));
-
-		me->PlayPaperSound();
-	}
 }
 
-void UInventoryWidget::PageUpButtonClicked()
-{
-	if ( EvidencePage->GetText().ToString() == "2" ) {
+void UInventoryWidget::PageDownButtonClicked(){
+	if (EvidencePage->GetText().ToString() == "1"){
 		return;
 	}
-	else {
-		EvidenceList1->SetVisibility(ESlateVisibility::Hidden);
-		EvidenceList2->SetVisibility(ESlateVisibility::Visible);
-		EvidencePage->SetText(FText::FromString("2"));
-		
-		me->PlayPaperSound();
-	}
-}
+	EvidenceList1->SetVisibility(ESlateVisibility::Visible);
+	EvidenceList2->SetVisibility(ESlateVisibility::Hidden);
+	EvidencePage->SetText(FText::FromString("1"));
 
-void UInventoryWidget::ShowEvidenceButtonClicked()
-{	
-	if ( CaseRecordScreen->IsVisible() ) {
-		return;
-	}
-	FWidgetTransform NewTransform;
-	NewTransform.Angle = 90;
-	NewTransform.Translation = FVector2D(20, 0);
-	ShowEvidenceButton->SetRenderTransform(NewTransform);
-	EvidenceButtonBackground->SetRenderTransform(NewTransform);
-	
-	NewTransform.Translation = FVector2D(-20, 0);
-	ShowNoteButton->SetRenderTransform(NewTransform);
-	NoteButtonBackground->SetRenderTransform(NewTransform);
-	
-	CaseRecordScreen->SetVisibility(ESlateVisibility::Visible);
-	CaseGuessScreen->SetVisibility(ESlateVisibility::Hidden);
-	
 	me->PlayPaperSound();
 }
 
-void UInventoryWidget::ShowNoteButtonClicked()
-{
-	if ( CaseGuessScreen->IsVisible() ) {
+void UInventoryWidget::PageUpButtonClicked(){
+	if (EvidencePage->GetText().ToString() == "2"){
+		return;
+	}
+	EvidenceList1->SetVisibility(ESlateVisibility::Hidden);
+	EvidenceList2->SetVisibility(ESlateVisibility::Visible);
+	EvidencePage->SetText(FText::FromString("2"));
+
+	me->PlayPaperSound();
+}
+
+void UInventoryWidget::ShowEvidenceButtonClicked(){
+	if (CaseRecordScreen->IsVisible()){
+		return;
+	}
+	FWidgetTransform NewTransform;
+	NewTransform.Angle = 90;
+	NewTransform.Translation = FVector2D(20, 0);
+	ShowEvidenceButton->SetRenderTransform(NewTransform);
+	EvidenceButtonBackground->SetRenderTransform(NewTransform);
+
+	NewTransform.Translation = FVector2D(-20, 0);
+	ShowNoteButton->SetRenderTransform(NewTransform);
+	NoteButtonBackground->SetRenderTransform(NewTransform);
+
+	CaseRecordScreen->SetVisibility(ESlateVisibility::Visible);
+	CaseGuessScreen->SetVisibility(ESlateVisibility::Hidden);
+
+	me->PlayPaperSound();
+}
+
+void UInventoryWidget::ShowNoteButtonClicked(){
+	if (CaseGuessScreen->IsVisible()){
 		return;
 	}
 	FWidgetTransform NewTransform;
@@ -120,69 +106,143 @@ void UInventoryWidget::ShowNoteButtonClicked()
 	NewTransform.Translation = FVector2D(-20, 0);
 	ShowEvidenceButton->SetRenderTransform(NewTransform);
 	EvidenceButtonBackground->SetRenderTransform(NewTransform);
-	
+
 	CaseGuessScreen->SetVisibility(ESlateVisibility::Visible);
 	CaseRecordScreen->SetVisibility(ESlateVisibility::Hidden);
 
 	me->PlayPaperSound();
 }
 
-void UInventoryWidget::SuspectButtonClicked()
-{
+void UInventoryWidget::SuspectButtonClicked(){
+	auto* ps = me->GetPlayerState();
 	DoubleClick(SuspectTextField);
-	if ( !SavedTexture ) {
+	if (!SavedTexture){
+		for (UNoteItemWidget* NoteItem : NoteItemArray){
+			if (NoteItem && NoteItem->SavedTexture == SuspectImage->GetBrush().GetResourceObject()) {
+				RestoreNoteItemInteraction(NoteItem);
+			}
+		}
+		SuspectImage->SetBrushFromTexture(InitTexture);
+		me->ServerSetSummaryMulti(0, InitTexture, ps->GetPlayerId());
 		return;
 	}
 	SuspectImage->SetBrushFromTexture(SavedTexture);
-	auto* ps = me->GetPlayerState();
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		if (NoteItem && NoteItem->SavedTexture == SavedTexture && !NoteItem->IsDisabled()){
+			NoteItem->DisableInteraction();
+		}
+		else if (NoteItem && NoteItem->IsDisabled() &&
+			NoteItem->SavedTexture != WeaponImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != MainEvidenceImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != SpecialThingImage->GetBrush().GetResourceObject()){
+			RestoreNoteItemInteraction(NoteItem);
+		}
+	}
+
 	me->ServerSetSummaryMulti(0, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
-void UInventoryWidget::WeaponButtonClicked()
-{
+void UInventoryWidget::WeaponButtonClicked(){
+	auto* ps = me->GetPlayerState();
 	DoubleClick(WeaponTextField);
-	if ( !SavedTexture ) {
+	if (!SavedTexture){
+		for (UNoteItemWidget* NoteItem : NoteItemArray){
+			if (NoteItem && NoteItem->SavedTexture == WeaponImage->GetBrush().GetResourceObject()) {
+				RestoreNoteItemInteraction(NoteItem);
+			}
+		}
+		WeaponImage->SetBrushFromTexture(InitTexture);
+		me->ServerSetSummaryMulti(1, InitTexture, ps->GetPlayerId());
 		return;
 	}
 	WeaponImage->SetBrushFromTexture(SavedTexture);
-	auto* ps = me->GetPlayerState();
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		if (NoteItem && NoteItem->SavedTexture == SavedTexture && !NoteItem->IsDisabled()){
+			NoteItem->DisableInteraction();
+		}
+		else if (NoteItem && NoteItem->IsDisabled() &&
+			NoteItem->SavedTexture != SuspectImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != MainEvidenceImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != SpecialThingImage->GetBrush().GetResourceObject()){
+			RestoreNoteItemInteraction(NoteItem);
+		}
+	}
 	me->ServerSetSummaryMulti(1, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
-void UInventoryWidget::MainEvidenceButtonClicked()
-{
+void UInventoryWidget::MainEvidenceButtonClicked(){
+	auto* ps = me->GetPlayerState();
 	DoubleClick(MainEvidenceTextField);
-	if ( !SavedTexture) {
+	if (!SavedTexture){
+		for (UNoteItemWidget* NoteItem : NoteItemArray){
+			if (NoteItem && NoteItem->SavedTexture == MainEvidenceImage->GetBrush().GetResourceObject()) {
+				RestoreNoteItemInteraction(NoteItem);
+			}
+		}
+		MainEvidenceImage->SetBrushFromTexture(InitTexture);
+		me->ServerSetSummaryMulti(2, InitTexture, ps->GetPlayerId());
 		return;
 	}
+
 	MainEvidenceImage->SetBrushFromTexture(SavedTexture);
-	auto* ps = me->GetPlayerState();
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		if (NoteItem && NoteItem->SavedTexture == SavedTexture && !NoteItem->IsDisabled()){
+			NoteItem->DisableInteraction();
+		}
+		else if (NoteItem && NoteItem->IsDisabled() &&
+			NoteItem->SavedTexture != WeaponImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != SuspectImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != SpecialThingImage->GetBrush().GetResourceObject()){
+			RestoreNoteItemInteraction(NoteItem);
+		}
+	}
 	me->ServerSetSummaryMulti(2, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
-void UInventoryWidget::SpecialThingButtonClicked()
-{
+void UInventoryWidget::SpecialThingButtonClicked(){
+	auto* ps = me->GetPlayerState();
 	DoubleClick(SpecialThingTextField);
-	if ( !SavedTexture) {
+	if (!SavedTexture){
+		for (UNoteItemWidget* NoteItem : NoteItemArray){
+			if (NoteItem && NoteItem->SavedTexture == SpecialThingImage->GetBrush().GetResourceObject()) {
+				RestoreNoteItemInteraction(NoteItem);
+			}
+		}
+		SpecialThingImage->SetBrushFromTexture(InitTexture);
+		me->ServerSetSummaryMulti(3, InitTexture, ps->GetPlayerId());
 		return;
 	}
 	SpecialThingImage->SetBrushFromTexture(SavedTexture);
-	auto* ps = me->GetPlayerState();
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		if (NoteItem && NoteItem->SavedTexture == SavedTexture && !NoteItem->IsDisabled()){
+			NoteItem->DisableInteraction();
+		}
+		else if (NoteItem && NoteItem->IsDisabled() &&
+			NoteItem->SavedTexture != WeaponImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != MainEvidenceImage->GetBrush().GetResourceObject() &&
+			NoteItem->SavedTexture != SuspectImage->GetBrush().GetResourceObject()){
+			RestoreNoteItemInteraction(NoteItem);
+		}
+	}
 	me->ServerSetSummaryMulti(3, SavedTexture, ps->GetPlayerId());
 	SavedTexture = nullptr;
 }
 
-void UInventoryWidget::ResetButtonClicked()
-{
+void UInventoryWidget::ResetButtonClicked(){
 	SuspectImage->SetBrushFromTexture(InitTexture);
 	WeaponImage->SetBrushFromTexture(InitTexture);
 	MainEvidenceImage->SetBrushFromTexture(InitTexture);
 	SpecialThingImage->SetBrushFromTexture(InitTexture);
+
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		RestoreNoteItemInteraction(NoteItem);
+	}
+
 	auto* ps = me->GetPlayerState();
-	if(ps->GetPlayerId() == 0){
+	if (ps->GetPlayerId() == 0){
 		me->SummaryWidget->Img_SuspectImage1->SetBrushFromTexture(InitTexture);
 		me->SummaryWidget->Img_WeaponImage1->SetBrushFromTexture(InitTexture);
 		me->SummaryWidget->Img_MainEvidenceImage1->SetBrushFromTexture(InitTexture);
@@ -207,14 +267,12 @@ void UInventoryWidget::CompleteButtonClicked(){
 	me->SummaryWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UInventoryWidget::InitDoubleClick()
-{
+void UInventoryWidget::InitDoubleClick(){
 	bIsDoubleClick = false;
 }
 
-void UInventoryWidget::DoubleClick(class UMultiLineEditableText* textbox)
-{
-	if ( bIsDoubleClick ) {
+void UInventoryWidget::DoubleClick(class UMultiLineEditableText* textbox){
+	if (bIsDoubleClick){
 		bIsDoubleClick = false;
 		textbox->SetVisibility(ESlateVisibility::Visible);
 		textbox->SetKeyboardFocus();
@@ -223,4 +281,10 @@ void UInventoryWidget::DoubleClick(class UMultiLineEditableText* textbox)
 	bIsDoubleClick = true;
 	FTimerHandle handle;
 	GetWorld()->GetTimerManager().SetTimer(handle, this, &UInventoryWidget::InitDoubleClick, 0.3f);
+}
+
+void UInventoryWidget::RestoreNoteItemInteraction(UNoteItemWidget* NoteItem){
+	if (NoteItem && NoteItem->IsDisabled()){
+		NoteItem->EnableInteraction();
+	}
 }
