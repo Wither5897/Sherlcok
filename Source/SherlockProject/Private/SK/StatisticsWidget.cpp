@@ -34,7 +34,7 @@ void UStatisticsWidget::UpdateStatistics(){
 	CalcSpecialRank();
 }
 
-void UStatisticsWidget::CalcSuspectRank(){
+int32 UStatisticsWidget::CalcSuspectRank(){
 	me->SummaryWidget->LoadClueData();
 	TArray<TPair<int32, int32>> SuspectPairs;
 	for (int32 i = 0; i < me->SummaryWidget->ClueDataArray.Num(); i++){
@@ -77,6 +77,8 @@ void UStatisticsWidget::CalcSuspectRank(){
 			break;
 		}
 	}
+
+	return SuspectPairs[0].Key;
 }
 
 void UStatisticsWidget::CalcWeaponRank(){
