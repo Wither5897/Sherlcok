@@ -3,6 +3,8 @@
 
 #include "Jin/AJH_WorldActor.h"
 #include "Components/SceneComponent.h"
+#include "Jin/AJH_ExPlainBtnWidget.h"
+#include "UW_EditorExplain.h"
 
 // Sets default values
 AAJH_WorldActor::AAJH_WorldActor()
@@ -172,6 +174,17 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Scale->SetMaterial(1, tempGizmoZ_Mat.Object);
 	}
 
+	ConstructorHelpers::FClassFinder<UAJH_ExPlainBtnWidget> tempExPlain(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Jin/UI/WBP_ExPlainBtn.WBP_ExPlainBtn_C'"));
+	if ( tempExPlain.Succeeded() )
+	{
+		ExPlainBtnFactory = tempExPlain.Class;
+	}
+	ConstructorHelpers::FClassFinder<UUW_EditorExplain> tempEditorExplain(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/KHH/UI/WBP_EditorExplain.WBP_EditorExplain_C'"));
+	if ( tempEditorExplain.Succeeded() )
+	{
+		EditorExplainFactory = tempEditorExplain.Class;
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -183,6 +196,20 @@ void AAJH_WorldActor::BeginPlay()
 	bIsVisibleLocation = false;
 	bIsVisibleRotation = false;
 	bIsVisibleScale = false;
+
+	ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
+	if ( ExPlainBtnWidget )
+	{
+		ExPlainBtnWidget->AddToViewport();
+		ExPlainBtnWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	EditorExplain = Cast<UUW_EditorExplain>(CreateWidget(GetWorld(), EditorExplainFactory));
+	if ( EditorExplain )
+	{
+		EditorExplain->AddToViewport();
+		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
+	}
 
 }
 
@@ -289,5 +316,10 @@ void AAJH_WorldActor::OnFixGizmoScale()
 	{
 		GizmoRoot->SetRelativeScale3D(FVector::ZeroVector);
 	}
+}
+
+void AAJH_WorldActor::OnExPlainBtn()
+{
+	
 }
 

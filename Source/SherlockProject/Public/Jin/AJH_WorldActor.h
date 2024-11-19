@@ -54,8 +54,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* Z_Scale;
 
-
-
 	UFUNCTION()
 	void GizmoVisibility();
 	UFUNCTION()
@@ -77,4 +75,19 @@ public:
 	bool bIsVisibleLocation;
 	bool bIsVisibleRotation;
 	bool bIsVisibleScale;
+
+	//======================================================================
+	UPROPERTY()
+	class UAJH_ExPlainBtnWidget* ExPlainBtnWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> ExPlainBtnFactory;
+	UPROPERTY()
+	class UUW_EditorExplain* EditorExplain;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> EditorExplainFactory;
+	UFUNCTION()
+	void OnExPlainBtn();
+
+
+
 };

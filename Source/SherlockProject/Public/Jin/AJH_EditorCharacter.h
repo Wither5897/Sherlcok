@@ -111,6 +111,14 @@ public:
 	TSubclassOf<class UUserWidget> GizmoUIFactory;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AActor> FactoryChange;
+	UPROPERTY()
+	class UAJH_ExPlainBtnWidget* ExPlainBtnWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> ExPlainBtnFactory;
+	UPROPERTY()
+	class UUW_EditorExplain* EditorExplain;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> EditorExplainFactory;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* HeavystompSound;
