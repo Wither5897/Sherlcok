@@ -133,6 +133,9 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_NextPage()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(5);
 	Furnitures_Vertical->SetVisibility(ESlateVisibility::Visible);
+	Furnitures_Vertical_1->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_2->SetVisibility(ESlateVisibility::Collapsed);
+	Furnitures_Vertical_3->SetVisibility(ESlateVisibility::Collapsed);
 	Furnitures_Vertical_4->SetVisibility(ESlateVisibility::Collapsed);
 }
 
