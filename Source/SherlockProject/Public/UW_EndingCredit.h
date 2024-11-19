@@ -23,6 +23,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Job;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* SubExplain;
+
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* sub;
 
@@ -40,4 +43,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<FString> subString;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FString> SubExplainString;
 };
