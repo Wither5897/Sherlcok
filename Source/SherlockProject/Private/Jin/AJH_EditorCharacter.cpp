@@ -320,10 +320,10 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 
 		GizmoUI->actorLocation = actorInitialLocation;
 		GizmoUI->GetEdit_Location();
-		
-
-		// Gizmo 상호작용 처리
-		//OnMyGizmoInteraction();
+		GizmoUI->actorRotation = actorInitialRotation;
+		GizmoUI->GetEdit_Rotation(actorInitialRotation);
+		GizmoUI->actorScale = actorInitialScale;
+		GizmoUI->GetEdit_Scale(actorInitialScale);
 
 		if ( IA_changeNum == 1 )
 		{
@@ -502,14 +502,10 @@ void AAJH_EditorCharacter::OnMyEditorActorSpawn(bool bIsSpawn)
 	{
 		pc->GetHitResultUnderCursorByChannel(query, true, outHit);
 		FTransform transform(outHit.Location);
-		//transform.SetTranslation(FVector(0.5f, 0.5f, 0.5f));
-		// transform = EditorSpawn->GetActorTransform();
-		//EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorActorFactory, transform);
+
 		EditorActor = GetWorld()->SpawnActor<AAJH_EditorActor>(EditorChange, transform);
 		if ( EditorActor )
 		{
-			//EditorActor->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
-			// EditorActor->OnMyMeshPath(num);
 			EditorActor->bIsSpawn = true;
 			bIsActorSpawn = true;
 			bIsEditorActor = true;
@@ -533,7 +529,6 @@ void AAJH_EditorCharacter::OnMyLineTrace()
 		FCollisionQueryParams param;
 		param.AddIgnoredActor(this);
 		bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, Start, End, ECC_Visibility, param);
-		// DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3);
 		if ( bHit && outHit.GetActor() != nullptr )
 		{
 			FString objectName = outHit.GetActor()->GetName();
@@ -571,12 +566,12 @@ void AAJH_EditorCharacter::OnMyHandleGizmoRotation()
 		// 선택된 축에 따라 회전값 수정
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("X_Rot")) )
 		{
-			deltaRotation.Pitch += MouseY * 5.0f; // 회전 속도 조절
+			deltaRotation.Roll += MouseY * 5.0f; // 회전 속도 조절
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along X Rot"));
-		}
+		} 
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Y_Rot")) )
 		{
-			deltaRotation.Roll += -MouseY * 5.0f;
+			deltaRotation.Pitch += -MouseY * 5.0f;
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Rotating along Y Rot"));
 		}
 		if ( outHit.GetComponent()->ComponentHasTag(TEXT("Z_Rot")) )
@@ -587,6 +582,7 @@ void AAJH_EditorCharacter::OnMyHandleGizmoRotation()
 
 		// 회전값 적용
 		CurrentWorldActor->AddActorLocalRotation(deltaRotation);
+		GizmoUI->GetEdit_Rotation(CurrentWorldActor->GetActorRotation());
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Rotation: ") + CurrentWorldActor->GetActorRotation().ToString());
 	}
 	else
@@ -649,6 +645,8 @@ void AAJH_EditorCharacter::OnMyHandleGizmoScale()
 
 		// Scale 값 적용
 		CurrentWorldActor->SetActorScale3D(newScale);
+		//GizmoUI->GetEdit_Scale(CurrentWorldActor->GetActorScale3D());
+		GizmoUI->GetEdit_Scale(newScale);
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Updated Actor Scale: ") + CurrentWorldActor->GetActorScale().ToString());
 	}
 	else

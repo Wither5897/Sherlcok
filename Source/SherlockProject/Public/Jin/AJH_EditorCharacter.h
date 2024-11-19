@@ -79,6 +79,7 @@ public:
 	int32 IA_changeNum;
 
 	FVector direction;
+	FRotator Rot;
 	bool bIsActorSpawn = false;
 	bool bIsEditorActor = false;
 
