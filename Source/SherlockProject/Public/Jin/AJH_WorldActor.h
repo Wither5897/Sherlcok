@@ -23,9 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//============ Location ===================
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* MeshComp;
+	UPROPERTY(EditDefaultsOnly)
+	class USceneComponent* GizmoRoot;
+
+	//============ Location ===================
 	UPROPERTY(EditDefaultsOnly)
 	class UStaticMeshComponent* X_Axis;
 	UPROPERTY(EditDefaultsOnly)
@@ -61,6 +64,10 @@ public:
 	void RotationVisivility();
 	UFUNCTION()
 	void ScaleVisivility();
+	UFUNCTION()
+	void OnFixGizmoRotation();
+	UFUNCTION()
+	void OnFixGizmoScale();
 
 	UPROPERTY()
 	bool bIsWorldSpawn = false;

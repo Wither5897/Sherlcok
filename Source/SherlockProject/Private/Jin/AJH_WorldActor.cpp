@@ -2,19 +2,22 @@
 
 
 #include "Jin/AJH_WorldActor.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 AAJH_WorldActor::AAJH_WorldActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	GizmoRoot = CreateDefaultSubobject<USceneComponent>(TEXT("GizmoRoot"));
+	SetRootComponent(GizmoRoot);
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-	SetRootComponent(MeshComp);
+	MeshComp->SetupAttachment(GizmoRoot);
 	Tags.Add(TEXT("Actor"));
-	Tags.Add(TEXT("InteractObj"));
+	// Tags.Add(TEXT("InteractObj"));
 	X_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Axis"));
-	X_Axis->SetupAttachment(MeshComp);
+	X_Axis->SetupAttachment(GizmoRoot);
 	X_Axis->ComponentTags.Add(TEXT("X_Axis"));
 	X_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
@@ -26,7 +29,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		X_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	}
 	Y_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Axis"));
-	Y_Axis->SetupAttachment(MeshComp);
+	Y_Axis->SetupAttachment(GizmoRoot);
 	Y_Axis->ComponentTags.Add(TEXT("Y_Axis"));
 	Y_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
@@ -38,7 +41,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Y_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
 	}
 	Z_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Axis"));
-	Z_Axis->SetupAttachment(MeshComp);
+	Z_Axis->SetupAttachment(GizmoRoot);
 	Z_Axis->ComponentTags.Add(TEXT("Z_Axis"));
 	Z_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Axis(TEXT("'/Game/Jin/Mesh/AJH_GizMoArrowHandle.AJH_GizMoArrowHandle'"));
@@ -50,7 +53,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f)); 
 	}
 	XYZ_Axis = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("XYZ_Axis"));
-	XYZ_Axis->SetupAttachment(MeshComp);
+	XYZ_Axis->SetupAttachment(GizmoRoot);
 	XYZ_Axis->ComponentTags.Add(TEXT("XYZ_Axis"));
 	XYZ_Axis->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempXYZ_Axis(TEXT("'/Engine/VREditor/TransformGizmo/UniformScaleHandle.UniformScaleHandle'"));
@@ -62,7 +65,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		XYZ_Axis->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f)); 
 	}
 	X_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Rot"));
-	X_Rot->SetupAttachment(MeshComp);
+	X_Rot->SetupAttachment(GizmoRoot);
 	X_Rot->ComponentTags.Add(TEXT("X_Rot"));
 	X_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
@@ -74,7 +77,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		X_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	Y_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Rot"));
-	Y_Rot->SetupAttachment(MeshComp);
+	Y_Rot->SetupAttachment(GizmoRoot);
 	Y_Rot->ComponentTags.Add(TEXT("Y_Rot"));
 	Y_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
@@ -86,7 +89,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Y_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	Z_Rot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Rot"));
-	Z_Rot->SetupAttachment(MeshComp);
+	Z_Rot->SetupAttachment(GizmoRoot);
 	Z_Rot->ComponentTags.Add(TEXT("Z_Rot"));
 	Z_Rot->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Rot(TEXT("'/Engine/VREditor/TransformGizmo/RotationHandleQuarter.RotationHandleQuarter'"));
@@ -98,7 +101,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Z_Rot->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 	X_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("X_Scale"));
-	X_Scale->SetupAttachment(MeshComp);
+	X_Scale->SetupAttachment(GizmoRoot);
 	X_Scale->ComponentTags.Add(TEXT("X_Scale"));
 	X_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempX_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
@@ -110,7 +113,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		X_Scale->SetRelativeScale3D(FVector(7.0f, 7.0f, 7.0f)); 
 	}
 	Y_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Y_Scale"));
-	Y_Scale->SetupAttachment(MeshComp);
+	Y_Scale->SetupAttachment(GizmoRoot);
 	Y_Scale->ComponentTags.Add(TEXT("Y_Scale"));
 	Y_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempY_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
@@ -122,7 +125,7 @@ AAJH_WorldActor::AAJH_WorldActor()
 		Y_Scale->SetRelativeScale3D(FVector(7.0f, 7.0f, 7.0f));
 	}
 	Z_Scale = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Z_Scale"));
-	Z_Scale->SetupAttachment(MeshComp);
+	Z_Scale->SetupAttachment(GizmoRoot);
 	Z_Scale->ComponentTags.Add(TEXT("Z_Scale"));
 	Z_Scale->bCastDynamicShadow = false;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempZ_Scale(TEXT("'/Engine/VREditor/TransformGizmo/BoundingBoxEdge.BoundingBoxEdge'"));
@@ -270,5 +273,21 @@ void AAJH_WorldActor::ScaleVisivility()
 	X_Scale->SetVisibility(true);
 	Y_Scale->SetVisibility(true);
 	Z_Scale->SetVisibility(true);
+}
+
+void AAJH_WorldActor::OnFixGizmoRotation()
+{
+	if ( GizmoRoot )
+	{
+		GizmoRoot->SetRelativeRotation(FRotator::ZeroRotator);
+	}
+}
+
+void AAJH_WorldActor::OnFixGizmoScale()
+{
+	if ( GizmoRoot )
+	{
+		GizmoRoot->SetRelativeScale3D(FVector::ZeroVector);
+	}
 }
 
