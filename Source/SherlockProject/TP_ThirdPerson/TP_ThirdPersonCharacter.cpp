@@ -415,47 +415,80 @@ void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
 	AnimPawn->SetActorHiddenInGame(true);
 }
 
-void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage_Implementation(int32 playerId){
-	if (!InventoryUI) return;
+void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage(){
+	auto* GS = GetWorld()->GetGameState();
+	if (!GS) return;
 
-	// 전체 아이템 개수와 수집된 아이템 개수
-	// int32 TotalItems = InventoryUI->ItemArray.Num();
-	int32 TotalItems = 9;
-	int32 CollectedItems = 0;
-	// 수집된 아이템(QuestionMark가 Hidden 상태인 아이템) 개수 세기
-	for (auto* Item : InventoryUI->ItemArray)
+	UGameInstance* GI = GetGameInstance();
+	if (!GI) return;
+
+	if (UAJH_SherlockGameInstance* MyGI = Cast<UAJH_SherlockGameInstance>(GI))
 	{
-		if (Item && Item->QuestionMark->Visibility == ESlateVisibility::Hidden)
+		// PlayerCollection 초기화
+		MyGI->PlayerCollection.Init(0.0f, 3);
+
+		for (APlayerState* PS : GS->PlayerArray)
 		{
-			CollectedItems++;
+			// 각 플레이어의 Pawns를 가져옴
+			if (ATP_ThirdPersonCharacter* Player = Cast<ATP_ThirdPersonCharacter>(PS->GetPawn()))
+			{
+				if (!Player->InventoryUI) continue;
+
+				// 각 플레이어의 아이템 상태 계산
+				int32 TotalItems = 9; // 전체 아이템 개수
+				int32 CollectedItems = 0;
+
+				for (auto* Item : Player->InventoryUI->ItemArray)
+				{
+					if (Item && !Item->QuestionMark->IsVisible())
+					{
+						CollectedItems++;
+					}
+				}
+
+				// 퍼센티지 계산
+				int32 PlayerID = Player->GetPlayerState()->GetPlayerId();
+				float CollectionPercentage = (TotalItems > 0) 
+					? (static_cast<float>(CollectedItems) / TotalItems) * 100.0f 
+					: 0.0f;
+
+				// 게임 인스턴스의 배열 갱신
+				if (MyGI->PlayerCollection.IsValidIndex(PlayerID))
+				{
+					MyGI->PlayerCollection[PlayerID] = CollectionPercentage;
+				}
+			}
 		}
 	}
-	// 수집률 계산
-	float CollectionPercentage = (TotalItems > 0) ? (static_cast<float>(CollectedItems) / TotalItems) * 100.0f : 0.0f;
 
-	// 각 플레이어의 수집률 UI 업데이트 (예: Player1CollectionText, Player2CollectionText, Player3CollectionText)
-	switch (playerId)
+	// UI 업데이트 호출
+	UpdateAllPlayerCollections();
+}
+
+void ATP_ThirdPersonCharacter::UpdateAllPlayerCollections_Implementation(){
+	auto* GS = GetWorld()->GetGameState();
+	if (!GS) return;
+
+	UGameInstance* GI = GetGameInstance();
+	if (!GI) return;
+
+	if (UAJH_SherlockGameInstance* MyGI = Cast<UAJH_SherlockGameInstance>(GI))
 	{
-	case 0:
-		if (InventoryUI->Player1CollectionText)
+		for (APlayerState* PS : GS->PlayerArray)
 		{
-			InventoryUI->Player1CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
+			if (ATP_ThirdPersonCharacter* Player = Cast<ATP_ThirdPersonCharacter>(PS->GetPawn()))
+			{
+				if (!Player->InventoryUI) continue;
+
+				// UI 텍스트 업데이트
+				Player->InventoryUI->Player1CollectionText->SetText(
+					FText::FromString(FString::Printf(TEXT("%.0f%%"), MyGI->PlayerCollection[0])));
+				Player->InventoryUI->Player2CollectionText->SetText(
+					FText::FromString(FString::Printf(TEXT("%.0f%%"), MyGI->PlayerCollection[1])));
+				Player->InventoryUI->Player3CollectionText->SetText(
+					FText::FromString(FString::Printf(TEXT("%.0f%%"), MyGI->PlayerCollection[2])));
+			}
 		}
-		break;
-	case 1:
-		if (InventoryUI->Player2CollectionText)
-		{
-			InventoryUI->Player2CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
-		}
-		break;
-	case 2:
-		if (InventoryUI->Player3CollectionText)
-		{
-			InventoryUI->Player3CollectionText->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), CollectionPercentage)));
-		}
-		break;
-	default:
-		break;
 	}
 }
 
@@ -484,7 +517,7 @@ void ATP_ThirdPersonCharacter::ItemFound(int32 ActorNum, int32 PlayerID){
 				default:
 					break;
 				}
-				Character->UpdatePlayerCollectionPercentage(PlayerID);
+				Character->UpdatePlayerCollectionPercentage();
 			}
 		}
 	}

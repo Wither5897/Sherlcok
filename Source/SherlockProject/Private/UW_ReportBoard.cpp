@@ -47,17 +47,20 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 
 	if(!me){
 		me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
+		UE_LOG(LogTemp, Warning, TEXT("me updated. me was null"));
 	}
-	
+	int32 playerIdx = 0;
 	if(!ps){
-		ps = me->ps;
+		ps = me->GetPlayerState();
+		playerIdx = ps->GetPlayerId();
+		UE_LOG(LogTemp, Warning, TEXT("ps updated. ps was null"));
 	}
 	
-	if (me && me->InventoryUI && ps){
+	if (me && me->InventoryUI){
 		UE_LOG(LogTemp, Warning, TEXT("Calling ServerItemFound from client"));
-		me->ServerItemFound(1, ps->GetPlayerId());
-		me->ServerItemFound(2, ps->GetPlayerId());
-		me->ServerItemFound(3, ps->GetPlayerId());
+		me->ServerItemFound(1, playerIdx);
+		me->ServerItemFound(2, playerIdx);
+		me->ServerItemFound(3, playerIdx);
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(0) && me->InventoryUI->NoteItemArray[0]){
 			me->InventoryUI->NoteItemArray[0]->WhenFindItem();
 		}
@@ -67,7 +70,9 @@ void UUW_ReportBoard::OpenEvidence() // 1. 시체검안서
 		if (me->InventoryUI->NoteItemArray.IsValidIndex(2) && me->InventoryUI->NoteItemArray[2]){
 			me->InventoryUI->NoteItemArray[2]->WhenFindItem();
 		}
+		return;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Can't Call ServerItemFound from client"));
 }
 
 void UUW_ReportBoard::OpenEvidence1() // 2. 손 짤림
