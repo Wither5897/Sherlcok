@@ -28,7 +28,7 @@ public:
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
 
-	void CalcSuspectRank();
+	int32 CalcSuspectRank();
 	
 	UPROPERTY(meta = (BindWidget))
 	class UImage* SuspectTop1;
