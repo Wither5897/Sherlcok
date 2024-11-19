@@ -13,6 +13,9 @@
 #include "SK/SaveLevelUI.h"
 #include "AJH_GizmoUI.h"
 #include "Jin/AJH_EscapeWidget.h"
+#include "Jin/AJH_ExPlainBtnWidget.h"
+#include "UW_EditorExplain.h"
+#include "Components/Button.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -67,6 +70,20 @@ void AAJH_EditorCharacter::BeginPlay()
 		GizmoUI->AddToViewport();
 	}
 	
+	/*ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
+	if ( ExPlainBtnWidget )
+	{
+		ExPlainBtnWidget->AddToViewport();
+		ExPlainBtnWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	EditorExplain = Cast<UUW_EditorExplain>(CreateWidget(GetWorld(), EditorExplainFactory));
+	if ( EditorExplain )
+	{
+		EditorExplain->AddToViewport();
+		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
+	}*/
+
 	EditorActor = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	EditorSpawn = Cast<AAJH_EditorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorActor::StaticClass()));
 	IA_changeNum = 1;
@@ -362,6 +379,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			CurrentWorldActor->bIsAxisLocation = false;
 			CurrentWorldActor->bIsAxisRotation = false;
 			CurrentWorldActor->bIsAxisScale = false;
+			CurrentWorldActor->ExPlainBtnWidget->SetVisibility(ESlateVisibility::Collapsed);
 			// CurrentWorldActor = nullptr;
 		}
 	}
@@ -371,6 +389,7 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	{
 		LastInteractedWorldActor->GizmoVisibility(); // 모든 축을 비활성화
 		LastInteractedWorldActor->MeshComp->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+		LastInteractedWorldActor->ExPlainBtnWidget->SetVisibility(ESlateVisibility::Collapsed);
 		// LastInteractedWorldActor = nullptr; // 초기화
 	}
 
@@ -399,6 +418,12 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 			CurrentWorldActor->bIsAxisScale = true;
 			CurrentWorldActor->ScaleVisivility();
 		}
+	}
+
+	if ( outHit.GetActor() != nullptr && outHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
+	{
+		CurrentWorldActor->ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
+		CurrentWorldActor->ExPlainBtnWidget->OnEnableBtn_ExPlain(true);
 	}
 
 	// 마지막으로 상호작용한 WorldActor 업데이트
