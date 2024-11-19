@@ -49,35 +49,28 @@ void UInventoryWidget::NativeConstruct(){
 	}
 
 	me = Cast<ATP_ThirdPersonCharacter>(GetOwningPlayer()->GetCharacter());
-	if (!me || !me->SummaryWidget){
-		return;
-	}
 }
 
 void UInventoryWidget::PageDownButtonClicked(){
 	if (EvidencePage->GetText().ToString() == "1"){
 		return;
 	}
-	else{
-		EvidenceList1->SetVisibility(ESlateVisibility::Visible);
-		EvidenceList2->SetVisibility(ESlateVisibility::Hidden);
-		EvidencePage->SetText(FText::FromString("1"));
+	EvidenceList1->SetVisibility(ESlateVisibility::Visible);
+	EvidenceList2->SetVisibility(ESlateVisibility::Hidden);
+	EvidencePage->SetText(FText::FromString("1"));
 
-		me->PlayPaperSound();
-	}
+	me->PlayPaperSound();
 }
 
 void UInventoryWidget::PageUpButtonClicked(){
 	if (EvidencePage->GetText().ToString() == "2"){
 		return;
 	}
-	else{
-		EvidenceList1->SetVisibility(ESlateVisibility::Hidden);
-		EvidenceList2->SetVisibility(ESlateVisibility::Visible);
-		EvidencePage->SetText(FText::FromString("2"));
+	EvidenceList1->SetVisibility(ESlateVisibility::Hidden);
+	EvidenceList2->SetVisibility(ESlateVisibility::Visible);
+	EvidencePage->SetText(FText::FromString("2"));
 
-		me->PlayPaperSound();
-	}
+	me->PlayPaperSound();
 }
 
 void UInventoryWidget::ShowEvidenceButtonClicked(){
