@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "AJH_SherlockGameInstance.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "GameFramework/PlayerState.h"
 
 void UUW_EndingCredit::NativeConstruct()
 {
@@ -22,7 +23,7 @@ void UUW_EndingCredit::NativeConstruct()
 	SubExplain->SetText(FText::FromString(*SubExplainString[1])); // 용의자 이유, 의심 (용의자 배열 순서 동일)
 
 	// 퍼센트는 받으면 넣을 예정 
-	percent->SetText(FText::FromString(FString::Printf(TEXT("%f", gi->PlayerCollection[ps->GetPlayerId()]))));
+	//percent->SetText(FText::FromString(FString::Printf(TEXT("%f"), gi->PlayerCollection[ps->GetPlayerId()]))); 
 
 	sub->SetText(FText::FromString(*subString[1])); // 퍼센트에 대한 부가적인 설명 (80, 50이상, 50이하)
 
