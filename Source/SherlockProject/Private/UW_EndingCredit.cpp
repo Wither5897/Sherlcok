@@ -25,20 +25,14 @@ void UUW_EndingCredit::NativeConstruct()
 	}
 	int32 MostVotedIndex = me->StatisticsUI->CalcSuspectRank();
 
-	if ( jobImageTexture.IsValidIndex(MostVotedIndex) && jobString.IsValidIndex(MostVotedIndex) )
+	if (jobImageTexture.IsValidIndex(MostVotedIndex) && jobString.IsValidIndex(MostVotedIndex))
 	{
 		jobImage->SetBrushFromTexture(jobImageTexture[MostVotedIndex]); // 직업 사진 
 		Job->SetText(FText::FromString(jobString[MostVotedIndex])); // 직업 , 용의자 (0.공사장 노동자, 1. 목수 이씨, 2. 친구 황씨)
 	}
 
-	if ( SubExplainString.IsValidIndex(MostVotedIndex) && subString.IsValidIndex(MostVotedIndex) )
+	if (SubExplainString.IsValidIndex(MostVotedIndex))
 	{
 		SubExplain->SetText(FText::FromString(SubExplainString[MostVotedIndex])); // 용의자 이유, 의심 (용의자 배열 순서 동일)
 	}
-
-	//// 퍼센트는 받으면 넣을 예정 
-	////percent->SetText(FText::FromString(FString::Printf(TEXT("%f"), gi->PlayerCollection[ps->GetPlayerId()]))); 
-
-	//sub->SetText(FText::FromString(*subString[1])); // 퍼센트에 대한 부가적인 설명 (80, 50이상, 50이하)
-
 }

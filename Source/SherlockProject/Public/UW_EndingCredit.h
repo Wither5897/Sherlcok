@@ -29,12 +29,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* SubExplain;
 
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UTextBlock* sub;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UTextBlock* percent;
-
 	UPROPERTY(meta = (BindWidget))
 	class UImage* jobImage;
 
@@ -43,9 +37,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<FString> jobString;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<FString> subString;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<FString> SubExplainString;
