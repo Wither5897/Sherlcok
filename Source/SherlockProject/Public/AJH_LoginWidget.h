@@ -19,28 +19,28 @@ protected:
 
 public:
 	
-    UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
-	class UEditableText* Edit_hostName;
+   // UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	//class UEditableText* Edit_hostName;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
-	class UButton* Btn_findSessions;
+	//UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	//class UButton* Btn_findSessions;
 
     UPROPERTY(EditDefaultsOnly, meta = (BindWidget), BlueprintReadWrite, Category = "MySettings")
 	class UWidgetSwitcher* Switcher_Opening;
 
-	UPROPERTY(BlueprintReadOnly)
-	class UAJH_SherlockGameInstance* gi;
+	//UPROPERTY(BlueprintReadOnly)
+	//class UAJH_SherlockGameInstance* gi;
 
-	UPROPERTY(EditDefaultsOnly, Category = "MySettings")
-	class USoundBase* MainbuttonSound;
+	//UPROPERTY(EditDefaultsOnly, Category = "MySettings")
+	//class USoundBase* MainbuttonSound;
 	//UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
 	//class UButton* ResetButton;
 	
-	UFUNCTION()
-	void OnClickedFindSessionsButton();
-	UFUNCTION()
-	void OnClickedResetButton();
-	UFUNCTION()
-	void OnMyTextChanged(const FText& InText);
+	//UFUNCTION()
+	//void OnClickedFindSessionsButton();
+	//UFUNCTION()
+	//void OnClickedResetButton();
+	//UFUNCTION()
+	//void OnMyTextChanged(const FText& InText);
 	
 };

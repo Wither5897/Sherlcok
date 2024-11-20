@@ -3,6 +3,7 @@
 
 #include "Jin/AJH_LobbyGameMode.h"
 #include "AJH_LoginWidget.h"
+#include "TJ_LoginWidget.h"
 #include "InterchangeResult.h"
 #include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
@@ -20,7 +21,7 @@ void AAJH_LobbyGameMode::BeginPlay()
 
 	if (LoginWidget != nullptr)
 	{
-		LoginUI = CreateWidget<UAJH_LoginWidget>(GetWorld(), LoginWidget);
+		LoginUI = CreateWidget<UTJ_LoginWidget>(GetWorld(), LoginWidget);
 		if (LoginUI != nullptr)
 		{
 			LoginUI->AddToViewport();
