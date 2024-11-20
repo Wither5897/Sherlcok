@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "SK/StatisticsWidget.h"
@@ -77,7 +77,6 @@ int32 UStatisticsWidget::CalcSuspectRank(){
 			break;
 		}
 	}
-
 	return SuspectPairs[0].Key;
 }
 
@@ -219,10 +218,22 @@ void UStatisticsWidget::CalcSpecialRank(){
 void UStatisticsWidget::OnClickedExit(){
 	SetVisibility(ESlateVisibility::Hidden);
 	auto* pc = Cast<ASherlockPlayerController>(GetOwningPlayer());
-	if(me && me->LoadingUI){
-		me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+	if ( me && me->OutroUI ) {
+		me->OutroUI->SetVisibility(ESlateVisibility::Visible);
 	}
+	//if(me && me->LoadingUI){
+	//	me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+	//}
 	pc->SetShowMouseCursor(false);
 	pc->SetInputMode(FInputModeGameOnly());
-	GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);
+	FTimerHandle handle;
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::ServerTravelDelay, 15, false);
+	
+}
+
+void UStatisticsWidget::ServerTravelDelay()
+{
+	if ( me->HasAuthority() ) {
+		GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);
+}
 }

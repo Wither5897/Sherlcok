@@ -43,6 +43,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Jin/AJH_CreatorToolTravel.h"
 #include "SK/AnimPawn.h"
+#include "UW_EndingCredit.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -192,6 +193,12 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if(LoadingUI){
 		LoadingUI->AddToViewport();
 		LoadingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	OutroUI = Cast<UUW_EndingCredit>(CreateWidget(GetWorld(), OutroUIFactory));
+	if ( OutroUI ) {
+		OutroUI->AddToViewport();
+		OutroUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());

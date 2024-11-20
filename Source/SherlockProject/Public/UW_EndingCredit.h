@@ -20,6 +20,9 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* me;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Job;
 
