@@ -130,6 +130,11 @@ public:
 	TSubclassOf<class UUserWidget> LoadingUIFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UUserWidget* LoadingUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> OutroUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UUserWidget* OutroUI;
 	
 	//====================================================================================================
 	
