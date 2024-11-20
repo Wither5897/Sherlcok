@@ -19,7 +19,7 @@ protected:
 
 public:
 
-	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = ( BindWidget ), Category = "MySettings")
 	class UEditableText* Edit_hostName;
 
 	UPROPERTY(VisibleAnywhere, meta = ( BindWidget ), Category = "MySettings")

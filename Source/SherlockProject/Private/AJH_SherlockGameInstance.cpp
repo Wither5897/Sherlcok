@@ -238,7 +238,7 @@ void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwas
 
 		if (pc != nullptr)
 		{
-			pc->ClientTravel(FString("/Game/Jin/Maps/LobbyMap"), ETravelType::TRAVEL_Absolute);
+			pc->ClientTravel(FString("/Game/Jin/Maps/MainLobbyMap"), ETravelType::TRAVEL_Absolute);
 		}
 	}
 }
