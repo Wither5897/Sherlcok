@@ -21,6 +21,6 @@ public:
 	TSubclassOf<class UUserWidget> LoginWidget;	
 
 	UPROPERTY(EditDefaultsOnly, Category="Mysettings")
-	class UAJH_LoginWidget* LoginUI;
+	class UTJ_LoginWidget* LoginUI;
 
 };
