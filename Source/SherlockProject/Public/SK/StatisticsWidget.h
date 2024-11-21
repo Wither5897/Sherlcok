@@ -104,4 +104,16 @@ public:
 
 	UFUNCTION()
 	void ServerTravelDelay();
+
+
+	UFUNCTION()
+	void DisplaySingleReportUI();
+
+
+	// ======================
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> SingleReportUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UUserWidget* SingleReportUI;
 };
