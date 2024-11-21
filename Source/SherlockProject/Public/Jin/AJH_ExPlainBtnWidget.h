@@ -33,5 +33,14 @@ public:
 	UFUNCTION()
 	void OnEnableBtn_ExPlain(bool bIsEnable);
 
+	UPROPERTY(meta =(BindWidget))
+	class UButton* Btn_InteractObj;
+	UPROPERTY(meta =(BindWidget))
+	class UButton* Btn_InteractObj_Cancel;
+	UFUNCTION()
+	void OnMyBtn_InteractObj();
+	UFUNCTION()
+	void OnMyBtn_InteractObj_Cancel();
+
 	bool bIsPlainWidget;
 };

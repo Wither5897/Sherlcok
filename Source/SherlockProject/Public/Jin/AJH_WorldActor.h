@@ -88,6 +88,8 @@ public:
 	UFUNCTION()
 	void OnExPlainBtn();
 
+	bool bIsInterative = false;
+
 
 
 };

@@ -342,6 +342,16 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 		GizmoUI->actorScale = actorInitialScale;
 		GizmoUI->GetEdit_Scale(actorInitialScale);
 
+		CurrentWorldActor->ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
+		if ( CurrentWorldActor->bIsInterative )
+		{
+			CurrentWorldActor->ExPlainBtnWidget->OnEnableBtn_ExPlain(true);
+		}
+		else
+		{
+			CurrentWorldActor->ExPlainBtnWidget->OnEnableBtn_ExPlain(false);
+		}
+
 		if ( IA_changeNum == 1 )
 		{
 			bIsGizmoLocationActive = true;
@@ -422,7 +432,6 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 
 	if ( outHit.GetActor() != nullptr && outHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
 	{
-		CurrentWorldActor->ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
 		CurrentWorldActor->ExPlainBtnWidget->OnEnableBtn_ExPlain(true);
 	}
 
@@ -891,6 +900,7 @@ void AAJH_EditorCharacter::OnMyGizmoInteraction()
 		{
 			bIsGizmoRotationStart = true;
 			SetGizmoState(EGizmoState::Rotation); // Rotation 상태 설정
+
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Gizmo State: Rotation"));
 		}
 	}
