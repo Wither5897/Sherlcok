@@ -44,6 +44,12 @@ struct FLevelSaveData
 	FString LevelName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	FText IntroText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	FText OutroText;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TArray<FActorSaveData> SavedActors;
 
 	FLevelSaveData()
