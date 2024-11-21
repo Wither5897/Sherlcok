@@ -10,13 +10,11 @@
 
 void UAJH_LightWidget::NativeConstruct()
 {
-	// player = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	directionalLightActor = Cast<AAJH_DirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_DirectionalLight::StaticClass()));
 	
 	Btn_morning->OnClicked.AddDynamic(this, &UAJH_LightWidget::OnMyBtn_morning);
 	Btn_lunch->OnClicked.AddDynamic(this, &UAJH_LightWidget::OnMyBtn_lunch);
 	Btn_Dinner->OnClicked.AddDynamic(this, &UAJH_LightWidget::OnMyBtn_Dinner);
-	
 }
 
 void UAJH_LightWidget::OnMyBtn_morning()
