@@ -403,7 +403,29 @@ public:
 	UFUNCTION()
 	void OnMyFurnitures_Btn_Down_4();
 
+	// =============================================SaveIntro & Outro Begin================================
+	UPROPERTY(meta = ( BindWidget ))
+	UButton* SaveTitleButton;
+	UFUNCTION()
+	void SaveTitleButtonClicked();
+	
+	UPROPERTY(meta = ( BindWidget ))
+	UButton* SaveContextButton;
+	UFUNCTION()
+	void SaveContextButtonClicked();
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> SaveIntroUIFactory;
+	UPROPERTY()
+	class UUW_EditIntro* SaveIntroUI;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> SaveOutroUIFactory;
+	UPROPERTY()
+	class UUW_EditOutro* SaveOutroUI;
+	
+	// =============================================SaveIntro & Outro End================================
+	
 	UPROPERTY()
 	class APlayerController* pc;
 	UPROPERTY(EditDefaultsOnly)

@@ -4,12 +4,18 @@
 #include "SK/SaveLevelUI.h"
 
 #include "AJH_SherlockGameInstance.h"
+#include "UW_EditIntro.h"
+#include "UW_EditOutro.h"
 #include "Components/Button.h"
 #include "Components/EditableText.h"
+#include "Jin/AJH_EditorCharacter.h"
+#include "Jin/AJH_EditorToolWidget.h"
 
 void USaveLevelUI::NativeConstruct(){
 	Super::NativeConstruct();
 
+	me = Cast<AAJH_EditorCharacter>(GetOwningPlayer()->GetCharacter());
+	
 	SetVisibility(ESlateVisibility::Hidden);
 	
 	ConfirmButton->OnClicked.AddDynamic(this, &USaveLevelUI::ConfirmButtonClicked);
@@ -21,7 +27,7 @@ void USaveLevelUI::ConfirmButtonClicked(){
 	if(LevelNameEdit->GetText().IsEmpty()){
 		return;
 	}
-	gi->SaveLevel(LevelNameEdit->GetText().ToString());
+	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText);
 	SetVisibility(ESlateVisibility::Hidden);
 }
 

@@ -15,10 +15,17 @@ class SHERLOCKPROJECT_API UUW_EditOutro : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void NativeConstruct() override;
+	
 	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
 	class UMultiLineEditableText* EndingMessage;
 
 	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
 	class UButton* StorySave;
-	
+
+	UFUNCTION()
+	void StorySaveButtonClicked();
+
+	UPROPERTY()
+	FText StoryText;
 };

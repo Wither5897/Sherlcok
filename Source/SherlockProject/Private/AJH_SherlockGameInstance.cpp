@@ -251,31 +251,49 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(FString LevelName){
-	UE_LOG(LogTemp, Warning, TEXT("Save Level"));
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory){
+	UE_LOG(LogTemp, Warning, TEXT("Save Level: %s"), *LevelName);
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
-	if(!SaveGameInstance){
+	if (!SaveGameInstance){
 		SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
-		if(!SaveGameInstance){
+		if (!SaveGameInstance){
+			UE_LOG(LogTemp, Error, TEXT("Failed to create SaveGame instance"));
 			return;
 		}
 	}
-	
+
 	FLevelSaveData* ExistingLevelData = SaveGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
 		return Data.LevelName == LevelName;
 	});
 
-	if(!ExistingLevelData){
+	if (!ExistingLevelData){
+		// 새 레벨 데이터 생성
 		FLevelSaveData NewLevelData;
 		NewLevelData.LevelName = LevelName;
+		NewLevelData.IntroTitleText = IntroTitle;
+		NewLevelData.IntroContextText = IntroContext;
+		NewLevelData.OutroText = OutroStory;
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
+		
+		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created"));
 	}
 	else{
+		// 기존 레벨 데이터 업데이트
 		ExistingLevelData->SavedActors.Empty();
+		ExistingLevelData->IntroTitleText = IntroTitle;
+		ExistingLevelData->IntroContextText = IntroContext;
+		ExistingLevelData->OutroText = OutroStory;
+		
+		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
 	}
-	
+
+	// 저장된 텍스트 로그 출력
+	UE_LOG(LogTemp, Warning, TEXT("Intro Title: %s"), *ExistingLevelData->IntroTitleText.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Intro Context: %s"), *ExistingLevelData->IntroContextText.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Outro Text: %s"), *ExistingLevelData->OutroText.ToString());
+
 	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
 		AAJH_WorldActor* Actor = *ActorItr;
 
@@ -287,8 +305,12 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName){
 
 		ExistingLevelData->SavedActors.Add(ActorData);
 	}
-	
-	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0);
+    
+	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0)){
+		UE_LOG(LogTemp, Warning, TEXT("SaveGame Successful"));
+	} else {
+		UE_LOG(LogTemp, Error, TEXT("SaveGame Failed"));
+	}
 }
 
 void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){

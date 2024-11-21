@@ -2,6 +2,9 @@
 
 
 #include "Jin/AJH_EditorToolWidget.h"
+
+#include "UW_EditIntro.h"
+#include "UW_EditOutro.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Jin/AJH_EditorActor.h"
@@ -18,6 +21,18 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	pc = GetWorld()->GetFirstPlayerController();
 	me = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_EditorCharacter::StaticClass()));
 
+	SaveIntroUI = Cast<UUW_EditIntro>(CreateWidget<UUserWidget>(GetWorld(), SaveIntroUIFactory));
+	if(SaveIntroUI){
+		SaveIntroUI->AddToViewport();
+		SaveIntroUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
+	SaveOutroUI = Cast<UUW_EditOutro>(CreateWidget<UUserWidget>(GetWorld(), SaveOutroUIFactory));
+	if(SaveOutroUI){
+		SaveOutroUI->AddToViewport();
+		SaveOutroUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
 	Main_Btn_Character->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Character);
 	Main_Btn_Evidence->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Evidence);
 	Main_Btn_Weapon->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Weapon);
@@ -92,7 +107,9 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Furnitures_Btn_Vase_6->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_6);
 	Furnitures_Btn_Down_4->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_4);
 
-	
+	// SaveTitle & Context
+	SaveTitleButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::SaveTitleButtonClicked);
+	SaveContextButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::SaveContextButtonClicked);
 
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
@@ -658,6 +675,26 @@ void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Vase_7()
 void UAJH_EditorToolWidget::OnMyFurnitures_Btn_Down_4()
 {
 	
+}
+
+void UAJH_EditorToolWidget::SaveTitleButtonClicked(){
+	SaveOutroUI->SetVisibility(ESlateVisibility::Hidden);
+	if(SaveIntroUI->IsVisible()){
+		SaveIntroUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else{
+		SaveIntroUI->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+void UAJH_EditorToolWidget::SaveContextButtonClicked(){
+	SaveIntroUI->SetVisibility(ESlateVisibility::Hidden);
+	if(SaveOutroUI->IsVisible()){
+		SaveOutroUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else{
+		SaveOutroUI->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void UAJH_EditorToolWidget::LevelSaveButtonClicked(){

@@ -15,6 +15,8 @@ class SHERLOCKPROJECT_API UUW_EditIntro : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void NativeConstruct() override;
+
 	
 	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
 	class UEditableText* TitleEditText;
@@ -24,4 +26,13 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
 	class UButton* TitleSave;
+
+	UFUNCTION()
+	void TitleSaveButtonClicked();
+
+	UPROPERTY()
+	FText TitleText;
+
+	UPROPERTY()
+	FText SubTitleText;
 };

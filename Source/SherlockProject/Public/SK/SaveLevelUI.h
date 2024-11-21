@@ -31,4 +31,7 @@ public:
 
 	UFUNCTION()
 	void CloseButtonClicked();
+
+	UPROPERTY()
+	class AAJH_EditorCharacter* me;
 };
