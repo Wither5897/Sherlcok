@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "Jin/AJH_SummaryWidget.h"
 #include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "UW_SingleReport.h"
 
 void UStatisticsWidget::NativeOnInitialized(){
 	Super::NativeOnInitialized();
@@ -227,8 +228,7 @@ void UStatisticsWidget::OnClickedExit(){
 	pc->SetShowMouseCursor(false);
 	pc->SetInputMode(FInputModeGameOnly());
 	FTimerHandle handle;
-	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::ServerTravelDelay, 15, false);
-	
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::ServerTravelDelay, 10, false);
 }
 
 void UStatisticsWidget::ServerTravelDelay()
