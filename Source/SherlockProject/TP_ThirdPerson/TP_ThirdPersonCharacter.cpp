@@ -122,7 +122,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	PaperSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/paper.paper"));
 
 	CallSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/office_telephone_ring.office_telephone_ring"));
-	PoliceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/police_siren_us.police_siren_us"));
+	PoliceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/mixkit-modern-classic-door-bell-sound-113.mixkit-modern-classic-door-bell-sound-113"));
 
 
 }
