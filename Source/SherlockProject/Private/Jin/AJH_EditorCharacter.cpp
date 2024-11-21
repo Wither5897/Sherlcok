@@ -16,6 +16,7 @@
 #include "Jin/AJH_ExPlainBtnWidget.h"
 #include "UW_EditorExplain.h"
 #include "Components/Button.h"
+#include "Jin/AJH_LightWidget.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -68,6 +69,12 @@ void AAJH_EditorCharacter::BeginPlay()
 	if ( GizmoUI )
 	{
 		GizmoUI->AddToViewport();
+	}
+
+	LightWidget = Cast<UAJH_LightWidget>(CreateWidget(GetWorld(), LightWidgetFactory));
+	if ( LightWidget )
+	{
+		LightWidget->AddToViewport();
 	}
 	
 	/*ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
