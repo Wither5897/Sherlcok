@@ -255,6 +255,7 @@ void AAJH_WorldActor::LocationVisibility()
 	Y_Scale->SetVisibility(false);
 	Z_Scale->SetVisibility(false);
 
+	ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("LocationVisibility called"));
 }
 
@@ -279,6 +280,7 @@ void AAJH_WorldActor::RotationVisivility()
 	Y_Scale->SetVisibility(false);
 	Z_Scale->SetVisibility(false);
 
+	ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("RotationVisivility called"));
 
 }
@@ -300,6 +302,8 @@ void AAJH_WorldActor::ScaleVisivility()
 	X_Scale->SetVisibility(true);
 	Y_Scale->SetVisibility(true);
 	Z_Scale->SetVisibility(true);
+
+	ExPlainBtnWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAJH_WorldActor::OnFixGizmoRotation()
