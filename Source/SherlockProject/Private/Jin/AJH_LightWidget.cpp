@@ -26,7 +26,7 @@ void UAJH_LightWidget::OnMyBtn_morning()
 
 void UAJH_LightWidget::OnMyBtn_lunch()
 {
-	directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-46, 0, 0));
+	directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-75, 0, 0));
 }
 
 void UAJH_LightWidget::OnMyBtn_Dinner()
