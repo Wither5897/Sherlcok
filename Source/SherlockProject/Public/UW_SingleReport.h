@@ -27,6 +27,18 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
 	class UTextBlock* percent;
 
+	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
+	class UTextBlock* EndingMarkShadow;
+
+	UPROPERTY(BlueprintReadOnly, meta = ( BindWidget ))
+	class UTextBlock* EndingMark;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FString> EndingMarkShadowArr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FString> EndingMarkArr;
+
 	UPROPERTY()
 	class ATP_ThirdPersonCharacter* me;
 	

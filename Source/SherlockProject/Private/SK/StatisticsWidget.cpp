@@ -222,18 +222,32 @@ void UStatisticsWidget::OnClickedExit(){
 	if ( me && me->OutroUI ) {
 		me->OutroUI->SetVisibility(ESlateVisibility::Visible);
 	}
-	//if(me && me->LoadingUI){
-	//	me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
-	//}
 	pc->SetShowMouseCursor(false);
 	pc->SetInputMode(FInputModeGameOnly());
 	FTimerHandle handle;
-	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::ServerTravelDelay, 10, false);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::DisplaySingleReportUI, 9, false);
 }
+
+void UStatisticsWidget::DisplaySingleReportUI()
+{
+	SingleReportUI = Cast<UUW_SingleReport>(CreateWidget(GetWorld(), SingleReportUIFactory));
+	if ( SingleReportUI )
+	{
+		SingleReportUI->AddToViewport();
+	}
+	FTimerHandle ServerTravelTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(ServerTravelTimerHandle,this,&UStatisticsWidget::ServerTravelDelay, 5, false);
+
+	if(me && me->LoadingUI){
+		me->LoadingUI->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
 
 void UStatisticsWidget::ServerTravelDelay()
 {
-	if ( me->HasAuthority() ) {
+	if ( me->HasAuthority() ) 
+	{
 		GetWorld()->ServerTravel("/Game/TJ/Main?Listen", true);
-}
+	}
 }
