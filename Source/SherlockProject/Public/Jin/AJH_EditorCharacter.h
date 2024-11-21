@@ -119,6 +119,10 @@ public:
 	class UUW_EditorExplain* EditorExplain;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> EditorExplainFactory;
+	UPROPERTY()
+	class UAJH_LightWidget* LightWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> LightWidgetFactory;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* HeavystompSound;
