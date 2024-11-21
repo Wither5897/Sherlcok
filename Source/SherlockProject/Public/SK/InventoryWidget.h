@@ -156,4 +156,7 @@ public:
 
 	UFUNCTION()
 	void RestoreNoteItemInteraction(UNoteItemWidget* NoteItem);
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MyPlayerID;
 };

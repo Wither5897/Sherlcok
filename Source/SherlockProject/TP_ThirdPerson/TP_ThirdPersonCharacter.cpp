@@ -97,8 +97,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	CoatMesh->SetupAttachment(GetMesh());
 
 	HatMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HatMesh"));
-	HatMesh->SetupAttachment(GetMesh());
-	HatMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hatSocket"));
+	HatMesh->SetupAttachment(GetMesh(), TEXT("hatSocket"));
 	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -573,6 +572,25 @@ void ATP_ThirdPersonCharacter::OpenInventory(){
 		pc->SetShowMouseCursor(true);
 		pc->SetInputMode(FInputModeGameAndUI());
 		GetCharacterMovement()->DisableMovement();
+		if(!ps){
+			ps = GetPlayerState();
+		}
+		int32 playerId = ps->GetPlayerId();
+		FWidgetTransform NewTransform;
+		switch (playerId){
+		case 0:
+			NewTransform.Translation = FVector2D(0, 0);
+			break;
+		case 1:
+			NewTransform.Translation = FVector2D(115, 0);
+			break;
+		case 2:
+			NewTransform.Translation = FVector2D(230, 0);
+			break;
+		default:
+			break;
+		}
+		InventoryUI->MyPlayerID->SetRenderTransform(NewTransform);
 	}
 }
 

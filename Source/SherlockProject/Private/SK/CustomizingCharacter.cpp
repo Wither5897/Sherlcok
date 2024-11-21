@@ -24,8 +24,7 @@ ACustomizingCharacter::ACustomizingCharacter()
 	CoatMesh->SetupAttachment(GetMesh());
 
 	HatMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat Mesh Component"));
-	HatMesh->SetupAttachment(GetMesh());
-	HatMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hatSocket"));
+	HatMesh->SetupAttachment(GetMesh(), TEXT("hatSocket"));
 }
 
 // Called when the game starts or when spawned
