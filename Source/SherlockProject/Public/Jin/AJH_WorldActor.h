@@ -89,7 +89,8 @@ public:
 	void OnExPlainBtn();
 
 	bool bIsInterative = false;
-
+	UPROPERTY()
+	FString ExplainText = " ";
 
 
 };

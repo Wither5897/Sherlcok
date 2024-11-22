@@ -20,9 +20,15 @@ public:
 	UPROPERTY()
 	class AAJH_EditorCharacter* player;
 
+	// =======================Save==============================//
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExplainSave;
+	UFUNCTION()
+	void OnMyExplainSave();
+	UPROPERTY(EditDefaultsOnly)
+	class UMultiLineEditableText* ExplainMultiEditText;
 
+	// =======================Delete===========================//
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExplainDelete;
 	UFUNCTION()
