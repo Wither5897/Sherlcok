@@ -31,6 +31,9 @@ public:
 	UFUNCTION()
 	void OnMyBtn_Back();
 
+	UPROPERTY()
+	class ASherlockPlayerController* pc;
+
 	UPROPERTY(meta=(BindWidget))
 	class UWidgetSwitcher* Switcherindex;
 

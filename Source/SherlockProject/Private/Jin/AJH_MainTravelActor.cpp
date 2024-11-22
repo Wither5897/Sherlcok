@@ -59,10 +59,11 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginClick(UPrimitiveComponent* Over
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
-		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
-		player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
+		// player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
+		// player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
+		//pc->bShowMouseCursor = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
+
 	}
 	else if( player && player->IsLocallyControlled())
 	{
@@ -95,6 +96,14 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
 		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
+		player->bIsServerMainTravel = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
+	}
+	else if( player && player->IsLocallyControlled() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
+		player->bIsClientMainTravel = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
 	}
 }
 
@@ -104,6 +113,18 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* Over
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
 		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->bIsServerMainTravel = false;
+		pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameOnly());
+	}
+	else if ( player && player->IsLocallyControlled() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->bIsClientMainTravel = false;
+		pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameOnly());
 	}
 }
 

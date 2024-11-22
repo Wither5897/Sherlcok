@@ -12,6 +12,8 @@ void UAJH_TravelClientWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
+	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+
 	Btn_FirstCrimeReady->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_FirstCrimeReady);
 	Btn_Cancel->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Cancel);
 	Btn_Crimefirst->OnClicked.AddDynamic(this, &UAJH_TravelClientWidget::OnMyBtn_Crimefirst);

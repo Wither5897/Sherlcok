@@ -41,9 +41,10 @@ void AAJH_CreatorToolTravelActor::OnMyBeginOverlap(UPrimitiveComponent* Overlapp
 
 	if (player && player->IsLocallyControlled() )
 	{
-		player->CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
+		// player->CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
+		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
+		player->bIsCreatorTravel = true;
+		// pc->bShowMouseCursor = true;
 	}
 }
 
@@ -54,6 +55,8 @@ void AAJH_CreatorToolTravelActor::OnMyEndOverlap(UPrimitiveComponent* Overlapped
 	if (player && player->IsLocallyControlled() )
 	{
 		player->CreatorToolTravel->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+		player->bIsCreatorTravel = false;
 		pc->bShowMouseCursor = false;
 		pc->SetInputMode(FInputModeGameOnly());
 	}
