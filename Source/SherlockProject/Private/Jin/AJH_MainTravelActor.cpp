@@ -10,6 +10,9 @@
 #include "Jin/AJH_TravelClientWidget.h"
 #include "SherlockPlayerController.h"
 #include "GameFramework/PlayerController.h"
+#include "UW_Interaction.h"
+#include "Delegates/Delegate.h"
+
 
 // Sets default values
 AAJH_MainTravelActor::AAJH_MainTravelActor()
@@ -27,8 +30,9 @@ void AAJH_MainTravelActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// mainTravelBoxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap);
-	// mainTravelBoxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap);
+	mainTravelBoxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap);
+	mainTravelBoxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap);
+
 	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 
 }
@@ -50,15 +54,16 @@ void AAJH_MainTravelActor::ShowCrimeSceneTravelWidget_Client(AActor* OtherActor)
 	
 }
 
-void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAJH_MainTravelActor::OnMyMainTravelBoxBeginClick(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
-		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
-		player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
+		// player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
+		// player->CrimeSceneTravelWidget->OnMyAnim_Switcherindex();
+		//pc->bShowMouseCursor = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
+
 	}
 	else if( player && player->IsLocallyControlled())
 	{
@@ -68,7 +73,7 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 	}
 }
 
-void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void AAJH_MainTravelActor::OnMyMainTravelBoxEndClick(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
@@ -81,6 +86,44 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* Over
 	{
 		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = false;
+		pc->SetInputMode(FInputModeGameOnly());
+	}
+}
+
+void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
+	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
+		player->bIsServerMainTravel = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
+	}
+	else if( player && player->IsLocallyControlled() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
+		player->bIsClientMainTravel = true;
+		//pc->SetInputMode(FInputModeGameAndUI());
+	}
+}
+
+void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
+	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->bIsServerMainTravel = false;
+		pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameOnly());
+	}
+	else if ( player && player->IsLocallyControlled() )
+	{
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->bIsClientMainTravel = false;
+		pc->SetShowMouseCursor(false);
 		pc->SetInputMode(FInputModeGameOnly());
 	}
 }

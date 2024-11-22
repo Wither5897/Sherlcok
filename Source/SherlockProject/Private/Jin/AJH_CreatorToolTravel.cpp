@@ -27,4 +27,5 @@ void UAJH_CreatorToolTravel::OnMyBtn_Travel()
 void UAJH_CreatorToolTravel::OnMyBtn_Cancel()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
+	pc->SetInputMode(FInputModeGameOnly());
 }

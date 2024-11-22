@@ -23,6 +23,7 @@ void UAJH_CrimeSceneTravelWidget::NativeConstruct()
 	gi = GetGameInstance<UAJH_SherlockGameInstance>();
 	gm = Cast<ATP_ThirdPersonGameMode>(GetWorld()->GetAuthGameMode());
 	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
+	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 	
 	// 첫 번째 사건 버튼 바인딩
 	Btn_Crimefirst->OnClicked.AddDynamic(this, &UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst);
@@ -110,6 +111,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
 	SetVisibility(ESlateVisibility::Collapsed);
+	pc->SetInputMode(FInputModeGameOnly());
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_Back_1()
@@ -189,7 +191,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_ThirdCrimeTravel(){
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_LevelBack()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
-	APlayerController* pc = GetWorld()->GetFirstPlayerController();
+	// pc = GetWorld()->GetFirstPlayerController();
 	if ( gi != nullptr && pc->IsLocalPlayerController() )
 	{
 		pc->ClientTravel(FString("192.168.0.40:7777/Game/TJ/Main?"), ETravelType::TRAVEL_Absolute);
