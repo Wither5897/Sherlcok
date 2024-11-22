@@ -44,6 +44,7 @@
 #include "Jin/AJH_CreatorToolTravel.h"
 #include "SK/AnimPawn.h"
 #include "UW_EndingCredit.h"
+#include "UW_Interaction.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -204,6 +205,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		OutroUI->AddToViewport();
 		OutroUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	InteractUI = Cast<UUW_Interaction>(CreateWidget(GetWorld(), InteractUIFactory));
+	if ( InteractUI ) {
+		InteractUI->AddToViewport();
+		InteractUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 	ps = GetPlayerState();

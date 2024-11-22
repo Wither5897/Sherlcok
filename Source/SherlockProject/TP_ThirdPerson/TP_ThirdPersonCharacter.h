@@ -135,6 +135,12 @@ public:
 	TSubclassOf<class UUserWidget> OutroUIFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UUserWidget* OutroUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> InteractUIFactory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UUserWidget* InteractUI;
+
 	
 	//====================================================================================================
 	
