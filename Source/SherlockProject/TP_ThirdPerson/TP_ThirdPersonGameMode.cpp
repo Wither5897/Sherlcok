@@ -34,8 +34,10 @@ void ATP_ThirdPersonGameMode::BeginPlay(){
 	}
 	if(!bIsSoundOn){
 		auto* me = Cast<ATP_ThirdPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-		me->PlayMapSound();
-		bIsSoundOn = true;
+		if(me){
+			me->PlayMapSound();
+			bIsSoundOn = true;
+		}
 	}
 }
 

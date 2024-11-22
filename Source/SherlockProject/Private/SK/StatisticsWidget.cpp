@@ -78,7 +78,10 @@ int32 UStatisticsWidget::CalcSuspectRank(){
 			break;
 		}
 	}
-	return SuspectPairs[0].Key;
+	if(SuspectPairs.Num() > 0){
+		return SuspectPairs[0].Key;
+	}
+	return 0;
 }
 
 void UStatisticsWidget::CalcWeaponRank(){

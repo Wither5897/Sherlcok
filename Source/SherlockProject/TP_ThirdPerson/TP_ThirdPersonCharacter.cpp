@@ -44,6 +44,8 @@
 #include "Jin/AJH_CreatorToolTravel.h"
 #include "SK/AnimPawn.h"
 #include "UW_EndingCredit.h"
+#include "SK/EditIntroPlayWidget.h"
+#include "SK/EditOutroPlayWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -149,8 +151,7 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		Notify->AddToViewport();
 		Notify->SetVisibility(ESlateVisibility::Hidden);
 	}
-
-
+	
 	reportboard = Cast<UUW_ReportBoard>(CreateWidget(GetWorld(), reportboardUI));
 	if (reportboard){
 		reportboard->AddToViewport();
@@ -198,6 +199,19 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if ( OutroUI ) {
 		OutroUI->AddToViewport();
 		OutroUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
+	EditIntroUI = Cast<UEditIntroPlayWidget>(CreateWidget(GetWorld(), EditIntroUIFactory));
+	if (EditIntroUI){
+		EditIntroUI->AddToViewport();
+		EditIntroUI->SetVisibility(ESlateVisibility::Visible);
+	}
+
+	// 이건 나중에 특정한 위치에서 만들어야함
+	EditOutroUI = Cast<UEditOutroPlayWidget>(CreateWidget(GetWorld(), EditOutroUIFactory));
+	if (EditOutroUI){
+		EditOutroUI->AddToViewport();
+		EditOutroUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
@@ -351,21 +365,17 @@ void ATP_ThirdPersonCharacter::Interaction(){
     if (!interactionUI || !pc){
         return;
     }
-	UE_LOG(LogTemp, Warning, TEXT("Interaction UI And Player Controller is not null"));
     if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
         AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
-    	UE_LOG(LogTemp, Warning, TEXT("Line trace is operate normally"));
         if (!actor){
             return;
         }
     	if (!ps){
     		ps = GetPlayerState();
     	}
-    	UE_LOG(LogTemp, Warning, TEXT("actor and player state is not null"));
         if (!bPick){
             int32 actorNum = actor->Comp->GetTagNum();
             int32 playerId = ps->GetPlayerId();
-        	UE_LOG(LogTemp, Warning, TEXT("%d %d"), actorNum, playerId);
         	if(HasAuthority()){
         		MulticastItemFound(actorNum, playerId);
         	}
@@ -740,11 +750,6 @@ void ATP_ThirdPersonCharacter::PlayPaperSound(){
 
 void ATP_ThirdPersonCharacter::PlayMapSound()
 {
-	if ( !GetWorld() )
-	{
-		return; 
-	}
-
 	FString CurrentLevelName = GetWorld()->GetMapName();
 	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
@@ -756,5 +761,4 @@ void ATP_ThirdPersonCharacter::PlayMapSound()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
 	}
-
 } 
