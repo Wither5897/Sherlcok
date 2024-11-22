@@ -25,7 +25,7 @@ public:
 	class UButton* ExplainSave;
 	UFUNCTION()
 	void OnMyExplainSave();
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	class UMultiLineEditableText* ExplainMultiEditText;
 
 	// =======================Delete===========================//

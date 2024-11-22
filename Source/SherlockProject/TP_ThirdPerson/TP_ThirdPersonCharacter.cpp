@@ -46,6 +46,7 @@
 #include "UW_EndingCredit.h"
 #include "SK/EditIntroPlayWidget.h"
 #include "SK/EditOutroPlayWidget.h"
+#include "UW_Interaction.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -217,6 +218,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		EditOutroUI->AddToViewport();
 		EditOutroUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	InteractUI = Cast<UUW_Interaction>(CreateWidget(GetWorld(), InteractUIFactory));
+	if ( InteractUI ) {
+		InteractUI->AddToViewport();
+		InteractUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 	ps = GetPlayerState();
@@ -429,6 +437,28 @@ void ATP_ThirdPersonCharacter::Interaction(){
         }
         bPick = !bPick;
     }
+	else if ( bIsCreatorTravel )
+	{
+		CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
+		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		pc->bShowMouseCursor = true;
+		pc->SetInputMode(FInputModeGameAndUI());
+	}
+	else if ( bIsServerMainTravel && !bIsClientMainTravel )
+	{
+		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
+		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		pc->bShowMouseCursor = true;
+		pc->SetInputMode(FInputModeGameAndUI());
+	}
+	else if ( !bIsServerMainTravel && bIsClientMainTravel )
+	{
+		TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
+		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		pc->bShowMouseCursor = true;
+		pc->SetInputMode(FInputModeGameAndUI());
+	}
+
 }
 
 void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
