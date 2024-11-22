@@ -305,6 +305,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ActorData.Rotation = Actor->GetActorRotation();
 		ActorData.Scale = Actor->GetActorScale3D();
 		ActorData.ActorClass = Actor->GetClass();
+		ActorData.String = Actor->ExplainText;
 
 		ExistingLevelData->SavedActors.Add(ActorData);
 	}

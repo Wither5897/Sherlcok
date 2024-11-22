@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -25,12 +25,17 @@ struct FActorSaveData{
 	FVector Scale;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	FString String;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TSubclassOf<AActor> ActorClass;
+
 
 	FActorSaveData()
 		: Location(FVector::ZeroVector),
 		  Rotation(FRotator::ZeroRotator),
 		  Scale(FVector(1.f, 1.f, 1.f)),
+		  String(" "),
 		  ActorClass(nullptr){
 	}
 };
