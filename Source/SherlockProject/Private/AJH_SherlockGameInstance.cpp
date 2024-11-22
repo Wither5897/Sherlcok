@@ -17,6 +17,9 @@
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "SK/CustomMapPlayCharacter.h"
+#include "SK/EditIntroPlayWidget.h"
+#include "SK/EditOutroPlayWidget.h"
 #include "SK/MapSaveGame.h"
 
 #if WITH_EDITOR
@@ -318,6 +321,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
 	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
 	if (!LoadGameInstance){
+		UE_LOG(LogTemp, Warning, TEXT("No Save Game Found"));
 		return;
 	}
 
@@ -325,15 +329,48 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
 		return Data.LevelName == LevelName;
 	});
 
-	if(LevelData){
+	if (LevelData){
+		// Spawn saved actors
 		for (const FActorSaveData& ActorData : LevelData->SavedActors){
 			FActorSpawnParameters SpawnParams;
 			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
 			if (!NewActor){
-				return;
+				UE_LOG(LogTemp, Error, TEXT("Failed to spawn actor"));
+				continue;
 			}
 			NewActor->SetActorScale3D(ActorData.Scale);
 		}
+
+		// Update IntroFullText
+		auto* World = GetWorld();
+		if (!World){
+			UE_LOG(LogTemp, Error, TEXT("World not found"));
+			return;
+		}
+
+		auto* PlayerController = World->GetFirstPlayerController();
+		if (!PlayerController){
+			UE_LOG(LogTemp, Error, TEXT("PlayerController not found"));
+			return;
+		}
+
+		auto* Character = Cast<ACustomMapPlayCharacter>(PlayerController->GetPawn());
+		if (!Character){
+			UE_LOG(LogTemp, Error, TEXT("CustomMapPlayCharacter not found"));
+			return;
+		}
+
+		if (Character->EditIntroUI){
+			Character->EditIntroUI->IntroFullText = LevelData->IntroContextText.ToString();
+			Character->EditIntroUI->IntroTitleText = LevelData->IntroTitleText;
+			Character->EditOutroUI->OutroContext = LevelData->OutroText;
+			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated: %s"), *LevelData->IntroContextText.ToString());
+		} else {
+			UE_LOG(LogTemp, Error, TEXT("EditIntroUI is null"));
+		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
 	}
 }
 

@@ -54,10 +54,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
@@ -135,6 +131,20 @@ public:
 	TSubclassOf<class UUserWidget> OutroUIFactory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UUserWidget* OutroUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<UUserWidget> EditIntroUIFactory;
+	UPROPERTY(BlueprintReadOnly)
+	class UEditIntroPlayWidget* EditIntroUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<UUserWidget> EditOutroUIFactory;
+	UPROPERTY(BlueprintReadOnly)
+	class UEditOutroPlayWidget* EditOutroUI;
+
+	// 여기에 아웃트로 UI의 애니메이션을 만들어 둔 뒤에 실행하게끔 하면 된다!
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	UWidgetAnimation* OutroAnim;
 	
 	//====================================================================================================
 	
