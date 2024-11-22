@@ -17,7 +17,7 @@
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
-#include "SK/CustomMapPlayCharacter.h"
+#include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "SK/EditIntroPlayWidget.h"
 #include "SK/EditOutroPlayWidget.h"
 #include "SK/MapSaveGame.h"
@@ -354,7 +354,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
 			return;
 		}
 
-		auto* Character = Cast<ACustomMapPlayCharacter>(PlayerController->GetPawn());
+		auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());
 		if (!Character){
 			UE_LOG(LogTemp, Error, TEXT("CustomMapPlayCharacter not found"));
 			return;

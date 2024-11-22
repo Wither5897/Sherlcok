@@ -209,10 +209,12 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	EditIntroUI = Cast<UEditIntroPlayWidget>(CreateWidget(GetWorld(), EditIntroUIFactory));
 	if (EditIntroUI){
 		EditIntroUI->AddToViewport();
-		EditIntroUI->SetVisibility(ESlateVisibility::Visible);
+		EditIntroUI->SetVisibility(ESlateVisibility::Hidden);
+		if(GetWorld()->GetMapName() == "SK_LoadMap" || GetWorld()->GetMapName() == "SK_LoadMap1"){
+			EditIntroUI->PlayStart();
+		}
 	}
-
-	// 이건 나중에 특정한 위치에서 만들어야함
+	
 	EditOutroUI = Cast<UEditOutroPlayWidget>(CreateWidget(GetWorld(), EditOutroUIFactory));
 	if (EditOutroUI){
 		EditOutroUI->AddToViewport();

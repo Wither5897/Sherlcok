@@ -20,4 +20,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText IntroTitleText;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayStart();
 };
