@@ -27,8 +27,8 @@ void AAJH_MainTravelActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	mainTravelBoxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap);
-	mainTravelBoxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap);
+	// mainTravelBoxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap);
+	// mainTravelBoxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap);
 	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 
 }

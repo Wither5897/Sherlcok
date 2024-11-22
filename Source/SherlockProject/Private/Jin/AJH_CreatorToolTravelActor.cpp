@@ -23,8 +23,8 @@ void AAJH_CreatorToolTravelActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TravelboxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyBeginOverlap);
-	TravelboxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyEndOverlap);
+	// TravelboxComp->OnComponentBeginOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyBeginOverlap);
+	// TravelboxComp->OnComponentEndOverlap.AddDynamic(this, &AAJH_CreatorToolTravelActor::OnMyEndOverlap);
 	pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
 }
 
