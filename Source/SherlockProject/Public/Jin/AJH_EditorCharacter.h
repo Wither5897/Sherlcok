@@ -74,7 +74,8 @@ public:
 	void OnMyIA_Escape();
 
 	UPROPERTY()
-	class APlayerController* pc;
+	//class APlayerController* pc;
+	class AAJH_EditorPlayerController* pc;
 
 	int32 IA_changeNum;
 
@@ -176,5 +177,6 @@ public:
 	void UpdateGizmoScale();
 	// 상태 정보를 저장할 변수 추가
 	EGizmoState CurrentGizmoState = EGizmoState::Location;
+
 
 };

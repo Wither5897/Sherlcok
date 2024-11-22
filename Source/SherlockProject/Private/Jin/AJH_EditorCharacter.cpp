@@ -17,6 +17,7 @@
 #include "UW_EditorExplain.h"
 #include "Components/Button.h"
 #include "Jin/AJH_LightWidget.h"
+#include "Jin/AJH_EditorPlayerController.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -34,7 +35,7 @@ void AAJH_EditorCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	pc = Cast<APlayerController>(GetController());
+	pc = Cast<AAJH_EditorPlayerController>(GetController());
 	if ( pc )
 	{
 		UEnhancedInputLocalPlayerSubsystem* subSys = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
