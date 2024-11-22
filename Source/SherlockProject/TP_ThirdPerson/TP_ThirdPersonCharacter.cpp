@@ -209,10 +209,9 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	EditIntroUI = Cast<UEditIntroPlayWidget>(CreateWidget(GetWorld(), EditIntroUIFactory));
 	if (EditIntroUI){
 		EditIntroUI->AddToViewport();
-		EditIntroUI->SetVisibility(ESlateVisibility::Visible);
+		EditIntroUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-
-	// 이건 나중에 특정한 위치에서 만들어야함
+	
 	EditOutroUI = Cast<UEditOutroPlayWidget>(CreateWidget(GetWorld(), EditOutroUIFactory));
 	if (EditOutroUI){
 		EditOutroUI->AddToViewport();
@@ -227,6 +226,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 			int32 PlayerIndex = ps->GetPlayerId();
 			ServerSetCharacterMaterial(PlayerIndex);
 		}
+	}
+
+	if (gi) {
+		gi->OnCharacterReady(this);
 	}
 	
 	// ServerSetCharacterMaterial(ps->GetPlayerId());

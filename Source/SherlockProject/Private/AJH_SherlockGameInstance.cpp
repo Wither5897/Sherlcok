@@ -17,7 +17,7 @@
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
-#include "SK/CustomMapPlayCharacter.h"
+#include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "SK/EditIntroPlayWidget.h"
 #include "SK/EditOutroPlayWidget.h"
 #include "SK/MapSaveGame.h"
@@ -316,61 +316,58 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 	}
 }
 
-void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
+void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 	UE_LOG(LogTemp, Warning, TEXT("Load Level"));
 	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
-	if (!LoadGameInstance){
+	if (!LoadGameInstance) {
 		UE_LOG(LogTemp, Warning, TEXT("No Save Game Found"));
 		return;
 	}
 
-	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
+	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
 		return Data.LevelName == LevelName;
 	});
 
-	if (LevelData){
-		// Spawn saved actors
-		for (const FActorSaveData& ActorData : LevelData->SavedActors){
-			FActorSpawnParameters SpawnParams;
-			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
-			if (!NewActor){
-				UE_LOG(LogTemp, Error, TEXT("Failed to spawn actor"));
-				continue;
-			}
-			NewActor->SetActorScale3D(ActorData.Scale);
-		}
+	if (LevelData) {
+		// Save data in instance temporarily for later
+		CachedLevelData = *LevelData;
 
-		// Update IntroFullText
-		auto* World = GetWorld();
-		if (!World){
-			UE_LOG(LogTemp, Error, TEXT("World not found"));
-			return;
-		}
+		// Schedule UI update after delay
+		GetWorld()->GetTimerManager().SetTimerForNextTick([this]() {
+			auto* PlayerController = GetWorld()->GetFirstPlayerController();
+			if (!PlayerController) return;
 
-		auto* PlayerController = World->GetFirstPlayerController();
-		if (!PlayerController){
-			UE_LOG(LogTemp, Error, TEXT("PlayerController not found"));
-			return;
-		}
+			auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());
+			if (!Character || !Character->EditIntroUI) return;
 
-		auto* Character = Cast<ACustomMapPlayCharacter>(PlayerController->GetPawn());
-		if (!Character){
-			UE_LOG(LogTemp, Error, TEXT("CustomMapPlayCharacter not found"));
-			return;
-		}
-
-		if (Character->EditIntroUI){
-			Character->EditIntroUI->IntroFullText = LevelData->IntroContextText.ToString();
-			Character->EditIntroUI->IntroTitleText = LevelData->IntroTitleText;
-			Character->EditOutroUI->OutroContext = LevelData->OutroText;
-			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated: %s"), *LevelData->IntroContextText.ToString());
-		} else {
-			UE_LOG(LogTemp, Error, TEXT("EditIntroUI is null"));
-		}
+			Character->EditIntroUI->IntroFullText = CachedLevelData.IntroContextText.ToString();
+			Character->EditIntroUI->IntroTitleText = CachedLevelData.IntroTitleText;
+			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
+			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
+		});
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
+	}
+}
+
+void UAJH_SherlockGameInstance::OnCharacterReady(ATP_ThirdPersonCharacter* Character){
+	if (!Character || !Character->EditIntroUI) return;
+	
+	if(!LoadGameInstance){
+		return;
+	}
+	
+	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
+		return Data.LevelName == LoadLevelName;
+	});
+
+	if (LevelData) {
+		Character->EditIntroUI->IntroFullText = LevelData->IntroContextText.ToString();
+		Character->EditIntroUI->IntroTitleText = LevelData->IntroTitleText;
+		Character->EditOutroUI->OutroContext = LevelData->OutroText;
+		UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated in OnCharacterReady: %s"), *LevelData->IntroContextText.ToString());
 	}
 }
 

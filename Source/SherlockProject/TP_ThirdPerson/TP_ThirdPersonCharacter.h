@@ -143,7 +143,7 @@ public:
 	class UEditOutroPlayWidget* EditOutroUI;
 
 	// 여기에 아웃트로 UI의 애니메이션을 만들어 둔 뒤에 실행하게끔 하면 된다!
-	UPROPERTY(EditDefaultsOnly, Category = UI)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 	UWidgetAnimation* OutroAnim;
 	
 	//====================================================================================================
