@@ -95,12 +95,14 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxBeginOverlap(UPrimitiveComponent* Ov
 	player = Cast<ATP_ThirdPersonCharacter>(OtherActor);
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
+		player->InteractUI->interact->SetText(FText::FromString(player->InteractUI->interactArr[0]));
 		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
 		player->bIsServerMainTravel = true;
 		//pc->SetInputMode(FInputModeGameAndUI());
 	}
 	else if( player && player->IsLocallyControlled() )
 	{
+		player->InteractUI->interact->SetText(FText::FromString(player->InteractUI->interactArr[0]));
 		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
 		player->bIsClientMainTravel = true;
 		//pc->SetInputMode(FInputModeGameAndUI());
@@ -114,6 +116,7 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* Over
 	{
 		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->interact->SetText(FText::FromString(""));
 		player->bIsServerMainTravel = false;
 		pc->SetShowMouseCursor(false);
 		pc->SetInputMode(FInputModeGameOnly());
@@ -122,6 +125,7 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndOverlap(UPrimitiveComponent* Over
 	{
 		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->interact->SetText(FText::FromString(""));
 		player->bIsClientMainTravel = false;
 		pc->SetShowMouseCursor(false);
 		pc->SetInputMode(FInputModeGameOnly());

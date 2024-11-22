@@ -17,8 +17,11 @@ void UUW_SingleReport::NativeConstruct()
 
 	APlayerState* ps = me->GetPlayerState();
 
-	float rawPercent = gi->PlayerCollection[ps->GetPlayerId()];
-
+	float rawPercent = 0;
+	if(gi->PlayerCollection.IsValidIndex(ps->GetPlayerId())){
+		rawPercent = gi->PlayerCollection[ps->GetPlayerId()];
+	}
+	
 	int32 roundedPercent = FMath::FloorToInt(rawPercent);
 
 	// 퍼센트는 받으면 넣을 예정 

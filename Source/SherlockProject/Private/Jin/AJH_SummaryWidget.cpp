@@ -118,7 +118,7 @@ void UAJH_SummaryWidget::OnMyBtn_Click(){
 
 void UAJH_SummaryWidget::LoadClueData(){
 	// JSON 파일 경로 설정
-	FString JsonFilePath = FPaths::ProjectSavedDir() / TEXT("Clue.json");
+	FString JsonFilePath = FPaths::ProjectDir() / TEXT("GameData") /  TEXT("Clue.json");
 	FString JsonString;
 
 	// JSON 파일 읽기
@@ -175,7 +175,7 @@ void UAJH_SummaryWidget::SaveClueData(){
 			ClueDataArray[i].SpecialThingCount);
 	}
 	// 저장 경로를 GameSavedDir로 변경
-	FString JsonFilePath = FPaths::ProjectSavedDir() / TEXT("Clue.json");
+	FString JsonFilePath = FPaths::ProjectDir() / TEXT("GameData") /  TEXT("Clue.json");
 
 	// 디렉토리가 없다면 생성
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();

@@ -47,6 +47,7 @@
 #include "SK/EditIntroPlayWidget.h"
 #include "SK/EditOutroPlayWidget.h"
 #include "UW_Interaction.h"
+#include "Components/AudioComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -790,10 +791,12 @@ void ATP_ThirdPersonCharacter::PlayMapSound()
 {
 	FString CurrentLevelName = GetWorld()->GetMapName();
 	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
-
+	
 	if ( CurrentLevelName == "Main" && MainSound )
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
+		UAudioComponent* SoundComp = UGameplayStatics::SpawnSound2D(GetWorld(), MainSound);
+		SoundComp->Stop();
+		//UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
 	}
 	else if ( CurrentLevelName == "Case" && CaseSound )
 	{

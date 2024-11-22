@@ -6,6 +6,7 @@
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Jin/AJH_CreatorToolTravel.h"
 #include "SherlockPlayerController.h"
+#include "UW_Interaction.h"
 
 // Sets default values
 AAJH_CreatorToolTravelActor::AAJH_CreatorToolTravelActor()
@@ -42,6 +43,7 @@ void AAJH_CreatorToolTravelActor::OnMyBeginOverlap(UPrimitiveComponent* Overlapp
 	if (player && player->IsLocallyControlled() )
 	{
 		// player->CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
+		player->InteractUI->interact->SetText(FText::FromString(player->InteractUI->interactArr[1]));
 		player->InteractUI->SetVisibility(ESlateVisibility::Visible);
 		player->bIsCreatorTravel = true;
 		// pc->bShowMouseCursor = true;
@@ -55,6 +57,7 @@ void AAJH_CreatorToolTravelActor::OnMyEndOverlap(UPrimitiveComponent* Overlapped
 	if (player && player->IsLocallyControlled() )
 	{
 		player->CreatorToolTravel->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->interact->SetText(FText::FromString(""));
 		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		player->bIsCreatorTravel = false;
 		pc->bShowMouseCursor = false;
