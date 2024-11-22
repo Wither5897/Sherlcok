@@ -22,6 +22,9 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* me;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* category;
 
@@ -37,5 +40,11 @@ public:
 	class UWidgetAnimation* Notifyinfo;
 
 	void PlayNotifyAnim();
+
+
+	void PlayPoliceSoundWithDelay();
+	void PlayCallSoundWithDelay();
+
+	FTimerHandle PlaySoundTimerHandle;
 
 };

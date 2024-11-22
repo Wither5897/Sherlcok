@@ -122,6 +122,11 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 
 	EvidenceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/Camera_shutter_click.Camera_shutter_click"));
 	PaperSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Interaction_sound/paper.paper"));
+
+	CallSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/office_telephone_ring.office_telephone_ring"));
+	PoliceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/mixkit-modern-classic-door-bell-sound-113.mixkit-modern-classic-door-bell-sound-113"));
+
+
 }
 
 void ATP_ThirdPersonCharacter::BeginPlay(){
@@ -762,3 +767,19 @@ void ATP_ThirdPersonCharacter::PlayMapSound()
 		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
 	}
 } 
+
+void ATP_ThirdPersonCharacter::PlayCallSound()
+{
+	if ( CallSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), CallSound);
+	}
+}
+
+void ATP_ThirdPersonCharacter::PlayPoliceSound()
+{
+	if ( PoliceSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), PoliceSound);
+	}
+}

@@ -31,20 +31,19 @@ void UTJ_LoginWidget::OnClickedFindSessionsButton()
 	}
 }
 
-void UTJ_LoginWidget::OnClickedResetButton()
-{
-	// 지금현재있는 방들 삭제 하고
-	// 내가 속해있는 세션도 나가고
-	gi->ExitMySession();
-	// 룸만들기
-	gi->OnDestroyAllSessions();
+//void UTJ_LoginWidget::OnClickedResetButton()
+//{
+//	// 지금현재있는 방들 삭제 하고
+//	// 내가 속해있는 세션도 나가고
+//	gi->ExitMySession();
+//	// 룸만들기
+//	gi->OnDestroyAllSessions();
+//}
 
-}
-
-void UTJ_LoginWidget::OnMyTextChanged(const FText& InText)
-{
-	if ( !InText.IsEmpty() )
-	{
-		Edit_hostName->SetText(InText);
-	}
-}
+//void UTJ_LoginWidget::OnMyTextChanged(const FText& InText)
+//{
+//	if ( !InText.IsEmpty() )
+//	{
+//		Edit_hostName->SetText(InText);
+//	}
+//}

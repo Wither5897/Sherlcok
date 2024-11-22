@@ -304,5 +304,19 @@ public:
 
 	UPROPERTY()
 	class USoundWave* PaperSound;
+
+	//==========================notify Sound==============
+
+	UPROPERTY()
+	class USoundWave* CallSound;
+	
+	UPROPERTY()
+	class USoundWave* PoliceSound;
+
+	UFUNCTION()
+	void PlayCallSound();
+	
+	UFUNCTION()
+	void PlayPoliceSound();
 };
 

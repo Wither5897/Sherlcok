@@ -35,10 +35,10 @@ public:
 
 	UFUNCTION()
 	void OnClickedFindSessionsButton();
-	UFUNCTION()
-	void OnClickedResetButton();
-	UFUNCTION()
-	void OnMyTextChanged(const FText& InText);
+	/*UFUNCTION()
+	void OnClickedResetButton();*/
+	/*UFUNCTION()
+	void OnMyTextChanged(const FText& InText);*/
 
 
 };
