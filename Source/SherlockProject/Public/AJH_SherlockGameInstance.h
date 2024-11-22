@@ -12,6 +12,8 @@
  * 
  */
 
+class ATP_ThirdPersonCharacter;
+
 USTRUCT(BlueprintType)
 struct FCustomizingData{
 	GENERATED_BODY()
@@ -74,6 +76,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel(FString LevelName);
 
+	UFUNCTION(BlueprintCallable)
+	void OnCharacterReady(ATP_ThirdPersonCharacter* Character);
+	
 	bool bShouldLoadLevel = false;
 
 	FString LoadLevelName;
@@ -86,6 +91,9 @@ public:
 
 	UPROPERTY()
 	TArray<float> PlayerCollection;
+
+	FLevelSaveData CachedLevelData;
+	
 private:
 	FName mySessionName = FName("first Session");
 	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 

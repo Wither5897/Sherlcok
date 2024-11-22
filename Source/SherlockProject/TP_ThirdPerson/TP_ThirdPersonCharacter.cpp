@@ -210,9 +210,6 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if (EditIntroUI){
 		EditIntroUI->AddToViewport();
 		EditIntroUI->SetVisibility(ESlateVisibility::Hidden);
-		if(GetWorld()->GetMapName() == "SK_LoadMap" || GetWorld()->GetMapName() == "SK_LoadMap1"){
-			EditIntroUI->PlayStart();
-		}
 	}
 	
 	EditOutroUI = Cast<UEditOutroPlayWidget>(CreateWidget(GetWorld(), EditOutroUIFactory));
@@ -229,6 +226,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 			int32 PlayerIndex = ps->GetPlayerId();
 			ServerSetCharacterMaterial(PlayerIndex);
 		}
+	}
+
+	if (gi) {
+		gi->OnCharacterReady(this);
 	}
 	
 	// ServerSetCharacterMaterial(ps->GetPlayerId());

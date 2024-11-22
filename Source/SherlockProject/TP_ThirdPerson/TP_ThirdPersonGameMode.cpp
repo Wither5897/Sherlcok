@@ -5,6 +5,7 @@
 #include "AJH_SherlockGameInstance.h"
 #include "TimerManager.h"
 #include "TP_ThirdPersonCharacter.h"
+#include "SK/EditIntroPlayWidget.h"
 #include "SK/MultiPlayerState.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -52,6 +53,20 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 			NumPlayers++;
 		}
 	}
+	
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [NewPlayer]() {
+		auto* Character = Cast<ATP_ThirdPersonCharacter>(NewPlayer->GetCharacter());
+		if (Character && Character->EditIntroUI) {
+			FString MapName = NewPlayer->GetWorld()->GetMapName();
+			MapName.RemoveFromStart(NewPlayer->GetWorld()->StreamingLevelsPrefix);
+
+			if (MapName == "SK_LoadMap" || MapName == "SK_LoadMap1") {
+				Character->EditIntroUI->PlayStart();
+				Character->EditIntroUI->SetVisibility(ESlateVisibility::Visible);
+			}
+		}
+	}, 1.0f, false);
 }
 
 void ATP_ThirdPersonGameMode::ServerTravelToLevel_Implementation(const FString& LevelName)
