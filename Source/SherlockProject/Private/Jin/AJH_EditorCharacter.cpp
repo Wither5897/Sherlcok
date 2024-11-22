@@ -440,6 +440,8 @@ void AAJH_EditorCharacter::OnMyIA_StartLineTraceLeftClick()
 	if ( outHit.GetActor() != nullptr && outHit.GetActor()->ActorHasTag(TEXT("InteractObj")) )
 	{
 		CurrentWorldActor->ExPlainBtnWidget->OnEnableBtn_ExPlain(true);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT(str: ") + CurrentWorldActor->ExplainText);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *CurrentWorldActor->ExplainText);
 	}
 
 	// 마지막으로 상호작용한 WorldActor 업데이트
