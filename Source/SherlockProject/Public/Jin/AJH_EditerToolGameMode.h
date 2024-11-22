@@ -13,8 +13,22 @@ UCLASS()
 class SHERLOCKPROJECT_API AAJH_EditerToolGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 public:
-	UFUNCTION(Category = "Editor Tool")
-	void WorldActorLocation(const FVector& NewLocation);
+	AAJH_EditerToolGameMode();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	/*UFUNCTION(Category = "Editor Tool")
+	void WorldActorLocation(const FVector& NewLocation);*/
+
+	UPROPERTY()
+	class AAJH_EditorCharacter* player;
+	UPROPERTY()
+	class AAJH_EditorPlayerController* pc;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class APawn> playerFactory;
+
 };

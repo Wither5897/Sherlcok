@@ -6,6 +6,7 @@
 #include "SherlockPlayerController.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Jin/AJH_EditorPlayerController.h"
 
 void UAJH_CreatorToolTravel::NativeConstruct()
 {
@@ -19,7 +20,9 @@ void UAJH_CreatorToolTravel::OnMyBtn_Travel()
 {
 	if (pc->IsLocalController() && player)
 	{
-		pc->ClientTravel(FString("/Game/Jin/Maps/EditorToolDevelopMap."), ETravelType::TRAVEL_Absolute);
+		//pc->ClientTravel(FString("/Game/Jin/Maps/EditorToolDevelopMap."), ETravelType::TRAVEL_Absolute);
+		UGameplayStatics::OpenLevel(GetWorld(), FName("EditorToolDevelopMap"));
+		pc->SetInputMode(FInputModeGameAndUI());
 	}
 	
 }

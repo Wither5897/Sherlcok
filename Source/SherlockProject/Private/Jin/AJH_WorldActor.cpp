@@ -197,6 +197,11 @@ void AAJH_WorldActor::BeginPlay()
 	bIsVisibleRotation = false;
 	bIsVisibleScale = false;
 
+	// 충돌 채널 초기화
+	X_Axis->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	Y_Axis->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	Z_Axis->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
 	ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
 	if ( ExPlainBtnWidget )
 	{
