@@ -24,6 +24,10 @@ void UItemWidget::NativeConstruct() {
 		DescriptionUI = Inven->DescriptionUI;
 		Inven->ItemArray.Add(this);
 	}
+	
+	FWidgetTransform NewTransform;
+	NewTransform.Angle = FMath::RandRange(-10, 10);
+	SetRenderTransform(NewTransform);
 
 	if ( GetMyNumber() <= 9 ) {
 		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);

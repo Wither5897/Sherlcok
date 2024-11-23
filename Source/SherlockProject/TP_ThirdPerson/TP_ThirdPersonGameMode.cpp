@@ -66,7 +66,7 @@ void ATP_ThirdPersonGameMode::PostLogin(APlayerController* NewPlayer)
 				Character->EditIntroUI->SetVisibility(ESlateVisibility::Visible);
 			}
 		}
-	}, 1.0f, false);
+	}, 0.3f, false);
 }
 
 void ATP_ThirdPersonGameMode::ServerTravelToLevel_Implementation(const FString& LevelName)

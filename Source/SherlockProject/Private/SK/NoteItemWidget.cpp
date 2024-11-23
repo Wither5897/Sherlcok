@@ -19,6 +19,10 @@ void UNoteItemWidget::NativeConstruct()
 		Inven->NoteItemArray.Add(this);
 	}
 
+	FWidgetTransform NewTransform;
+	NewTransform.Angle = FMath::RandRange(-10, 10);
+	SetRenderTransform(NewTransform);
+
 	if ( GetMyNumber() <= 9 ) {
 		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 		SavedTexture = ItemColor[GetMyNumber() - 1];

@@ -329,11 +329,24 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
 		return Data.LevelName == LevelName;
 	});
-
+	
 	if (LevelData) {
 		// Save data in instance temporarily for later
 		CachedLevelData = *LevelData;
-
+		// int32 ActorIndex = 0;
+		FName InteractTag = FName(TEXT("InteractObj"));
+		for (const FActorSaveData& ActorData : LevelData->SavedActors){
+			FActorSpawnParameters SpawnParams;
+			AEvidenceActor* NewActor = GetWorld()->SpawnActor<AEvidenceActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+			if (!NewActor){
+				return;
+			}
+			NewActor->SetActorScale3D(ActorData.Scale);
+			if(!NewActor->Tags.Contains(InteractTag)){
+				NewActor->Tags.Add(InteractTag);
+			}
+		}
+		
 		// Schedule UI update after delay
 		GetWorld()->GetTimerManager().SetTimerForNextTick([this]() {
 			auto* PlayerController = GetWorld()->GetFirstPlayerController();
