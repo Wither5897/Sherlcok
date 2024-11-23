@@ -159,4 +159,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MyPlayerID;
+
+	UFUNCTION()
+	void UnHighlightUI();
 };

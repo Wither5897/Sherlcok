@@ -166,7 +166,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_SecondCrimeTravel(){
 		{
 			SherlockPC->SetInputMode(FInputModeGameOnly());
 			gi->bShouldLoadLevel = true;
-			gi->LoadLevelName = LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 2].LevelName;
+			gi->LoadLevelName = LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 1].LevelName;
 		}
 	}
 }
@@ -183,7 +183,7 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_ThirdCrimeTravel(){
 		{
 			SherlockPC->SetInputMode(FInputModeGameOnly());
 			gi->bShouldLoadLevel = true;
-			gi->LoadLevelName = LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 1].LevelName;
+			gi->LoadLevelName = LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 2].LevelName;
 		}
 	}
 }

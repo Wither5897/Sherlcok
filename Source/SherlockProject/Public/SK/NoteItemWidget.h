@@ -29,6 +29,9 @@ public:
 	UPROPERTY(Meta = ( BindWidget ))
 	class UImage* Evidence;
 
+	UPROPERTY(Meta = ( BindWidget ))
+	class UImage* HighlightImage;
+
 	UPROPERTY(EditDefaultsOnly)
 	TArray<class UTexture2D*> ItemColor;
 
