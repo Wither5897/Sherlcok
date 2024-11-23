@@ -28,6 +28,9 @@ struct FActorSaveData{
 	FString String;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	bool boolean;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TSubclassOf<AActor> ActorClass;
 
 
@@ -36,6 +39,7 @@ struct FActorSaveData{
 		  Rotation(FRotator::ZeroRotator),
 		  Scale(FVector(1.f, 1.f, 1.f)),
 		  String(" "),
+		  boolean(),
 		  ActorClass(nullptr){
 	}
 };
