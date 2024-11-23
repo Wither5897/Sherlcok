@@ -116,6 +116,7 @@ void UInventoryWidget::ShowNoteButtonClicked(){
 void UInventoryWidget::SuspectButtonClicked(){
 	auto* ps = me->GetPlayerState();
 	DoubleClick(SuspectTextField);
+	UnHighlightUI();
 	if (!SavedTexture){
 		for (UNoteItemWidget* NoteItem : NoteItemArray){
 			if (NoteItem && NoteItem->SavedTexture == SuspectImage->GetBrush().GetResourceObject()) {
@@ -146,6 +147,7 @@ void UInventoryWidget::SuspectButtonClicked(){
 void UInventoryWidget::WeaponButtonClicked(){
 	auto* ps = me->GetPlayerState();
 	DoubleClick(WeaponTextField);
+	UnHighlightUI();
 	if (!SavedTexture){
 		for (UNoteItemWidget* NoteItem : NoteItemArray){
 			if (NoteItem && NoteItem->SavedTexture == WeaponImage->GetBrush().GetResourceObject()) {
@@ -175,6 +177,7 @@ void UInventoryWidget::WeaponButtonClicked(){
 void UInventoryWidget::MainEvidenceButtonClicked(){
 	auto* ps = me->GetPlayerState();
 	DoubleClick(MainEvidenceTextField);
+	UnHighlightUI();
 	if (!SavedTexture){
 		for (UNoteItemWidget* NoteItem : NoteItemArray){
 			if (NoteItem && NoteItem->SavedTexture == MainEvidenceImage->GetBrush().GetResourceObject()) {
@@ -205,6 +208,7 @@ void UInventoryWidget::MainEvidenceButtonClicked(){
 void UInventoryWidget::SpecialThingButtonClicked(){
 	auto* ps = me->GetPlayerState();
 	DoubleClick(SpecialThingTextField);
+	UnHighlightUI();
 	if (!SavedTexture){
 		for (UNoteItemWidget* NoteItem : NoteItemArray){
 			if (NoteItem && NoteItem->SavedTexture == SpecialThingImage->GetBrush().GetResourceObject()) {
@@ -286,5 +290,16 @@ void UInventoryWidget::DoubleClick(class UMultiLineEditableText* textbox){
 void UInventoryWidget::RestoreNoteItemInteraction(UNoteItemWidget* NoteItem){
 	if (NoteItem && NoteItem->IsDisabled()){
 		NoteItem->EnableInteraction();
+		NoteItem->HighlightImage->SetVisibility(ESlateVisibility::Hidden);
 	}
+}
+
+void UInventoryWidget::UnHighlightUI(){
+	for (UNoteItemWidget* NoteItem : NoteItemArray){
+		NoteItem->HighlightImage->SetVisibility(ESlateVisibility::Hidden);
+	}
+	SuspectButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.f));
+	WeaponButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.f));
+	MainEvidenceButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.f));
+	SpecialThingButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.f));
 }

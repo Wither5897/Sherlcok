@@ -27,7 +27,7 @@ void UNoteItemWidget::NativeConstruct()
 		Evidence->SetBrushFromTexture(ItemColor[GetMyNumber() - 1]);
 		SavedTexture = ItemColor[GetMyNumber() - 1];
 	}
-	
+	HighlightImage->SetVisibility(ESlateVisibility::Hidden);
 	ItemButton->OnClicked.AddDynamic(this, &UNoteItemWidget::ItemButtonClicked);
 
 }
@@ -49,6 +49,11 @@ void UNoteItemWidget::ItemButtonClicked()
 {
 	if ( GetMyNumber() <= 9 ) {
 		Inven->SavedTexture = ItemColor[GetMyNumber() - 1];
+		HighlightImage->SetVisibility(ESlateVisibility::Visible);
+		Inven->SuspectButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.25f));
+		Inven->WeaponButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.25f));
+		Inven->MainEvidenceButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.25f));
+		Inven->SpecialThingButton->SetBackgroundColor(FLinearColor(0.f, 0.5f, 1.f, 0.25f));
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("My Number: %d, Display Name: %s"), GetMyNumber() - 1, *UKismetSystemLibrary::GetDisplayName(Inven->SavedTexture)));
 	}
 }

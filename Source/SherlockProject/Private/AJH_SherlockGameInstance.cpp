@@ -4,6 +4,8 @@
 #include "AJH_SherlockGameInstance.h"
 
 // #include "EditorDirectories.h"
+#include <ThirdParty/Steamworks/Steamv157/sdk/public/steam/isteamremotestorage.h>
+
 #include "EngineUtils.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
@@ -20,6 +22,7 @@
 #include "SherlockProject/TP_ThirdPerson/TP_ThirdPersonCharacter.h"
 #include "SK/EditIntroPlayWidget.h"
 #include "SK/EditOutroPlayWidget.h"
+#include "SK/EvidenceActorComp.h"
 #include "SK/MapSaveGame.h"
 
 #if WITH_EDITOR
@@ -334,17 +337,29 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 	if (LevelData) {
 		// Save data in instance temporarily for later
 		CachedLevelData = *LevelData;
-		// int32 ActorIndex = 0;
+		int32 ActorIndex = 0;
 		FName InteractTag = FName(TEXT("InteractObj"));
 		for (const FActorSaveData& ActorData : LevelData->SavedActors){
 			FActorSpawnParameters SpawnParams;
-			AEvidenceActor* NewActor = GetWorld()->SpawnActor<AEvidenceActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
 			if (!NewActor){
-				return;
+				continue;
 			}
 			NewActor->SetActorScale3D(ActorData.Scale);
+			NewActor->AddComponentByClass(UEvidenceActorComp::StaticClass(), false, FTransform(), false);
+			if(!ActorData.boolean){
+				continue;
+			}
 			if(!NewActor->Tags.Contains(InteractTag)){
 				NewActor->Tags.Add(InteractTag);
+				if(ActorIndex < 10){
+					NewActor->Tags.Add(FName(*FString::Printf(TEXT("0%d"), ActorIndex)));
+				}
+				else{
+					NewActor->Tags.Add(FName(*FString::Printf(TEXT("%d"), ActorIndex)));
+				}
+				UE_LOG(LogTemp, Warning, TEXT("Add Interact Tag Success Tag Number : %s"), *NewActor->Tags.Last().ToString());
+				ActorIndex++;
 			}
 		}
 		
