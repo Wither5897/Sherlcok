@@ -306,6 +306,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ActorData.Scale = Actor->GetActorScale3D();
 		ActorData.ActorClass = Actor->GetClass();
 		ActorData.String = Actor->ExplainText;
+		ActorData.boolean = Actor->bIsInterative;
 
 		ExistingLevelData->SavedActors.Add(ActorData);
 	}
