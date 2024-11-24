@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Jin/AJH_EditorCharacter.h"
 #include "GameFramework/PlayerController.h"
+#include "Jin/AJH_EditorPlayerController.h"
 
 void UAJH_ExPlainBtnWidget::NativeConstruct()
 {

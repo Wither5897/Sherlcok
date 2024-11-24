@@ -5,12 +5,16 @@
 #include "Components/SceneComponent.h"
 #include "Jin/AJH_ExPlainBtnWidget.h"
 #include "UW_EditorExplain.h"
+#include "SK/EvidenceActorComp.h"
+#include "KHH_InteractionWidget.h"
 
 // Sets default values
 AAJH_WorldActor::AAJH_WorldActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	Comp = CreateDefaultSubobject<UEvidenceActorComp>(TEXT("EvidenceActorComp"));
 
 	GizmoRoot = CreateDefaultSubobject<USceneComponent>(TEXT("GizmoRoot"));
 	SetRootComponent(GizmoRoot);
@@ -214,6 +218,13 @@ void AAJH_WorldActor::BeginPlay()
 	{
 		EditorExplain->AddToViewport();
 		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	InteractionWidget = Cast<UKHH_InteractionWidget>(CreateWidget(GetWorld(), InteractionWidgetFactor));
+	if ( InteractionWidget )
+	{
+		InteractionWidget->AddToViewport();
+		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 }

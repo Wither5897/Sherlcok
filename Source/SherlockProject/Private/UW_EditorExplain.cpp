@@ -8,11 +8,13 @@
 #include "Jin/AJH_WorldActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/MultiLineEditableText.h"
+#include "Jin/AJH_EditorPlayerController.h"
+#include "KHH_InteractionWidget.h"
 
 void UUW_EditorExplain::NativeConstruct()
 {
 	player = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
+	
 	ExplainDelete->OnClicked.AddDynamic(this, &UUW_EditorExplain::OnMyExplainDelete);
 	ExplainSave->OnClicked.AddDynamic(this, &UUW_EditorExplain::OnMyExplainSave);
 }
@@ -20,6 +22,7 @@ void UUW_EditorExplain::NativeConstruct()
 void UUW_EditorExplain::OnMyExplainSave()
 {
 	player->CurrentWorldActor->ExplainText = ExplainMultiEditText->GetText().ToString();
+	player->CurrentWorldActor->InteractionText = ExplainMultiEditText->GetText().ToString();
 }
 
 void UUW_EditorExplain::OnMyExplainDelete()

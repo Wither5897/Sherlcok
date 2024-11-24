@@ -22,6 +22,8 @@ void UCustomizingWidget::NativeConstruct(){
 	HatIdx = 0;
 
 	me = Cast<ACustomizingCharacter>(GetOwningPlayer()->GetCharacter());
+	me->SetCoatMaterial(MaterialColor[CoatIdx]);
+	me->SetHatMaterial(MaterialColor[HatIdx]);
 }
 
 void UCustomizingWidget::CoatLeftButtonClicked(){

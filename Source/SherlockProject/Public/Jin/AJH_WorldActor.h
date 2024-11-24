@@ -85,12 +85,19 @@ public:
 	class UUW_EditorExplain* EditorExplain;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> EditorExplainFactory;
+	UPROPERTY()
+	class UKHH_InteractionWidget* InteractionWidget;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> InteractionWidgetFactor;
 	UFUNCTION()
 	void OnExPlainBtn();
 
 	bool bIsInterative = false;
 	UPROPERTY()
 	FString ExplainText = " ";
+	UPROPERTY()
+	FString InteractionText = " ";
 
-
+	UPROPERTY()
+	class UEvidenceActorComp* Comp;
 };
