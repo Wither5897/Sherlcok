@@ -79,12 +79,14 @@ void AAJH_MainTravelActor::OnMyMainTravelBoxEndClick(UPrimitiveComponent* Overla
 	if ( player && player->IsLocallyControlled() && player->HasAuthority() )
 	{
 		player->CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = false;
 		pc->SetInputMode(FInputModeGameOnly());
 	}
 	else if ( player && player->IsLocallyControlled() )
 	{
 		player->TravelClientWidget->SetVisibility(ESlateVisibility::Collapsed);
+		player->InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = false;
 		pc->SetInputMode(FInputModeGameOnly());
 	}

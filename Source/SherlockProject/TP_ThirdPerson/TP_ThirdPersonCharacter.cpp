@@ -441,21 +441,22 @@ void ATP_ThirdPersonCharacter::Interaction(){
 	else if ( bIsCreatorTravel )
 	{
 		CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
-		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = true;
 		pc->SetInputMode(FInputModeGameAndUI());
 	}
 	else if ( bIsServerMainTravel && !bIsClientMainTravel )
 	{
 		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
-		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = true;
 		pc->SetInputMode(FInputModeGameAndUI());
 	}
 	else if ( !bIsServerMainTravel && bIsClientMainTravel )
 	{
 		TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
-		InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		//InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
 		pc->bShowMouseCursor = true;
 		pc->SetInputMode(FInputModeGameAndUI());
 	}
