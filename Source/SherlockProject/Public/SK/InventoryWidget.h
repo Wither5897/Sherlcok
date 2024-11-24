@@ -48,15 +48,15 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ShowEvidenceButton;
-
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ShowEvidenceButtonClicked();
+	
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* CaseGuessScreen;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ShowNoteButton;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ShowNoteButtonClicked();
 
 	UPROPERTY(meta = (BindWidget))

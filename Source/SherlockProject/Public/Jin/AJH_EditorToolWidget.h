@@ -20,6 +20,8 @@ protected:
 public:
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UWidgetSwitcher* EditorWidgetSwitcher;
+	UFUNCTION()
+	void OnMyBtn_Back();
 	// =================================Main=====================================
 	UPROPERTY(BlueprintReadWrite, meta = ( BindWidget ))
 	class UButton* Main_Btn_Character;
