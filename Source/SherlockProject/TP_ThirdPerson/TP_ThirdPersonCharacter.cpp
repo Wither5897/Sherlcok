@@ -131,6 +131,9 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 	PoliceSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/notify/mixkit-modern-classic-door-bell-sound-113.mixkit-modern-classic-door-bell-sound-113"));
 
 
+	AttackSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/AttackSound.AttackSound"));
+	WindSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/skip_wind.skip_wind"));
+
 }
 
 void ATP_ThirdPersonCharacter::BeginPlay(){
@@ -476,6 +479,10 @@ void ATP_ThirdPersonCharacter::Interaction(){
 							AnimPawn->SetActorHiddenInGame(false);
 						}
 						LevelSequencePlayer->OnFinished.AddDynamic(this, &ATP_ThirdPersonCharacter::SetAnimPawnVisibility);
+
+						PlayWindSound();
+						GetWorld()->GetTimerManager().SetTimer(AttackSoundTimerHandle, this, &ATP_ThirdPersonCharacter::PlayAttackSound, 3.3f, false);
+
 						LevelSequencePlayer->Play();
 					}
 					bSequence = true;
@@ -876,4 +883,20 @@ void ATP_ThirdPersonCharacter::InteractionLoadMap()
 	auto* pc = Cast<APlayerController>(GetController());
 	interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
 	worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ATP_ThirdPersonCharacter::PlayAttackSound()
+{
+	if ( AttackSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), AttackSound);
+	}
+}
+
+void ATP_ThirdPersonCharacter::PlayWindSound()
+{
+	if ( WindSound )
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), WindSound);
+	}
 }
