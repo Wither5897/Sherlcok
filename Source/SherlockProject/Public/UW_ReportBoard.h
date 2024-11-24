@@ -101,13 +101,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowWitness();
 	
-public:
-
 	bool bHandReport = false;
 	bool bAutopsyReport = false;
 	bool bExpertReport = false;
 	bool bWitnessReport = false;
 	bool bSequence = false;
-	
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	bool bIsFirst = true;
 };
