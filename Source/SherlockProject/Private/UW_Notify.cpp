@@ -24,7 +24,7 @@ void UUW_Notify::notifySetting(int32 value)
 		category_Image->SetBrushFromTexture(categoryImgArr[0]);
 		if ( GetWorld() )
 		{
-			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayCallSoundWithDelay, 3.3f, false);
+			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayCallSoundWithDelay, 10.3f, false);
 		}
 		break;
 
@@ -34,7 +34,7 @@ void UUW_Notify::notifySetting(int32 value)
 		category_Image->SetBrushFromTexture(categoryImgArr[1]);
 		if ( GetWorld() )
 		{
-			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 3.3f, false);
+			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 10.3f, false);
 		}
 		break;
 
@@ -44,7 +44,7 @@ void UUW_Notify::notifySetting(int32 value)
 		category_Image->SetBrushFromTexture(categoryImgArr[2]);
 		if ( GetWorld() )
 		{
-			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 3.3f, false);
+			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 10.3f, false);
 		}
 		break;
 
@@ -54,7 +54,7 @@ void UUW_Notify::notifySetting(int32 value)
 		category_Image->SetBrushFromTexture(categoryImgArr[3]);
 		if ( GetWorld() )
 		{
-			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 3.3f, false);
+			GetWorld()->GetTimerManager().SetTimer(PlaySoundTimerHandle, this, &UUW_Notify::PlayPoliceSoundWithDelay, 10.3f, false);
 		}
 		break;
 

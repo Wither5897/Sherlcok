@@ -329,6 +329,23 @@ public:
 	UFUNCTION()
 	void PlayPoliceSound();
 
+	// =======================sequencer Sound=============
+	
+	UPROPERTY()
+	class USoundWave* AttackSound;
+	
+	UPROPERTY()
+	class USoundWave* WindSound;
+
+	UFUNCTION()
+	void PlayAttackSound();
+	
+	UFUNCTION()
+	void PlayWindSound(); 
+
+	FTimerHandle AttackSoundTimerHandle;
+
+
 	// ==========================Travel=====================
 	bool bIsCreatorTravel = false;
 	bool bIsServerMainTravel = false;

@@ -146,14 +146,13 @@ void UUW_ReportBoard::ShowNotifyWidget(int32 value){
 		me->Notify->notifySetting(value);
 		me->Notify->SetVisibility(ESlateVisibility::Visible);
 		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UUW_ReportBoard::HideNotifyWidget, 5.0f, false);
-
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UUW_ReportBoard::HideNotifyWidget, 13.0f, false);
 		me->Notify->PlayNotifyAnim();
 	}
 }
 
 void UUW_ReportBoard::HideNotifyWidget(){
 	if (me->Notify){
-		me->Notify->SetVisibility(ESlateVisibility::Hidden);
+		me->Notify->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
