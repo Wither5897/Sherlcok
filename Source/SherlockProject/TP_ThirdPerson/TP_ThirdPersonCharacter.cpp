@@ -49,6 +49,7 @@
 #include "UW_Interaction.h"
 #include "Components/AudioComponent.h"
 #include "Jin/AJH_WorldActor.h"
+#include "UW_EditorExplain.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -227,6 +228,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		InteractUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	EditorExplain = Cast<UUW_EditorExplain>(CreateWidget(GetWorld(), EditorExplainFactory));
+	if ( EditorExplain )
+	{
+		EditorExplain->AddToViewport();
+		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 	ps = GetPlayerState();
@@ -347,7 +355,7 @@ void ATP_ThirdPersonCharacter::OnOffFlashLight(){
 
 void ATP_ThirdPersonCharacter::PerformHighLight(){
 	if (IsLocallyControlled() && currntLevel == TEXT("case") ) {
-	UE_LOG(LogTemp, Warning, TEXT("121111"));
+	//UE_LOG(LogTemp, Warning, TEXT("121111"));
 		if (Comp){
 			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
 			if (EvidenceActor && EvidenceActor->StaticMesh){
@@ -379,7 +387,7 @@ void ATP_ThirdPersonCharacter::PerformHighLight(){
 	}
 	else if ( IsLocallyControlled() && (currntLevel == TEXT("SK_LoadMap") || currntLevel == TEXT("SK_LoadMap1") ) )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("끼야아아아아아아악"));
+		//UE_LOG(LogTemp, Warning, TEXT("끼야아아아아아아악"));
 		if ( Comp ) {
 			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
 			if ( worldActor && worldActor->MeshComp ) {
@@ -413,88 +421,96 @@ void ATP_ThirdPersonCharacter::PerformHighLight(){
 
 void ATP_ThirdPersonCharacter::Interaction(){
     auto* pc = Cast<APlayerController>(GetController());
-    if (!interactionUI || !pc){
-        return;
-    }
-    if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
-        AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
-        if (!actor){
-            return;
-        }
-    	if (!ps){
-    		ps = GetPlayerState();
-    	}
-        if (!bPick){
-            int32 actorNum = actor->Comp->GetTagNum();
-            int32 playerId = ps->GetPlayerId();
-        	if(HasAuthority()){
-        		MulticastItemFound(actorNum, playerId);
-        	}
-        	else{
-        		ServerItemFound(actorNum, playerId);
-        	}
+	if ( currntLevel == TEXT("case") || currntLevel == TEXT("Main") )
+	{
+		UE_LOG(LogTemp, Warning, TEXT("우우우우우우우우우우우우웅"));
+		if (!interactionUI || !pc){
+			return;
+		}
+		if (bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj"))){
+			AEvidenceActor* actor = Cast<AEvidenceActor>(OutHit.GetActor());
+			if (!actor){
+				return;
+			}
+    		if (!ps){
+    			ps = GetPlayerState();
+    		}
+			if (!bPick){
+				int32 actorNum = actor->Comp->GetTagNum();
+				int32 playerId = ps->GetPlayerId();
+        		if(HasAuthority()){
+        			MulticastItemFound(actorNum, playerId);
+        		}
+        		else{
+        			ServerItemFound(actorNum, playerId);
+        		}
         	
-            if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
-                InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
-            }
+				if (InventoryUI && InventoryUI->NoteItemArray.IsValidIndex((actorNum - 1))) {
+					InventoryUI->NoteItemArray[actorNum - 1]->WhenFindItem();
+				}
 
-            interactionUI->SetVisibility(ESlateVisibility::Visible);
-            interactionUI->WhenItemClick(actorNum);
-            PlayEvidenceSound();
-            pc->SetShowMouseCursor(true);
-            pc->SetInputMode(FInputModeGameAndUI());
-            GetCharacterMovement()->DisableMovement();
-        }
-        else {
-            // UI가 닫힐 때 실행
-            interactionUI->SetVisibility(ESlateVisibility::Hidden);
-            pc->SetShowMouseCursor(false);
-            pc->SetInputMode(FInputModeGameOnly());
-            GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				interactionUI->SetVisibility(ESlateVisibility::Visible);
+				interactionUI->WhenItemClick(actorNum);
+				PlayEvidenceSound();
+				pc->SetShowMouseCursor(true);
+				pc->SetInputMode(FInputModeGameAndUI());
+				GetCharacterMovement()->DisableMovement();
+			}
+			else {
+				// UI가 닫힐 때 실행
+				interactionUI->SetVisibility(ESlateVisibility::Hidden);
+				pc->SetShowMouseCursor(false);
+				pc->SetInputMode(FInputModeGameOnly());
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
-            // UI가 닫힌 후 조건에 따라 레벨 시퀀스 실행
-            if (check[3] && check[5] && check[8] && !bSequence) {
-                FMovieSceneSequencePlaybackSettings PlaybackSettings;
-                ALevelSequenceActor* OutActor;
-                ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
-                    GetWorld(), LevelSequence, PlaybackSettings, OutActor);
+				// UI가 닫힌 후 조건에 따라 레벨 시퀀스 실행
+				if (check[3] && check[5] && check[8] && !bSequence) {
+					FMovieSceneSequencePlaybackSettings PlaybackSettings;
+					ALevelSequenceActor* OutActor;
+					ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+						GetWorld(), LevelSequence, PlaybackSettings, OutActor);
                 
-                if (LevelSequencePlayer) {
-                    AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
-                    if(AnimPawn) {
-                        AnimPawn->SetActorHiddenInGame(false);
-                    }
-                    LevelSequencePlayer->OnFinished.AddDynamic(this, &ATP_ThirdPersonCharacter::SetAnimPawnVisibility);
-                    LevelSequencePlayer->Play();
-                }
-                bSequence = true;
-            }
-        }
-        bPick = !bPick;
-    }
-	else if ( bIsCreatorTravel )
-	{
-		CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
-		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
+					if (LevelSequencePlayer) {
+						AnimPawn = Cast<AAnimPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AAnimPawn::StaticClass()));
+						if(AnimPawn) {
+							AnimPawn->SetActorHiddenInGame(false);
+						}
+						LevelSequencePlayer->OnFinished.AddDynamic(this, &ATP_ThirdPersonCharacter::SetAnimPawnVisibility);
+						LevelSequencePlayer->Play();
+					}
+					bSequence = true;
+				}
+			}
+			bPick = !bPick;
+		}
+		else if ( bIsCreatorTravel )
+		{
+			CreatorToolTravel->SetVisibility(ESlateVisibility::Visible);
+			InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+			pc->bShowMouseCursor = true;
+			pc->SetInputMode(FInputModeGameAndUI());
+		}
+		else if ( bIsServerMainTravel && !bIsClientMainTravel )
+		{
+			CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
+			InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+			pc->bShowMouseCursor = true;
+			pc->SetInputMode(FInputModeGameAndUI());
+		}
+		else if ( !bIsServerMainTravel && bIsClientMainTravel )
+		{
+			TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
+			//InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
+			InteractUI->SetVisibility(ESlateVisibility::Collapsed);
+			pc->bShowMouseCursor = true;
+			pc->SetInputMode(FInputModeGameAndUI());
+		}
 	}
-	else if ( bIsServerMainTravel && !bIsClientMainTravel )
+	else if ( currntLevel == TEXT("SK_LoadMap") )
 	{
-		CrimeSceneTravelWidget->SetVisibility(ESlateVisibility::Visible);
-		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
+		UE_LOG(LogTemp, Warning, TEXT("끼얏아아아아아앗호오오오오오오"));
+		InteractionLoadMap();
 	}
-	else if ( !bIsServerMainTravel && bIsClientMainTravel )
-	{
-		TravelClientWidget->SetVisibility(ESlateVisibility::Visible);
-		//InteractUI->SetVisibility(ESlateVisibility::HitTestInvisible);
-		InteractUI->SetVisibility(ESlateVisibility::Collapsed);
-		pc->bShowMouseCursor = true;
-		pc->SetInputMode(FInputModeGameAndUI());
-	}
-
 }
 
 void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
@@ -853,4 +869,11 @@ void ATP_ThirdPersonCharacter::PlayPoliceSound()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), PoliceSound);
 	}
+}
+
+void ATP_ThirdPersonCharacter::InteractionLoadMap()
+{
+	auto* pc = Cast<APlayerController>(GetController());
+	interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
+	worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 }

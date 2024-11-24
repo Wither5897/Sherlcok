@@ -4,6 +4,7 @@
 #include "SK/EvidenceActorComp.h"
 #include "Kismet/KismetStringLibrary.h"
 #include "EvidenceActor.h"
+#include "Jin/AJH_WorldActor.h"
 
 // Sets default values for this component's properties
 UEvidenceActorComp::UEvidenceActorComp()
@@ -23,6 +24,7 @@ void UEvidenceActorComp::BeginPlay()
 
 	// ...
 	me = Cast<AEvidenceActor>(GetOwner());
+	worldActor = Cast<AAJH_WorldActor>(GetOwner());
 }
 
 
@@ -36,9 +38,19 @@ void UEvidenceActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 int32 UEvidenceActorComp::GetTagNum()
 {
+
 	FString tag = me->Tags[1].ToString();
 	FString num = UKismetStringLibrary::GetSubstring(tag, 0, 2);
-	
+
+	return UKismetStringLibrary::Conv_StringToInt(num);
+}
+
+int32 UEvidenceActorComp::GetWorldActorTagNum()
+{
+
+	FString tag = worldActor->Tags[1].ToString();
+	FString num = UKismetStringLibrary::GetSubstring(tag, 0, 2);
+
 	return UKismetStringLibrary::Conv_StringToInt(num);
 }
 

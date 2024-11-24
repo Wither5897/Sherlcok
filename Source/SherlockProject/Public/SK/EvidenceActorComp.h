@@ -26,6 +26,9 @@ public:
 
 	UPROPERTY()
 	class AEvidenceActor* me;
+	UPROPERTY()
+	class AAJH_WorldActor* worldActor;
 
 	int32 GetTagNum();
+	int32 GetWorldActorTagNum();
 };
