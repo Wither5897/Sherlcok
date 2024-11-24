@@ -21,15 +21,15 @@ void UAJH_LightWidget::NativeConstruct()
 
 void UAJH_LightWidget::OnMyBtn_morning()
 {
-	directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-7, 0, 0));
+	//directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-7, 0, 0));
 }
 
 void UAJH_LightWidget::OnMyBtn_lunch()
 {
-	directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-46, 0, 0));
+	//directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-46, 0, 0));
 }
 
 void UAJH_LightWidget::OnMyBtn_Dinner()
 {
-	directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-3.5, 180, 180));
+	//directionalLightActor->directionalLightComp->SetRelativeRotation(FRotator(-3.5, 180, 180));
 }
