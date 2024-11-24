@@ -13,6 +13,7 @@
 #include "SK/SaveLevelUI.h"
 #include "Jin/AJH_WorldActor.h"
 #include "Components/VerticalBox.h"
+#include "Jin/AJH_EscapeWidget.h"
 
 void UAJH_EditorToolWidget::NativeConstruct()
 {
@@ -42,22 +43,22 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Main_Btn_NextPage->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_NextPage);
 	// Character
 	Btn_Character_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Character_0);
-	Character_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Character_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Back);
 
 	// Evidence
 	Btn_Evidence_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Evidence_0);
-	Evidence_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Evidence_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Back);
 
 	// Weapon
 	Btn_Weapon_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Weapon_1);
-	Weapon_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Weapon_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Back);
 
 	// place
 	Place_Btn_Furnitures_Up_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Up_0);
 	Place_Btn_Furnitures_Up_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Up_1);
 	Place_Btn_Furnitures_Down_0->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_0);
 	Place_Btn_Furnitures_Down_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Furnitures_Down_1);
-	Place_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Place_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Back);
 
 	// Footway
 	Place_Btn_Footway_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Footway_1);
@@ -71,7 +72,7 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	Place_Btn_Station_1->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyPlace_Btn_Station_1);
 
 	// Furnitures
-	Furnitures_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyMain_Btn_Back);
+	Furnitures_Btn_Back->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyBtn_Back);
 	///////////////////////////////////////////Furnitures_Vertical///////////////////////////////////////////
 	Furnitures_Btn_Up->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Up);
 	Furnitures_Btn_Bed->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::OnMyFurnitures_Btn_Bed);
@@ -114,6 +115,11 @@ void UAJH_EditorToolWidget::NativeConstruct()
 	LevelSaveButton->OnClicked.AddDynamic(this, &UAJH_EditorToolWidget::LevelSaveButtonClicked);
 }
 
+void UAJH_EditorToolWidget::OnMyBtn_Back()
+{
+	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+}
+
 void UAJH_EditorToolWidget::OnMyMain_Btn_Character()
 {
 	EditorWidgetSwitcher->SetActiveWidgetIndex(1);
@@ -138,7 +144,8 @@ void UAJH_EditorToolWidget::OnMyMain_Btn_Place()
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_Back()
 {
-	EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+	//EditorWidgetSwitcher->SetActiveWidgetIndex(0);
+	me->EscapeWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UAJH_EditorToolWidget::OnMyMain_Btn_PrePage()

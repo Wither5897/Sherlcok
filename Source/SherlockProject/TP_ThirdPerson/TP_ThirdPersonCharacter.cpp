@@ -48,6 +48,7 @@
 #include "SK/EditOutroPlayWidget.h"
 #include "UW_Interaction.h"
 #include "Components/AudioComponent.h"
+#include "Jin/AJH_WorldActor.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -138,7 +139,7 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	//PlayerController = Cast<APlayerController>(GetController());
 
 	//ChildActor->SetVisibility(false);
-
+	currntLevel = UGameplayStatics::GetCurrentLevelName(GetWorld(), true);
 	interactionUI = CreateWidget<UKHH_InteractionWidget>(GetWorld(), interactionUIsetting);
 	//EvidenceActor = Cast<AEvidenceActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AEvidenceActor::StaticClass()));
 
@@ -345,13 +346,14 @@ void ATP_ThirdPersonCharacter::OnOffFlashLight(){
 }
 
 void ATP_ThirdPersonCharacter::PerformHighLight(){
-	if (IsLocallyControlled()){
+	if (IsLocallyControlled() && currntLevel == TEXT("case") ) {
+	UE_LOG(LogTemp, Warning, TEXT("121111"));
 		if (Comp){
 			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
 			if (EvidenceActor && EvidenceActor->StaticMesh){
 				Comp->SKUnHighlight(OutputMeshComp);
 			}
-
+			
 			if (bHit){
 				AActor* HitActor = OutHit.GetActor();
 				if (HitActor) // Actor가 nullptr이 아닌지 확인
@@ -371,6 +373,38 @@ void ATP_ThirdPersonCharacter::PerformHighLight(){
 				}
 			}
 			else{
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
+		}
+	}
+	else if ( IsLocallyControlled() && (currntLevel == TEXT("SK_LoadMap") || currntLevel == TEXT("SK_LoadMap1") ) )
+	{
+		UE_LOG(LogTemp, Warning, TEXT("끼야아아아아아아악"));
+		if ( Comp ) {
+			// 이전에 하이라이트된 오브젝트의 하이라이트를 해제
+			if ( worldActor && worldActor->MeshComp ) {
+				Comp->SKUnHighlight(OutputMeshComp);
+			}
+			
+			if ( bHit ) {
+				AActor* HitActor = OutHit.GetActor();
+				if ( HitActor ) // Actor가 nullptr이 아닌지 확인
+				{
+					worldActor = Cast<AAJH_WorldActor>(HitActor);
+					if ( worldActor ) {
+						worldActor->GetComponents<UStaticMeshComponent>(OutputMeshComp);
+
+						// OutputMeshComp가 비어있지 않고, InteractObj 태그를 가진 경우
+						if ( worldActor->ActorHasTag(TEXT("InteractObj")) && OutputMeshComp.Num() > 0 ) {
+							Comp->SKHighlight(OutputMeshComp);
+						}
+						else {
+							Comp->SKUnHighlight(OutputMeshComp);
+						}
+					}
+				}
+			}
+			else {
 				Comp->SKUnHighlight(OutputMeshComp);
 			}
 		}
