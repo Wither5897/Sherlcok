@@ -85,10 +85,10 @@ public:
 	class UUW_EditorExplain* EditorExplain;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> EditorExplainFactory;
-	UPROPERTY()
+	/*UPROPERTY()
 	class UKHH_InteractionWidget* InteractionWidget;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UUserWidget> InteractionWidgetFactor;
+	TSubclassOf<class UUserWidget> InteractionWidgetFactor;*/
 	UFUNCTION()
 	void OnExPlainBtn();
 

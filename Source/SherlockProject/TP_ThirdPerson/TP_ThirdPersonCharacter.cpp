@@ -113,7 +113,95 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 
 	Comp = CreateDefaultSubobject<UHighlightComponent>(TEXT("HighlighComp"));
 
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInteractionUIsetting(TEXT("/Game/SK/UI/SKWBP_InteractionUI.SKWBP_InteractionUI_C"));
+	if ( tempInteractionUIsetting.Succeeded() )
+	{
+		interactionUIsetting = tempInteractionUIsetting.Class;
+	}
 
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInventoryUI(TEXT("/Game/SK/UI/SKWBP_Inventory.SKWBP_Inventory_C"));
+	if ( tempInventoryUI.Succeeded() )
+	{
+		InventoryUIFactory = tempInventoryUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempNotifyUI(TEXT("/Game/KHH/UI/WBP_Notify.WBP_Notify_C"));
+	if ( tempNotifyUI.Succeeded() )
+	{
+		NotifyUI = tempNotifyUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempreportboardUI(TEXT("/Game/KHH/UI/Board/SKWBP_ReportBoard2.SKWBP_ReportBoard2_C"));
+	if ( tempreportboardUI.Succeeded() )
+	{
+		reportboardUI = tempreportboardUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempSummaryWidgetFactory(TEXT("/Game/Jin/UI/WBP_MultiSummary.WBP_MultiSummary_C"));
+	if ( tempSummaryWidgetFactory.Succeeded() )
+	{
+		SummaryWidgetFactory = tempSummaryWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempCrimeSceneTravelWidgetFactory(TEXT("/Game/Jin/UI/WBP_ServerCrimeSceneTravel.WBP_ServerCrimeSceneTravel_C"));
+	if ( tempCrimeSceneTravelWidgetFactory.Succeeded() )
+	{
+		CrimeSceneTravelWidgetFactory = tempCrimeSceneTravelWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempTravelClientWidgetFactory(TEXT("/Game/Jin/UI/WBP_ClientCrimeSceneTravel.WBP_ClientCrimeSceneTravel_C"));
+	if ( tempTravelClientWidgetFactory.Succeeded() )
+	{
+		TravelClientWidgetFactory = tempTravelClientWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempCreatorToolTravelFactory(TEXT("/Game/Jin/UI/WBP_CreatorToolTravel.WBP_CreatorToolTravel_C"));
+	if ( tempCreatorToolTravelFactory.Succeeded() )
+	{
+		CreatorToolTravelFactory = tempCreatorToolTravelFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempStatisticsUIFactory(TEXT("/Game/SK/UI/SKWBP_Statistic1.SKWBP_Statistic1_C"));
+	if ( tempStatisticsUIFactory.Succeeded() )
+	{
+		StatisticsUIFactory = tempStatisticsUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempLoadingUIFactory(TEXT("/Game/KHH/UI/WBP_loading.WBP_loading_C"));
+	if ( tempLoadingUIFactory.Succeeded() )
+	{
+		LoadingUIFactory = tempLoadingUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempOutroUIFactory(TEXT("/Game/KHH/intro/WBP_Outro1.WBP_Outro1_C"));
+	if ( tempOutroUIFactory.Succeeded() )
+	{
+		OutroUIFactory = tempOutroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditIntroUIFactory(TEXT("/Game/KHH/intro/editPlay/WBP_EditIntroPlay.WBP_EditIntroPlay_C"));
+	if ( tempEditIntroUIFactory.Succeeded() )
+	{
+		EditIntroUIFactory = tempEditIntroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditOutroUIFactory(TEXT("/Game/KHH/intro/editPlay/WBP_EditOutroPlay.WBP_EditOutroPlay_C"));
+	if ( tempEditOutroUIFactory.Succeeded() )
+	{
+		EditOutroUIFactory = tempEditOutroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInteractUIFactory(TEXT("/Game/KHH/UI/WBP_Interaction.WBP_Interaction_C"));
+	if ( tempInteractUIFactory.Succeeded() )
+	{
+		InteractUIFactory = tempInteractUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditorExplainFactory(TEXT("/Game/KHH/UI/WBP_EditorExplain.WBP_EditorExplain_C"));
+	if ( tempInteractUIFactory.Succeeded() )
+	{
+		EditorExplainFactory = tempEditorExplainFactory.Class;
+	}
 
 	ConstructorHelpers::FObjectFinder<USoundWave> MainSoundObj(TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
 	if ( MainSoundObj.Succeeded() )
@@ -161,6 +249,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if (InventoryUI){
 		InventoryUI->AddToViewport();
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to create interactionUI widget."));
 	}
 
 	Notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NotifyUI));
