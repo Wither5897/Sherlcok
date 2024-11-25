@@ -6,9 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "AJH_LightWidget.generated.h"
 
-/**
- * 
- */
+
+ 
 UCLASS()
 class SHERLOCKPROJECT_API UAJH_LightWidget : public UUserWidget
 {

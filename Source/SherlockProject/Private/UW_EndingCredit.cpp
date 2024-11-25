@@ -23,7 +23,9 @@ void UUW_EndingCredit::NativeConstruct()
 	{
 		return;
 	}
-	int32 MostVotedIndex = me->StatisticsUI->CalcSuspectRank();
+	int32 MostVotedIndex = 0;
+
+	//me->StatisticsUI->CalcSuspectRank();
 
 	if (jobImageTexture.IsValidIndex(MostVotedIndex) && jobString.IsValidIndex(MostVotedIndex))
 	{
