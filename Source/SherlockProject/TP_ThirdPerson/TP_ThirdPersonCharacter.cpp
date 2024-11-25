@@ -133,6 +133,8 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 
 	AttackSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/AttackSound.AttackSound"));
 	WindSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/skip_wind.skip_wind"));
+	
+	OutroSound = LoadObject<USoundWave>(nullptr, TEXT("/Game/KHH/Sound/Outro_sound.Outro_sound"));
 
 }
 
@@ -852,13 +854,12 @@ void ATP_ThirdPersonCharacter::PlayMapSound()
 	
 	if ( CurrentLevelName == "Main" && MainSound )
 	{
-		UAudioComponent* SoundComp = UGameplayStatics::SpawnSound2D(GetWorld(), MainSound);
-		SoundComp->Stop();
-		//UGameplayStatics::PlaySound2D(GetWorld(), MainSound);
+		SoundComp = UGameplayStatics::SpawnSound2D(GetWorld(), MainSound);
+		// SoundComp->Stop();
 	}
 	else if ( CurrentLevelName == "Case" && CaseSound )
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), CaseSound);
+		SoundComp = UGameplayStatics::SpawnSound2D(GetWorld(), CaseSound);
 	}
 } 
 

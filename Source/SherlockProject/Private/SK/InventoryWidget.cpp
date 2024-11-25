@@ -10,8 +10,10 @@
 #include "Components/MultiLineEditableText.h"
 #include "Components/Image.h"
 #include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include "Components/AudioComponent.h"
 #include "Engine/Engine.h"
 #include "Jin/AJH_SummaryWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "SK/MultiPlayerState.h"
 #include "SK/NoteItemWidget.h"
 
@@ -268,6 +270,8 @@ void UInventoryWidget::ResetButtonClicked(){
 
 void UInventoryWidget::CompleteButtonClicked(){
 	SetVisibility(ESlateVisibility::Hidden);
+	me->SoundComp->Stop();
+	me->SoundComp = UGameplayStatics::SpawnSound2D(GetWorld(), me->OutroSound);
 	me->SummaryWidget->SetVisibility(ESlateVisibility::Visible);
 }
 

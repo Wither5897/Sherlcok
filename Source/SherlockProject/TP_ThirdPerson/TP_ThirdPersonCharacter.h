@@ -298,6 +298,9 @@ public:
 	
 	//============================================
 
+	UPROPERTY()
+	UAudioComponent* SoundComp;
+
 	UFUNCTION()
 	void PlayInventorySound();
 	
@@ -322,6 +325,9 @@ public:
 	UPROPERTY()
 	class USoundWave* PaperSound;
 
+	UPROPERTY()
+	USoundWave* OutroSound;
+
 	//==========================notify Sound==============
 
 	UPROPERTY()
@@ -335,7 +341,7 @@ public:
 	
 	UFUNCTION()
 	void PlayPoliceSound();
-
+	
 	// =======================sequencer Sound=============
 	
 	UPROPERTY()
