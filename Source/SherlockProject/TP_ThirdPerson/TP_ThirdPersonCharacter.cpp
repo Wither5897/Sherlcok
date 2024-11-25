@@ -38,6 +38,8 @@
 // 에디터 전용 작업 수행
 #endif
 #include "LevelSequencePlayer.h"
+#include "SherlockHUD.h"
+#include "SherlockPlayerController.h"
 #include "TP_ThirdPersonGameMode.h"
 #include "Sound/SoundWave.h"
 #include "UObject/ConstructorHelpers.h"
@@ -50,6 +52,7 @@
 #include "Components/AudioComponent.h"
 #include "Jin/AJH_WorldActor.h"
 #include "UW_EditorExplain.h"
+#include "UW_Main.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -481,6 +484,14 @@ void ATP_ThirdPersonCharacter::Interaction(){
 							AnimPawn->SetActorHiddenInGame(false);
 						}
 						LevelSequencePlayer->OnFinished.AddDynamic(this, &ATP_ThirdPersonCharacter::SetAnimPawnVisibility);
+						
+						pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+						if(pc){
+							auto* MyHUD = Cast<ASherlockHUD>(pc->GetHUD());
+							if(MyHUD){
+								MyHUD->MainUIObject->SetVisibility(ESlateVisibility::Hidden);
+							}
+						}
 
 						PlayWindSound();
 						GetWorld()->GetTimerManager().SetTimer(AttackSoundTimerHandle, this, &ATP_ThirdPersonCharacter::PlayAttackSound, 3.3f, false);
@@ -524,6 +535,13 @@ void ATP_ThirdPersonCharacter::Interaction(){
 
 void ATP_ThirdPersonCharacter::SetAnimPawnVisibility(){
 	AnimPawn->SetActorHiddenInGame(true);
+	auto* pc = Cast<ASherlockPlayerController>(GetWorld()->GetFirstPlayerController());
+	if(pc){
+		auto* MyHUD = Cast<ASherlockHUD>(pc->GetHUD());
+		if(MyHUD){
+			MyHUD->MainUIObject->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
 }
 
 void ATP_ThirdPersonCharacter::UpdatePlayerCollectionPercentage(){
