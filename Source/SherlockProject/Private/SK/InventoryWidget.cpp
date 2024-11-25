@@ -81,11 +81,11 @@ void UInventoryWidget::ShowEvidenceButtonClicked(){
 	}
 	FWidgetTransform NewTransform;
 	NewTransform.Angle = 90;
-	NewTransform.Translation = FVector2D(20, 0);
+	NewTransform.Translation = FVector2D(12.5f, 0);
 	ShowEvidenceButton->SetRenderTransform(NewTransform);
 	EvidenceButtonBackground->SetRenderTransform(NewTransform);
 
-	NewTransform.Translation = FVector2D(-20, 0);
+	NewTransform.Translation = FVector2D(-12.5f, 0);
 	ShowNoteButton->SetRenderTransform(NewTransform);
 	NoteButtonBackground->SetRenderTransform(NewTransform);
 
@@ -101,11 +101,11 @@ void UInventoryWidget::ShowNoteButtonClicked(){
 	}
 	FWidgetTransform NewTransform;
 	NewTransform.Angle = 90;
-	NewTransform.Translation = FVector2D(20, 0);
+	NewTransform.Translation = FVector2D(12.5f, 0);
 	ShowNoteButton->SetRenderTransform(NewTransform);
 	NoteButtonBackground->SetRenderTransform(NewTransform);
 
-	NewTransform.Translation = FVector2D(-20, 0);
+	NewTransform.Translation = FVector2D(-12.5f, 0);
 	ShowEvidenceButton->SetRenderTransform(NewTransform);
 	EvidenceButtonBackground->SetRenderTransform(NewTransform);
 
