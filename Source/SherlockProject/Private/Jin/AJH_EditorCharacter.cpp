@@ -18,6 +18,7 @@
 #include "Components/Button.h"
 #include "Jin/AJH_LightWidget.h"
 #include "Jin/AJH_EditorPlayerController.h"
+#include "Jin/AJH_CompletedWidget.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -77,6 +78,8 @@ void AAJH_EditorCharacter::BeginPlay()
 	{
 		LightWidget->AddToViewport();
 	}
+	
+	
 	
 	/*ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
 	if ( ExPlainBtnWidget )
