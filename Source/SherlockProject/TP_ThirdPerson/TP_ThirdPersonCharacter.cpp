@@ -431,7 +431,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
     auto* pc = Cast<APlayerController>(GetController());
 	if ( currntLevel == TEXT("case") || currntLevel == TEXT("Main") )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("우우우우우우우우우우우우웅"));
+		// UE_LOG(LogTemp, Warning, TEXT("우우우우우우우우우우우우웅"));
 		if (!interactionUI || !pc){
 			return;
 		}
@@ -526,7 +526,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
 			pc->SetInputMode(FInputModeGameAndUI());
 		}
 	}
-	else if ( currntLevel == TEXT("SK_LoadMap") )
+	else if ( currntLevel == TEXT("SK_LoadMap") || currntLevel == TEXT("SK_LoadMap1") )
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("끼얏아아아아아앗호오오오오오오"));
 		InteractionLoadMap();
@@ -902,7 +902,36 @@ void ATP_ThirdPersonCharacter::InteractionLoadMap()
 	auto* pc = Cast<APlayerController>(GetController());
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *worldActor->ExplainText);
+		worldActor = Cast<AAJH_WorldActor>(OutHit.GetActor());
+		if ( worldActor && interactionUI ) {
+			// 데이터를 가져와서 위젯에 설정
+			FString ExplainText1 = worldActor->ExplainText;
+			FString ExplainText2 = worldActor->InteractionText;
+			FString ExplainText3 = ""; // 필요하면 다른 데이터를 추가
+
+			interactionUI->SetExplainText(
+				FText::FromString(ExplainText1),
+				FText::FromString(ExplainText2),
+				FText::FromString(ExplainText3)
+			);
+
+			// 위젯을 화면에 표시
+			interactionUI->SetVisibility(ESlateVisibility::Visible);
+			if ( bIsWorldActorInteraction )
+			{
+				interactionUI->SetVisibility(ESlateVisibility::Collapsed);
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				pc->SetInputMode(FInputModeGameOnly());
+				bIsWorldActorInteraction = false;
+			}
+			else
+			{
+				pc->SetInputMode(FInputModeGameAndUI());
+				GetCharacterMovement()->DisableMovement();
+				bIsWorldActorInteraction = true;
+			}
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *worldActor->ExplainText);
+		}
 	}
 	//interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
 	//worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
