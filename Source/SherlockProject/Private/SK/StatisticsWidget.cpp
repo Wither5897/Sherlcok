@@ -228,7 +228,7 @@ void UStatisticsWidget::OnClickedExit(){
 	pc->SetShowMouseCursor(false);
 	pc->SetInputMode(FInputModeGameOnly());
 	FTimerHandle handle;
-	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::DisplaySingleReportUI, 9, false);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UStatisticsWidget::DisplaySingleReportUI, 13, false);
 }
 
 void UStatisticsWidget::DisplaySingleReportUI()
