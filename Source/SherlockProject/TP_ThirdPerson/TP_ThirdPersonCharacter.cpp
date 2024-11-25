@@ -515,7 +515,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
 	}
 	else if ( currntLevel == TEXT("SK_LoadMap") )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("끼얏아아아아아앗호오오오오오오"));
+		//UE_LOG(LogTemp, Warning, TEXT("끼얏아아아아아앗호오오오오오오"));
 		InteractionLoadMap();
 	}
 }
@@ -881,8 +881,12 @@ void ATP_ThirdPersonCharacter::PlayPoliceSound()
 void ATP_ThirdPersonCharacter::InteractionLoadMap()
 {
 	auto* pc = Cast<APlayerController>(GetController());
-	interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
-	worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *worldActor->ExplainText);
+	}
+	//interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
+	//worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void ATP_ThirdPersonCharacter::PlayAttackSound()
