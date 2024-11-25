@@ -312,6 +312,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ActorData.boolean = Actor->bIsInterative;
 
 		ExistingLevelData->SavedActors.Add(ActorData);
+		UE_LOG(LogTemp, Warning, TEXT("String Text: %s"), *ActorData.String);
 	}
     
 	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0)){
@@ -346,6 +347,8 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 				continue;
 			}
 			NewActor->SetActorScale3D(ActorData.Scale);
+			NewActor->ExplainText = ActorData.String; // 여기서 데이터 복원
+			UE_LOG(LogTemp, Warning, TEXT("Loading ExplainText: %s"), *ActorData.String);
 			NewActor->AddComponentByClass(UEvidenceActorComp::StaticClass(), false, FTransform(), false);
 			if(!ActorData.boolean){
 				continue;
@@ -374,6 +377,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditIntroUI->IntroFullText = CachedLevelData.IntroContextText.ToString();
 			Character->EditIntroUI->IntroTitleText = CachedLevelData.IntroTitleText;
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
+			// Character->worldActor->ExplainText = CachedLevelData.ActorText;
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 		});
 	}
