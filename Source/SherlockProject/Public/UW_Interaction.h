@@ -19,7 +19,7 @@ public:
 	virtual void NativeConstruct() override;
 
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	class UTextBlock* interact;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
