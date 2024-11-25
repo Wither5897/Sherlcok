@@ -220,12 +220,12 @@ void AAJH_WorldActor::BeginPlay()
 		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	InteractionWidget = Cast<UKHH_InteractionWidget>(CreateWidget(GetWorld(), InteractionWidgetFactor));
+	/*InteractionWidget = Cast<UKHH_InteractionWidget>(CreateWidget(GetWorld(), InteractionWidgetFactor));
 	if ( InteractionWidget )
 	{
 		InteractionWidget->AddToViewport();
 		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	}*/
 
 }
 

@@ -113,7 +113,95 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter(){
 
 	Comp = CreateDefaultSubobject<UHighlightComponent>(TEXT("HighlighComp"));
 
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInteractionUIsetting(TEXT("/Game/SK/UI/SKWBP_InteractionUI.SKWBP_InteractionUI_C"));
+	if ( tempInteractionUIsetting.Succeeded() )
+	{
+		interactionUIsetting = tempInteractionUIsetting.Class;
+	}
 
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInventoryUI(TEXT("/Game/SK/UI/SKWBP_Inventory.SKWBP_Inventory_C"));
+	if ( tempInventoryUI.Succeeded() )
+	{
+		InventoryUIFactory = tempInventoryUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempNotifyUI(TEXT("/Game/KHH/UI/WBP_Notify.WBP_Notify_C"));
+	if ( tempNotifyUI.Succeeded() )
+	{
+		NotifyUI = tempNotifyUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempreportboardUI(TEXT("/Game/KHH/UI/Board/SKWBP_ReportBoard2.SKWBP_ReportBoard2_C"));
+	if ( tempreportboardUI.Succeeded() )
+	{
+		reportboardUI = tempreportboardUI.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempSummaryWidgetFactory(TEXT("/Game/Jin/UI/WBP_MultiSummary.WBP_MultiSummary_C"));
+	if ( tempSummaryWidgetFactory.Succeeded() )
+	{
+		SummaryWidgetFactory = tempSummaryWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempCrimeSceneTravelWidgetFactory(TEXT("/Game/Jin/UI/WBP_ServerCrimeSceneTravel.WBP_ServerCrimeSceneTravel_C"));
+	if ( tempCrimeSceneTravelWidgetFactory.Succeeded() )
+	{
+		CrimeSceneTravelWidgetFactory = tempCrimeSceneTravelWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempTravelClientWidgetFactory(TEXT("/Game/Jin/UI/WBP_ClientCrimeSceneTravel.WBP_ClientCrimeSceneTravel_C"));
+	if ( tempTravelClientWidgetFactory.Succeeded() )
+	{
+		TravelClientWidgetFactory = tempTravelClientWidgetFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempCreatorToolTravelFactory(TEXT("/Game/Jin/UI/WBP_CreatorToolTravel.WBP_CreatorToolTravel_C"));
+	if ( tempCreatorToolTravelFactory.Succeeded() )
+	{
+		CreatorToolTravelFactory = tempCreatorToolTravelFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempStatisticsUIFactory(TEXT("/Game/SK/UI/SKWBP_Statistic1.SKWBP_Statistic1_C"));
+	if ( tempStatisticsUIFactory.Succeeded() )
+	{
+		StatisticsUIFactory = tempStatisticsUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempLoadingUIFactory(TEXT("/Game/KHH/UI/WBP_loading.WBP_loading_C"));
+	if ( tempLoadingUIFactory.Succeeded() )
+	{
+		LoadingUIFactory = tempLoadingUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempOutroUIFactory(TEXT("/Game/KHH/intro/WBP_Outro1.WBP_Outro1_C"));
+	if ( tempOutroUIFactory.Succeeded() )
+	{
+		OutroUIFactory = tempOutroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditIntroUIFactory(TEXT("/Game/KHH/intro/editPlay/WBP_EditIntroPlay.WBP_EditIntroPlay_C"));
+	if ( tempEditIntroUIFactory.Succeeded() )
+	{
+		EditIntroUIFactory = tempEditIntroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditOutroUIFactory(TEXT("/Game/KHH/intro/editPlay/WBP_EditOutroPlay.WBP_EditOutroPlay_C"));
+	if ( tempEditOutroUIFactory.Succeeded() )
+	{
+		EditOutroUIFactory = tempEditOutroUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempInteractUIFactory(TEXT("/Game/KHH/UI/WBP_Interaction.WBP_Interaction_C"));
+	if ( tempInteractUIFactory.Succeeded() )
+	{
+		InteractUIFactory = tempInteractUIFactory.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> tempEditorExplainFactory(TEXT("/Game/KHH/UI/WBP_EditorExplain.WBP_EditorExplain_C"));
+	if ( tempInteractUIFactory.Succeeded() )
+	{
+		EditorExplainFactory = tempEditorExplainFactory.Class;
+	}
 
 	ConstructorHelpers::FObjectFinder<USoundWave> MainSoundObj(TEXT("/Game/KHH/Sound/Main_scene.Main_scene"));
 	if ( MainSoundObj.Succeeded() )
@@ -161,6 +249,10 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 	if (InventoryUI){
 		InventoryUI->AddToViewport();
 		InventoryUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to create interactionUI widget."));
 	}
 
 	Notify = Cast<UUW_Notify>(CreateWidget(GetWorld(), NotifyUI));
@@ -431,7 +523,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
     auto* pc = Cast<APlayerController>(GetController());
 	if ( currntLevel == TEXT("case") || currntLevel == TEXT("Main") )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("우우우우우우우우우우우우웅"));
+		// UE_LOG(LogTemp, Warning, TEXT("우우우우우우우우우우우우웅"));
 		if (!interactionUI || !pc){
 			return;
 		}
@@ -526,7 +618,7 @@ void ATP_ThirdPersonCharacter::Interaction(){
 			pc->SetInputMode(FInputModeGameAndUI());
 		}
 	}
-	else if ( currntLevel == TEXT("SK_LoadMap") )
+	else if ( currntLevel == TEXT("SK_LoadMap") || currntLevel == TEXT("SK_LoadMap1") )
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("끼얏아아아아아앗호오오오오오오"));
 		InteractionLoadMap();
@@ -902,7 +994,36 @@ void ATP_ThirdPersonCharacter::InteractionLoadMap()
 	auto* pc = Cast<APlayerController>(GetController());
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *worldActor->ExplainText);
+		worldActor = Cast<AAJH_WorldActor>(OutHit.GetActor());
+		if ( worldActor && interactionUI ) {
+			// 데이터를 가져와서 위젯에 설정
+			FString ExplainText1 = worldActor->ExplainText;
+			FString ExplainText2 = worldActor->InteractionText;
+			FString ExplainText3 = ""; // 필요하면 다른 데이터를 추가
+
+			interactionUI->SetExplainText(
+				FText::FromString(ExplainText1),
+				FText::FromString(ExplainText2),
+				FText::FromString(ExplainText3)
+			);
+
+			// 위젯을 화면에 표시
+			interactionUI->SetVisibility(ESlateVisibility::Visible);
+			if ( bIsWorldActorInteraction )
+			{
+				interactionUI->SetVisibility(ESlateVisibility::Collapsed);
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				pc->SetInputMode(FInputModeGameOnly());
+				bIsWorldActorInteraction = false;
+			}
+			else
+			{
+				pc->SetInputMode(FInputModeGameAndUI());
+				GetCharacterMovement()->DisableMovement();
+				bIsWorldActorInteraction = true;
+			}
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *worldActor->ExplainText);
+		}
 	}
 	//interactionUI->Explain_1->SetText(FText::FromString(worldActor->InteractionText));
 	//worldActor->InteractionWidget->SetVisibility(ESlateVisibility::Visible);
