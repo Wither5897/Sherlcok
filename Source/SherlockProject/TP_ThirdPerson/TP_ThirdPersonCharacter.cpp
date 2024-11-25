@@ -31,7 +31,6 @@
 #include "Jin/AJH_CrimeSceneTravelWidget.h"
 #include "Jin/AJH_TravelClientWidget.h"
 #include "SK/NoteItemWidget.h"
-#include "Jin/AJH_CompletedWidget.h"
 
 // 에디터 전용 코드 분리
 #if WITH_EDITOR
