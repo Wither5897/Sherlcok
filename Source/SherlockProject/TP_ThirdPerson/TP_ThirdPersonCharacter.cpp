@@ -38,6 +38,8 @@
 // 에디터 전용 작업 수행
 #endif
 #include "LevelSequencePlayer.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "SherlockHUD.h"
 #include "SherlockPlayerController.h"
 #include "TP_ThirdPersonGameMode.h"
@@ -53,6 +55,11 @@
 #include "Jin/AJH_WorldActor.h"
 #include "UW_EditorExplain.h"
 #include "UW_Main.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "TimerManager.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Materials/Material.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -269,6 +276,35 @@ void ATP_ThirdPersonCharacter::Tick(float DeltaTime){
 
 	PerformLineTrace();
 	PerformHighLight();
+
+	FString CurrentMapName = GetWorld()->GetMapName();
+	if(!CurrentMapName.Contains(TEXT("Case"))){
+		if(bIsNavigationActive){
+			ClearNiagaraEffects();
+			bIsNavigationActive = false;
+		}
+		return;
+	}
+
+	FVector PlayerLocation = GetActorLocation();
+	if(!bIsNavigationActive || !PlayerLocation.Equals(Startlocation, 10.f)){
+		Startlocation = PlayerLocation;
+
+		TArray<FVector> PathPoints;
+		CalculateNavigationPath(MyEndLocation, PathPoints);
+
+		if(PathPoints.Num() > 0){
+			ClearNiagaraEffects();
+			VisualizePathWithNiagara(PathPoints);
+			bIsNavigationActive = true;
+		}
+	}
+
+	if (bIsNavigationActive && FVector::Dist(PlayerLocation, MyEndLocation) <= 20.f) {
+		ClearNiagaraEffects(); // 경로 비활성화
+		bIsNavigationActive = false;
+		UE_LOG(LogTemp, Warning, TEXT("Reached EndLocation. Navigation deactivated."));
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -954,3 +990,38 @@ void ATP_ThirdPersonCharacter::PlayWindSound()
 		UGameplayStatics::PlaySound2D(GetWorld(), WindSound);
 	}
 }
+
+void ATP_ThirdPersonCharacter::CalculateNavigationPath(FVector EndLocation, TArray<FVector>& OutPathPoints){
+	UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+
+	if(!NavSys){
+		return;
+	}
+
+	FVector StartLocation = GetActorLocation();
+	UNavigationPath* NavPath = NavSys->FindPathToLocationSynchronously(GetWorld(), Startlocation, EndLocation);
+	if(NavPath && NavPath->IsValid()){
+		OutPathPoints = NavPath->PathPoints;
+	}
+}
+
+void ATP_ThirdPersonCharacter::VisualizePathWithNiagara(TArray<FVector> OutPathPoints){
+	for(const FVector& Point : OutPathPoints){
+		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NavigationEffect, Point);
+		if (NiagaraComp) {
+			ActiveNiagaraComponents.Add(NiagaraComp);
+			UE_LOG(LogTemp, Warning, TEXT("Niagara Effect Spawned at %s"), *Point.ToString());
+		}
+	}
+}
+
+void ATP_ThirdPersonCharacter::ClearNiagaraEffects(){
+	for (UNiagaraComponent* NiagaraComp : ActiveNiagaraComponents) {
+		if (NiagaraComp) {
+			NiagaraComp->DestroyComponent();
+		}
+	}
+	ActiveNiagaraComponents.Empty();
+	UE_LOG(LogTemp, Warning, TEXT("Cleared all active Niagara effects."));
+}
+

@@ -356,8 +356,7 @@ public:
 	void PlayWindSound(); 
 
 	FTimerHandle AttackSoundTimerHandle;
-
-
+	
 	// ==========================Travel=====================
 	bool bIsCreatorTravel = false;
 	bool bIsServerMainTravel = false;
@@ -370,5 +369,28 @@ public:
 
 	bool bIsWorldActorInteraction = false;
 
+	// Level Navigation
+
+	// UPROPERTY()
+	// TArray<FVector>& OutPathPoints;
+
+	UPROPERTY()
+	class UNiagaraSystem* NavigationEffect;
+
+	TArray<UNiagaraComponent*> ActiveNiagaraComponents;
+	
+	bool bIsNavigationActive = true;
+
+	UPROPERTY(EditDefaultsOnly)
+	FVector MyEndLocation = FVector(-200.f, 0, 200.f);
+	
+	UFUNCTION()
+	void CalculateNavigationPath(FVector EndLocation, TArray<FVector>& OutPathPoints);
+	
+	UFUNCTION()
+	void VisualizePathWithNiagara(TArray<FVector> OutPathPoints);
+
+	UFUNCTION()
+	void ClearNiagaraEffects();
 };
 
