@@ -30,6 +30,7 @@
 #if WITH_EDITOR
 #include "EditorDirectories.h"
 #endif
+#include "Jin/AJH_Sun.h"
 
 void UAJH_SherlockGameInstance::Init()
 {
@@ -287,6 +288,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
 		
 		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created"));
+		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created with HeightSun: %f"), HeightSun);
 	}
 	else{
 		// 기존 레벨 데이터 업데이트
@@ -297,12 +299,14 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->HeightSun = HeightSun;
 		
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
+		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated with HeightSun: %f"), HeightSun);
 	}
 
 	// 저장된 텍스트 로그 출력
 	UE_LOG(LogTemp, Warning, TEXT("Intro Title: %s"), *ExistingLevelData->IntroTitleText.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("Intro Context: %s"), *ExistingLevelData->IntroContextText.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("Outro Text: %s"), *ExistingLevelData->OutroText.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("HeightSun : %f"), ExistingLevelData->HeightSun);
 
 	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
 		AAJH_WorldActor* Actor = *ActorItr;
@@ -383,6 +387,18 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 		});
+
+		// Load Sun height data and apply to AAJH_Sun
+		TActorIterator<AAJH_Sun> SunIterator(GetWorld());
+		if ( SunIterator ) {
+			AAJH_Sun* SunActor = *SunIterator;
+			SunActor->height_Sun = LevelData->HeightSun; // 불러온 데이터 적용
+			UE_LOG(LogTemp, Warning, TEXT("Sun Height Applied: %f"), LevelData->HeightSun);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("No Sun Actor found in the level."));
+		}
+
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
