@@ -152,6 +152,7 @@ public:
 	UPROPERTY()
 	class UUW_EditorExplain* EditorExplain;
 
+
 	// 여기에 아웃트로 UI의 애니메이션을 만들어 둔 뒤에 실행하게끔 하면 된다!
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 	UWidgetAnimation* OutroAnim;
@@ -363,12 +364,10 @@ public:
 	bool bIsServerMainTravel = false;
 	bool bIsClientMainTravel = false;
 
+
 	// ==========================LevelName==================
 	UPROPERTY()
 	FString currntLevel;
 	FString currentSaveLevel;
-
-	bool bIsWorldActorInteraction = false;
-
 };
 

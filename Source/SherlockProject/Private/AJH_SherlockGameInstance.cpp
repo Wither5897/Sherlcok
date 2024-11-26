@@ -377,6 +377,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditIntroUI->IntroFullText = CachedLevelData.IntroContextText.ToString();
 			Character->EditIntroUI->IntroTitleText = CachedLevelData.IntroTitleText;
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
+			// Character->worldActor->ExplainText = CachedLevelData.ActorText;
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 		});
 	}

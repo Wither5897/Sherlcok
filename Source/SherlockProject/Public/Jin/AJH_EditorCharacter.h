@@ -125,7 +125,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> LightWidgetFactory;
 
-
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* HeavystompSound;
 

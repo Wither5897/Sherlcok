@@ -78,8 +78,6 @@ void AAJH_EditorCharacter::BeginPlay()
 		LightWidget->AddToViewport();
 	}
 	
-	
-	
 	/*ExPlainBtnWidget = Cast<UAJH_ExPlainBtnWidget>(CreateWidget(GetWorld(), ExPlainBtnFactory));
 	if ( ExPlainBtnWidget )
 	{
