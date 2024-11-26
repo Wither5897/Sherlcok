@@ -34,5 +34,8 @@ public:
 	class AAJH_DirectionalLight* directionalLightActor;
 	UPROPERTY()
 	class AAJH_EditorCharacter* player;
-
+	UPROPERTY()
+	class AAJH_Sun* HeightSun;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AAJH_Sun> HeightSunFactory;
 };
