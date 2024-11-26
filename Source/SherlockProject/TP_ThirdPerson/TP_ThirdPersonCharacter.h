@@ -246,7 +246,7 @@ public:
 	bool isNotify3Checked = false;
 	bool isNotify4Checked = false;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class ABoard* Board;
 
 	UFUNCTION()

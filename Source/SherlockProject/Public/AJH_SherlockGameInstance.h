@@ -77,6 +77,12 @@ public:
 	void LoadLevel(FString LevelName);
 
 	UFUNCTION(BlueprintCallable)
+	void SaveSimulationSlot();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadSimulationSlot();
+	
+	UFUNCTION(BlueprintCallable)
 	void OnCharacterReady(ATP_ThirdPersonCharacter* Character);
 	
 	bool bShouldLoadLevel = false;

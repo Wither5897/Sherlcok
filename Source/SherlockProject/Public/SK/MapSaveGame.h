@@ -83,4 +83,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	TArray<FLevelSaveData> DataList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	TArray<FActorSaveData> SimulationActors;
 };

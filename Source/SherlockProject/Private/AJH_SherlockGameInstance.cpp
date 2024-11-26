@@ -12,9 +12,11 @@
 #include "SherlockProject.h"
 #include "Online/OnlineSessionNames.h"
 #include "string"
+#include "TimerManager.h"
 #include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
 #include "Jin/AJH_UserNameTagWidget.h"
 #include "Components/WidgetComponent.h"
+#include "Engine/Engine.h"
 #include "GameFramework/Character.h"
 #include "Jin/AJH_UserNameWidgetComponent.h"
 #include "Jin/AJH_WorldActor.h"
@@ -383,6 +385,66 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
 	}
+}
+
+void UAJH_SherlockGameInstance::SaveSimulationSlot(){
+	FString SlotName = TEXT("SimulationSlot");
+	UE_LOG(LogTemp, Warning, TEXT("Saving Simulation Data to Slot: %s"), *SlotName);
+
+	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
+	if (!SaveGameInstance) {
+		UE_LOG(LogTemp, Error, TEXT("Failed to create SaveGame instance for simulation slot"));
+		return;
+	}
+
+	// 액터 데이터를 저장
+	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+		AAJH_WorldActor* Actor = *ActorItr;
+
+		FActorSaveData ActorData;
+		ActorData.Location = Actor->GetActorLocation();
+		ActorData.Rotation = Actor->GetActorRotation();
+		ActorData.Scale = Actor->GetActorScale3D();
+		ActorData.ActorClass = Actor->GetClass();
+		ActorData.String = Actor->ExplainText;
+		ActorData.boolean = Actor->bIsInterative;
+
+		SaveGameInstance->SimulationActors.Add(ActorData);
+		UE_LOG(LogTemp, Warning, TEXT("Saved Actor: %s"), *Actor->GetName());
+	}
+
+	// 슬롯에 저장
+	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotName, 0)) {
+		UE_LOG(LogTemp, Warning, TEXT("Simulation data saved successfully"));
+	} else {
+		UE_LOG(LogTemp, Error, TEXT("Failed to save simulation data"));
+	}
+}
+
+void UAJH_SherlockGameInstance::LoadSimulationSlot(){
+	FString SlotName = TEXT("SimulationSlot");
+	UE_LOG(LogTemp, Warning, TEXT("Loading Simulation Data from Slot: %s"), *SlotName);
+
+	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+	if (!LoadGameInstance) {
+		UE_LOG(LogTemp, Warning, TEXT("No simulation data found in slot: %s"), *SlotName);
+		return;
+	}
+
+	// 저장된 액터 데이터로 복원
+	for (const FActorSaveData& ActorData : LoadGameInstance->SimulationActors) {
+		FActorSpawnParameters SpawnParams;
+		AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+		if (!NewActor) continue;
+
+		NewActor->SetActorScale3D(ActorData.Scale);
+		NewActor->ExplainText = ActorData.String;
+		NewActor->bIsInterative = ActorData.boolean;
+
+		UE_LOG(LogTemp, Warning, TEXT("Loaded Actor: %s"), *NewActor->GetName());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Simulation data loaded successfully"));
 }
 
 void UAJH_SherlockGameInstance::OnCharacterReady(ATP_ThirdPersonCharacter* Character){
