@@ -259,7 +259,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory){
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, float HeightSun){
 	UE_LOG(LogTemp, Warning, TEXT("Save Level: %s"), *LevelName);
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
@@ -282,6 +282,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		NewLevelData.IntroTitleText = IntroTitle;
 		NewLevelData.IntroContextText = IntroContext;
 		NewLevelData.OutroText = OutroStory;
+		NewLevelData.HeightSun = HeightSun;
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
 		
@@ -293,6 +294,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->IntroTitleText = IntroTitle;
 		ExistingLevelData->IntroContextText = IntroContext;
 		ExistingLevelData->OutroText = OutroStory;
+		ExistingLevelData->HeightSun = HeightSun;
 		
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
 	}

@@ -7,11 +7,13 @@
 #include "Components/DirectionalLightComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Jin/AJH_EditorCharacter.h"
+#include "Jin/AJH_Sun.h"
 
 void UAJH_LightWidget::NativeConstruct()
 {
 	// player = Cast<AAJH_EditorCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	directionalLightActor = Cast<AAJH_DirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_DirectionalLight::StaticClass()));
+	HeightSun = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
 	
 	Btn_morning->OnClicked.AddDynamic(this, &UAJH_LightWidget::OnMyBtn_morning);
 	Btn_lunch->OnClicked.AddDynamic(this, &UAJH_LightWidget::OnMyBtn_lunch);
