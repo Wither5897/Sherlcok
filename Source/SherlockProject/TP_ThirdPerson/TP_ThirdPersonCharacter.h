@@ -374,12 +374,13 @@ public:
 	// UPROPERTY()
 	// TArray<FVector>& OutPathPoints;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* NavigationEffect;
 
-	TArray<UNiagaraComponent*> ActiveNiagaraComponents;
+	UPROPERTY()
+	TArray<class UNiagaraComponent*> ActiveNiagaraComponents;
 	
-	bool bIsNavigationActive = true;
+	bool bIsNavigationActive = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	FVector MyEndLocation = FVector(-200.f, 0, 200.f);
