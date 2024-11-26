@@ -68,17 +68,21 @@ void UAJH_CrimeSceneTravelWidget::OnMyBtn_Crimefirst()
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_CrimeSecond(){
 	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
-	if (LoadGameInstance->DataList.Num() < 1){
+	if (!LoadGameInstance || LoadGameInstance->DataList.Num() < 1){
 		return;
 	}
+	SecondCrimeTitle->SetText(LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 1].IntroTitleText);
+	SecondCrimeSubtitle->SetText(LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 1].IntroContextText);
 	Switcherindex->SetActiveWidgetIndex(2);
 }
 
 void UAJH_CrimeSceneTravelWidget::OnMyBtn_CrimeThird(){
 	UGameplayStatics::PlaySound2D(GetWorld(), PaperscrollSound);
-	if (LoadGameInstance->DataList.Num() < 2){
+	if (!LoadGameInstance || LoadGameInstance->DataList.Num() < 2){
 		return;
 	}
+	ThirdCrimeTitle->SetText(LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 2].IntroTitleText);
+	ThirdCrimeSubtitle->SetText(LoadGameInstance->DataList[LoadGameInstance->DataList.Num() - 2].IntroContextText);
 	Switcherindex->SetActiveWidgetIndex(3);
 }
 

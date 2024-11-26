@@ -154,6 +154,17 @@ public:
 	UFUNCTION()
 	void OnMyAnim_Canvas_Second();
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* SecondCrimeTitle;
+	
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* SecondCrimeSubtitle;
+	
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ThirdCrimeTitle;
+	
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ThirdCrimeSubtitle;
 	
 	// 뒤로가기 버튼 이벤트 (스택 활용)
 	UPROPERTY()
