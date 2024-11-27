@@ -30,7 +30,7 @@ void USaveLevelUI::ConfirmButtonClicked(){
 	if(LevelNameEdit->GetText().IsEmpty()){
 		return;
 	}
-	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText, me->LightWidget->SKSunHeight);
+	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText);
 	SetVisibility(ESlateVisibility::Hidden);
 }
 

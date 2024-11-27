@@ -35,6 +35,8 @@ public:
 	class AAJH_DirectionalLight* directionalLightActor;
 	UPROPERTY()
 	class AAJH_EditorCharacter* player;
+	UPROPERTY()
+	class UAJH_SherlockGameInstance* gi;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class AAJH_Sun* SunActor;

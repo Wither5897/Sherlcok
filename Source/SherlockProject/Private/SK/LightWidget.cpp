@@ -3,6 +3,7 @@
 
 #include "SK/LightWidget.h"
 
+#include "AJH_SherlockGameInstance.h"
 #include "Components/Button.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Jin/AJH_DirectionalLight.h"
@@ -18,10 +19,13 @@ void ULightWidget::NativeConstruct(){
 	Btn_Dinner->OnClicked.AddDynamic(this, &ULightWidget::OnMyBtn_Dinner);
 
 	SunActor = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
+
+	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 }
 
 void ULightWidget::OnMyBtn_morning(){
 	SKSunHeight = 0.33f;
+	gi->NewSKHeight = SKSunHeight;
 	SunActor->RefreshMateiral(SKSunHeight);
 	directionalLightActor->directionalLightComp->SetIntensity(10.0f);
 	sunColor = FLinearColor(0.705882, 0.792157, 1.0f);
@@ -31,6 +35,7 @@ void ULightWidget::OnMyBtn_morning(){
 
 void ULightWidget::OnMyBtn_lunch(){
 	SKSunHeight = 1.f;
+	gi->NewSKHeight = SKSunHeight;
 	SunActor->RefreshMateiral(SKSunHeight);
 	directionalLightActor->directionalLightComp->SetIntensity(10.0f);
 	sunColor = FLinearColor(1.0f, 1.0f, 1.0f);
@@ -40,6 +45,7 @@ void ULightWidget::OnMyBtn_lunch(){
 
 void ULightWidget::OnMyBtn_Dinner(){
 	SKSunHeight = -1.f;
+	gi->NewSKHeight = SKSunHeight;
 	SunActor->RefreshMateiral(SKSunHeight);
 	directionalLightActor->directionalLightComp->SetIntensity(0.4f);
 	sunColor = FLinearColor(0.403922, 0.545098, 1.0f);

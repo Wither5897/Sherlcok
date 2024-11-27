@@ -260,7 +260,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, float Height){
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory){
 	UE_LOG(LogTemp, Warning, TEXT("Save Level: %s"), *LevelName);
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
@@ -283,7 +283,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		NewLevelData.IntroTitleText = IntroTitle;
 		NewLevelData.IntroContextText = IntroContext;
 		NewLevelData.OutroText = OutroStory;
-		NewLevelData.Height = Height;
+		NewLevelData.Height = NewSKHeight;
 
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
@@ -298,7 +298,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->IntroTitleText = IntroTitle;
 		ExistingLevelData->IntroContextText = IntroContext;
 		ExistingLevelData->OutroText = OutroStory;
-		ExistingLevelData->Height = Height;
+		ExistingLevelData->Height = NewSKHeight;
 
 		
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
@@ -389,8 +389,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 			
-			FActorSpawnParameters SpawnParams;
- 			AAJH_Sun* NewSun = GetWorld()->SpawnActor<AAJH_Sun>(AAJH_Sun::StaticClass(), FTransform(), SpawnParams);
+ 			AAJH_Sun* NewSun = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
 			NewSun->RefreshMateiral(CachedLevelData.Height);
 		});
 		auto* PlayerController = GetWorld()->GetFirstPlayerController();

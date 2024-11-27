@@ -71,7 +71,7 @@ public:
 	UMapSaveGame* LoadGameInstance;
 	
 	UFUNCTION(BlueprintCallable)
-	void SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, float Height);
+	void SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory);
 
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel(FString LevelName);
@@ -99,7 +99,8 @@ public:
 	TArray<float> PlayerCollection;
 
 	FLevelSaveData CachedLevelData;
-	
+
+	float NewSKHeight = 0.f;
 private:
 	FName mySessionName = FName("first Session");
 	TSharedPtr<class FOnlineSessionSearch> sessionSearch;	//OnlineSessionSearch 는 
