@@ -390,7 +390,7 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 			
 			FActorSpawnParameters SpawnParams;
- 			GetWorld()->SpawnActor<AAJH_Sun>(CachedLevelData.MySun->GetClass(), CachedLevelData.MySun->GetActorTransform(), SpawnParams);
+ 			// GetWorld()->SpawnActor<AAJH_Sun>(CachedLevelData.MySun->GetClass(), CachedLevelData.MySun->GetActorTransform(), SpawnParams);
 		});
 		auto* PlayerController = GetWorld()->GetFirstPlayerController();
 		auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());

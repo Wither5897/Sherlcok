@@ -160,6 +160,12 @@ public:
 	class AAJH_WorldActor* worldActor;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AAJH_WorldActor> worldActorFatory;
+
+	UPROPERTY()
+	class UKHH_InteractionWidget* EditorInteractionWidget;
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<class UUserWidget> EditorInteractionWidgetFatory;
+
 	
 	//====================================================================================================
 	
