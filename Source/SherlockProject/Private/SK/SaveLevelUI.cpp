@@ -29,7 +29,7 @@ void USaveLevelUI::ConfirmButtonClicked(){
 	if(LevelNameEdit->GetText().IsEmpty()){
 		return;
 	}
-	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText, me->LightWidget->HeightSun->height_Sun);
+	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText, me->LightWidget->SunActor);
 	SetVisibility(ESlateVisibility::Hidden);
 }
 
