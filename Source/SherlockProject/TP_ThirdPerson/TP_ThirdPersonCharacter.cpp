@@ -252,6 +252,13 @@ void ATP_ThirdPersonCharacter::BeginPlay(){
 		EditorExplain->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
+	EditorInteractionWidget = Cast<UKHH_InteractionWidget>(CreateWidget(GetWorld(), EditorInteractionWidgetFatory));
+	if ( EditorInteractionWidget )
+	{
+		EditorInteractionWidget->AddToViewport();
+		EditorInteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
 
 	gi = Cast<UAJH_SherlockGameInstance>(GetGameInstance());
 	ps = GetPlayerState();
@@ -912,23 +919,23 @@ void ATP_ThirdPersonCharacter::InteractionLoadMap()
 	if ( bHit && OutHit.GetActor()->ActorHasTag(TEXT("InteractObj")))
 	{
 		worldActor = Cast<AAJH_WorldActor>(OutHit.GetActor());
-		if ( worldActor && interactionUI ) {
+		if ( worldActor && EditorInteractionWidget ) {
 			// 데이터를 가져와서 위젯에 설정
 			FString ExplainText1 = worldActor->ExplainText;
 			FString ExplainText2 = worldActor->InteractionText;
 			FString ExplainText3 = ""; // 필요하면 다른 데이터를 추가
 
-			interactionUI->SetExplainText(
+			EditorInteractionWidget->SetExplainText(
 				FText::FromString(ExplainText1),
 				FText::FromString(ExplainText2),
 				FText::FromString(ExplainText3)
 			);
 
 			// 위젯을 화면에 표시
-			interactionUI->SetVisibility(ESlateVisibility::Visible);
+			EditorInteractionWidget->SetVisibility(ESlateVisibility::Visible);
 			if ( bIsWorldActorInteraction )
 			{
-				interactionUI->SetVisibility(ESlateVisibility::Collapsed);
+				EditorInteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 				pc->SetInputMode(FInputModeGameOnly());
 				bIsWorldActorInteraction = false;
