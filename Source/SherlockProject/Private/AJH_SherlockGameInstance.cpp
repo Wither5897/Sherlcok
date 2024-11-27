@@ -260,7 +260,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, AAJH_Sun* Sun){
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, float Height){
 	UE_LOG(LogTemp, Warning, TEXT("Save Level: %s"), *LevelName);
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
@@ -283,13 +283,13 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		NewLevelData.IntroTitleText = IntroTitle;
 		NewLevelData.IntroContextText = IntroContext;
 		NewLevelData.OutroText = OutroStory;
-		NewLevelData.MySun = Sun;
+		NewLevelData.Height = Height;
 
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
 		
 		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created"));
-		UE_LOG(LogTemp, Warning, TEXT("New Level Data MorningSun : %s"), *NewLevelData.MySun->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("New Level Data MorningSun : %1f"), NewLevelData.Height);
 
 	}
 	else{
@@ -298,11 +298,11 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->IntroTitleText = IntroTitle;
 		ExistingLevelData->IntroContextText = IntroContext;
 		ExistingLevelData->OutroText = OutroStory;
-		ExistingLevelData->MySun = Sun;
+		ExistingLevelData->Height = Height;
 
 		
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
-		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data MorningSun Updated : %s"), *ExistingLevelData->MySun->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data MorningSun Updated : %1f"), ExistingLevelData->Height);
 	}
 
 	// 저장된 텍스트 로그 출력
@@ -390,7 +390,8 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
 			
 			FActorSpawnParameters SpawnParams;
- 			GetWorld()->SpawnActor<AAJH_Sun>(CachedLevelData.MySun->GetClass(), CachedLevelData.MySun->GetActorTransform(), SpawnParams);
+ 			AAJH_Sun* NewSun = GetWorld()->SpawnActor<AAJH_Sun>(AAJH_Sun::StaticClass(), FTransform(), SpawnParams);
+			NewSun->RefreshMateiral(CachedLevelData.Height);
 		});
 		auto* PlayerController = GetWorld()->GetFirstPlayerController();
 		auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());

@@ -26,4 +26,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Override settings", meta = (ClampMin = "-1.0", ClampMax = "1.0", SliderMin = "-1.0", SliderMax = "1.0"))
 	float height_Sun = 0.33;
 
+	UFUNCTION(BlueprintNativeEvent)
+	void RefreshMateiral(float Height);
 };

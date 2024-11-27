@@ -12,6 +12,7 @@
 #include "Jin/AJH_EditorToolWidget.h"
 #include "Jin/AJH_LightWidget.h"
 #include "Jin/AJH_Sun.h"
+#include "SK/LightWidget.h"
 
 void USaveLevelUI::NativeConstruct(){
 	Super::NativeConstruct();
@@ -29,7 +30,7 @@ void USaveLevelUI::ConfirmButtonClicked(){
 	if(LevelNameEdit->GetText().IsEmpty()){
 		return;
 	}
-	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText, me->LightWidget->SunActor);
+	gi->SaveLevel(LevelNameEdit->GetText().ToString(), me->EditorWidget->SaveIntroUI->TitleText, me->EditorWidget->SaveIntroUI->SubTitleText, me->EditorWidget->SaveOutroUI->StoryText, me->LightWidget->SKSunHeight);
 	SetVisibility(ESlateVisibility::Hidden);
 }
 

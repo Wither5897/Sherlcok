@@ -15,7 +15,6 @@ AAJH_Sun::AAJH_Sun()
 void AAJH_Sun::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -23,5 +22,8 @@ void AAJH_Sun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AAJH_Sun::RefreshMateiral_Implementation(float Height){
 }
 

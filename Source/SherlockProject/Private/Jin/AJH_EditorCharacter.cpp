@@ -18,6 +18,7 @@
 #include "Components/Button.h"
 #include "Jin/AJH_LightWidget.h"
 #include "Jin/AJH_EditorPlayerController.h"
+#include "SK/LightWidget.h"
 
 // Sets default values
 AAJH_EditorCharacter::AAJH_EditorCharacter()
@@ -72,7 +73,7 @@ void AAJH_EditorCharacter::BeginPlay()
 		GizmoUI->AddToViewport();
 	}
 
-	LightWidget = Cast<UAJH_LightWidget>(CreateWidget(GetWorld(), LightWidgetFactory));
+	LightWidget = Cast<ULightWidget>(CreateWidget(GetWorld(), LightWidgetFactory));
 	if ( LightWidget )
 	{
 		LightWidget->AddToViewport();

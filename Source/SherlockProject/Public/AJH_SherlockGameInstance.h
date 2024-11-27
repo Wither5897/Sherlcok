@@ -71,7 +71,7 @@ public:
 	UMapSaveGame* LoadGameInstance;
 	
 	UFUNCTION(BlueprintCallable)
-	void SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, AAJH_Sun* Sun);
+	void SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, float Height);
 
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel(FString LevelName);

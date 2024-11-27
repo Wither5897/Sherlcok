@@ -52,7 +52,7 @@ public:
 	TSubclassOf<class AAJH_Sun> MidnightSunFactory;
 	bool bIsMidnightSun = false;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class AAJH_Sun* SunActor;
 	UPROPERTY(EditDefaultsOnly)
 	FLinearColor sunColor;
