@@ -375,7 +375,6 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 				ActorIndex++;
 			}
 		}
-		
 		// Schedule UI update after delay
 		GetWorld()->GetTimerManager().SetTimerForNextTick([this]() {
 			auto* PlayerController = GetWorld()->GetFirstPlayerController();
@@ -392,8 +391,6 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
  			AAJH_Sun* NewSun = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
 			NewSun->RefreshMateiral(CachedLevelData.Height);
 		});
-		auto* PlayerController = GetWorld()->GetFirstPlayerController();
-		auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);

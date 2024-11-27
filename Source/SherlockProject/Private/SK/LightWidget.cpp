@@ -27,7 +27,7 @@ void ULightWidget::OnMyBtn_morning(){
 	SKSunHeight = 0.33f;
 	gi->NewSKHeight = SKSunHeight;
 	SunActor->RefreshMateiral(SKSunHeight);
-	directionalLightActor->directionalLightComp->SetIntensity(10.0f);
+	directionalLightActor->directionalLightComp->SetIntensity(5.0f);
 	sunColor = FLinearColor(0.705882, 0.792157, 1.0f);
 	directionalLightActor->directionalLightComp->SetLightColor(sunColor);
 	directionalLightActor->SetActorRotation(FRotator(-55.0f, 0.0f, 0.0f));
@@ -37,7 +37,7 @@ void ULightWidget::OnMyBtn_lunch(){
 	SKSunHeight = 1.f;
 	gi->NewSKHeight = SKSunHeight;
 	SunActor->RefreshMateiral(SKSunHeight);
-	directionalLightActor->directionalLightComp->SetIntensity(10.0f);
+	directionalLightActor->directionalLightComp->SetIntensity(7.0f);
 	sunColor = FLinearColor(1.0f, 1.0f, 1.0f);
 	directionalLightActor->directionalLightComp->SetLightColor(sunColor);
 	directionalLightActor->SetActorRotation(FRotator(-90.0f, 0.0f, 0.0f));

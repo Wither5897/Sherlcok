@@ -8,6 +8,7 @@
 #include "Jin/AJH_EditorCharacter.h"
 #include "GameFramework/PlayerController.h"
 #include "Jin/AJH_EditorPlayerController.h"
+#include "Jin/AJH_WorldActor.h"
 
 void UAJH_ExPlainBtnWidget::NativeConstruct()
 {
