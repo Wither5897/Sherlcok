@@ -38,4 +38,7 @@ public:
 	class AAJH_Sun* HeightSun;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AAJH_Sun> HeightSunFactory;
+
+	UPROPERTY()
+	class AActor* SunActor;
 };
