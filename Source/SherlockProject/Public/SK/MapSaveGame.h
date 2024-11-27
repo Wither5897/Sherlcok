@@ -62,7 +62,11 @@ struct FLevelSaveData
 	FText OutroText;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
-	float HeightSun;
+	class AActor* MorningSun;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	class AActor* middaySun;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
+	class AActor* MidnightSun;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveData")
 	FString ActorText;
