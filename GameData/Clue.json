@@ -1,8 +1,8 @@
-{
+﻿{
 	"data": [
 		{
 			"ClueID": "Clue1",
-			"SuspectCount": "5",
+			"SuspectCount": "10",
 			"WeaponCount": "0",
 			"MainEvidenceCount": "0",
 			"SpecialThingCount": "1"
@@ -16,7 +16,7 @@
 		},
 		{
 			"ClueID": "Clue3",
-			"SuspectCount": "1",
+			"SuspectCount": "5",
 			"WeaponCount": "0",
 			"MainEvidenceCount": "3",
 			"SpecialThingCount": "0"
@@ -30,7 +30,7 @@
 		},
 		{
 			"ClueID": "Clue5",
-			"SuspectCount": "4",
+			"SuspectCount": "0",
 			"WeaponCount": "0",
 			"MainEvidenceCount": "4",
 			"SpecialThingCount": "1"
