@@ -260,7 +260,7 @@ void UAJH_SherlockGameInstance::OnDestroyAllSessions()
 	}
 }
 
-void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, AActor* Sun){
+void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, FText IntroContext, FText OutroStory, AAJH_Sun* Sun){
 	UE_LOG(LogTemp, Warning, TEXT("Save Level: %s"), *LevelName);
 	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
@@ -283,10 +283,14 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		NewLevelData.IntroTitleText = IntroTitle;
 		NewLevelData.IntroContextText = IntroContext;
 		NewLevelData.OutroText = OutroStory;
+		NewLevelData.MySun = Sun;
+
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
 		
 		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created"));
+		UE_LOG(LogTemp, Warning, TEXT("New Level Data MorningSun : %s"), *NewLevelData.MySun->GetName());
+
 	}
 	else{
 		// 기존 레벨 데이터 업데이트
@@ -294,8 +298,11 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->IntroTitleText = IntroTitle;
 		ExistingLevelData->IntroContextText = IntroContext;
 		ExistingLevelData->OutroText = OutroStory;
+		ExistingLevelData->MySun = Sun;
+
 		
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
+		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data MorningSun Updated : %s"), *ExistingLevelData->MySun->GetName());
 	}
 
 	// 저장된 텍스트 로그 출력
@@ -381,8 +388,12 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditIntroUI->IntroTitleText = CachedLevelData.IntroTitleText;
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
 			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
+			
+			FActorSpawnParameters SpawnParams;
+ 			GetWorld()->SpawnActor<AAJH_Sun>(CachedLevelData.MySun->GetClass(), CachedLevelData.MySun->GetActorTransform(), SpawnParams);
 		});
-
+		auto* PlayerController = GetWorld()->GetFirstPlayerController();
+		auto* Character = Cast<ATP_ThirdPersonCharacter>(PlayerController->GetPawn());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
