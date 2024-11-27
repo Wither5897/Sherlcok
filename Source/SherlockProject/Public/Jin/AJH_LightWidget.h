@@ -34,11 +34,26 @@ public:
 	class AAJH_DirectionalLight* directionalLightActor;
 	UPROPERTY()
 	class AAJH_EditorCharacter* player;
-	UPROPERTY()
-	class AAJH_Sun* HeightSun;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class AAJH_Sun* MorningSun;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AAJH_Sun> HeightSunFactory;
+	TSubclassOf<class AAJH_Sun> MorningSunFactory;
+	bool bIsMorningSun = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class AAJH_Sun* MiddaySun;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AAJH_Sun> MiddaySunFactory;
+	bool bIsMiddaySun = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class AAJH_Sun* MidnightSun;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AAJH_Sun> MidnightSunFactory;
+	bool bIsMidnightSun = false;
 
 	UPROPERTY()
-	class AActor* SunActor;
+	class AAJH_Sun* SunActor;
+	UPROPERTY(EditDefaultsOnly)
+	FLinearColor sunColor;
 };
