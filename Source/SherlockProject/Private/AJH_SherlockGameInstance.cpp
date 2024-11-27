@@ -30,40 +30,40 @@
 #if WITH_EDITOR
 #include "EditorDirectories.h"
 #endif
+#include "Components/DirectionalLightComponent.h"
+#include "Engine/DirectionalLight.h"
+#include "Jin/AJH_DirectionalLight.h"
 #include "Jin/AJH_Sun.h"
 
-void UAJH_SherlockGameInstance::Init()
-{
+void UAJH_SherlockGameInstance::Init(){
 	Super::Init();
 
 	sessionInterface = IOnlineSubsystem::Get()->GetSessionInterface();
 
-	if (sessionInterface != nullptr)
-	{
+	if (sessionInterface != nullptr){
 		//서버쪽에서 Delegate 으로 이벤트 값을 받을 함수를 연결
-		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnCreatedSession);
+		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(
+			this, &UAJH_SherlockGameInstance::OnCreatedSession);
 
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnFoundSession);
 
 		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnJoinedSession);
 
-		sessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UAJH_SherlockGameInstance::OnDestroyedSesssion);
+		sessionInterface->OnDestroySessionCompleteDelegates.AddUObject(
+			this, &UAJH_SherlockGameInstance::OnDestroyedSesssion);
 	}
-
 }
 
-void UAJH_SherlockGameInstance::SetSessionName(FString name, FString ClickedroomName_, FString ClickedhostName_, int32 ClickedplayerCount_)
-{
+void UAJH_SherlockGameInstance::SetSessionName(FString name, FString ClickedroomName_, FString ClickedhostName_,
+                                               int32 ClickedplayerCount_){
 	mySessionName = FName(*name);
 	ClickedroomName = ClickedroomName_;
 	ClickedhostName = ClickedhostName_;
 	ClickedplayerCount = ClickedplayerCount_;
 }
 
-void UAJH_SherlockGameInstance::CreateMySession()
-{
-	if (!sessionInterface.IsValid())
-	{
+void UAJH_SherlockGameInstance::CreateMySession(){
+	if (!sessionInterface.IsValid()){
 		return;
 	}
 
@@ -76,13 +76,14 @@ void UAJH_SherlockGameInstance::CreateMySession()
 	// 접속하는 방법이 랜 경유 , 스팀서버 경유 두가지 있는데 랜 경유이면 null 문자열 반환, 스팀이면 steam 문자열 반환
 	SessionSettings->bUsesPresence = true;
 	SessionSettings->bShouldAdvertise = true; //다른사람이 세션검색할경우 노출되도록 ( 검색이 가능하도록 )
-	SessionSettings->bUseLobbiesIfAvailable = true;  //로비의 사용여부
+	SessionSettings->bUseLobbiesIfAvailable = true; //로비의 사용여부
 	SessionSettings->NumPublicConnections = 3;
 
 	FName SessionName = FName(*FString::Printf(TEXT("MySession_%d"), FDateTime::Now().GetTicks()));
 
 	//커스텀 설정값을 추가하기
-	SessionSettings->Set(FName("Room Name"), ClickedroomName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	SessionSettings->Set(FName("Room Name"), ClickedroomName,
+	                     EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 
@@ -93,8 +94,7 @@ void UAJH_SherlockGameInstance::CreateMySession()
 	UE_LOG(LogTemp, Warning, TEXT("current platform : %s"), *IOnlineSubsystem::Get()->GetSubsystemName().ToString());
 }
 
-void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuccessful)
-{
+void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuccessful){
 	UE_LOG(LogTemp, Warning, TEXT("Session Name: %s"), *sessionName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("Session create: %s"), bWasSuccessful ? *FString("Success!") : *FString("Fail"));
 
@@ -104,10 +104,8 @@ void UAJH_SherlockGameInstance::OnCreatedSession(FName sessionName, bool bWasSuc
 	//지금현재 리슨서버이기때문에  ?listen 으로 설정 
 }
 
-void UAJH_SherlockGameInstance::FindMySession()
-{
-	if (!sessionInterface.IsValid())
-	{
+void UAJH_SherlockGameInstance::FindMySession(){
+	if (!sessionInterface.IsValid()){
 		return;
 	}
 
@@ -123,31 +121,26 @@ void UAJH_SherlockGameInstance::FindMySession()
 	sessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), sessionSearch.ToSharedRef());
 }
 
-void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful)
-{
+void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful){
 	if (!sessionInterface.IsValid()) return;
 
-	if (!sessionSearch)
-	{
+	if (!sessionSearch){
 		UE_LOG(LogTemp, Warning, TEXT("sessionSearch Null"));
 	}
-	else
-	{
+	else{
 		TArray<FOnlineSessionSearchResult> results = sessionSearch->SearchResults;
 
 		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), results.Num());
 
 		// 어차피 방은 1개
 		// 있으면 참여 , 없으면 만들기
-		for (auto Result : results)
-		{
+		for (auto Result : results){
 			FString roomName;
 			Result.Session.SessionSettings.Get(FName("Room Name"), roomName);
 
 			if (roomName == FString("CUBIC")) // Crime_Scene
 			{
-				if (GEngine)
-				{
+				if (GEngine){
 					GEngine->AddOnScreenDebugMessage(
 						-1,
 						15.f,
@@ -164,14 +157,12 @@ void UAJH_SherlockGameInstance::OnFoundSession(bool bwasSuccessful)
 		}
 
 		CreateMySession();
-
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Find Results: %s"), bwasSuccessful ? *FString("Success!") : *FString("Failed..."));
 }
 
-void UAJH_SherlockGameInstance::JoinMySession(int32 roomNumber)
-{
+void UAJH_SherlockGameInstance::JoinMySession(int32 roomNumber){
 	if (!sessionInterface.IsValid()) return;
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
@@ -183,8 +174,7 @@ void UAJH_SherlockGameInstance::JoinMySession(int32 roomNumber)
 	sessionInterface->JoinSession(*LocalPlayer->GetPreferredUniqueNetId(), mySessionName, *realSession);
 }
 
-void UAJH_SherlockGameInstance::OnJoinedSession(FName SesssionName, EOnJoinSessionCompleteResult::Type result)
-{
+void UAJH_SherlockGameInstance::OnJoinedSession(FName SesssionName, EOnJoinSessionCompleteResult::Type result){
 	GEngine->AddOnScreenDebugMessage(
 		-1,
 		15.f,
@@ -192,13 +182,11 @@ void UAJH_SherlockGameInstance::OnJoinedSession(FName SesssionName, EOnJoinSessi
 		FString::Printf(TEXT("Joined Session: %s"), *SesssionName.ToString())
 	);
 
-	if (!sessionInterface.IsValid())
-	{
+	if (!sessionInterface.IsValid()){
 		return;
 	}
 
-	switch (result)
-	{
+	switch (result){
 	case EOnJoinSessionCompleteResult::Success:
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Join Success!"));
@@ -232,30 +220,25 @@ void UAJH_SherlockGameInstance::OnJoinedSession(FName SesssionName, EOnJoinSessi
 	}
 }
 
-void UAJH_SherlockGameInstance::ExitMySession()
-{
+void UAJH_SherlockGameInstance::ExitMySession(){
 	sessionInterface->DestroySession(mySessionName);
 }
 
-void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwasSuccessful)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Destory Session: %s"), bwasSuccessful ? *FString("Success!") : *FString("Failed..."));
+void UAJH_SherlockGameInstance::OnDestroyedSesssion(FName sessionName, bool bwasSuccessful){
+	UE_LOG(LogTemp, Warning, TEXT("Destory Session: %s"),
+	       bwasSuccessful ? *FString("Success!") : *FString("Failed..."));
 
-	if (bwasSuccessful)
-	{
+	if (bwasSuccessful){
 		APlayerController* pc = GetWorld()->GetFirstPlayerController();
 
-		if (pc != nullptr)
-		{
+		if (pc != nullptr){
 			pc->ClientTravel(FString("/Game/Jin/Maps/MainLobbyMap"), ETravelType::TRAVEL_Absolute);
 		}
 	}
 }
 
-void UAJH_SherlockGameInstance::OnDestroyAllSessions()
-{
-	for (const FName& SessionName : AllSessionNames)
-	{
+void UAJH_SherlockGameInstance::OnDestroyAllSessions(){
+	for (const FName& SessionName : AllSessionNames){
 		sessionInterface->DestroySession(SessionName);
 	}
 }
@@ -272,7 +255,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		}
 	}
 
-	FLevelSaveData* ExistingLevelData = SaveGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
+	FLevelSaveData* ExistingLevelData = SaveGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
 		return Data.LevelName == LevelName;
 	});
 
@@ -287,10 +270,9 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 
 		SaveGameInstance->DataList.Add(NewLevelData);
 		ExistingLevelData = &SaveGameInstance->DataList.Last();
-		
+
 		UE_LOG(LogTemp, Warning, TEXT("New Level Data Created"));
 		UE_LOG(LogTemp, Warning, TEXT("New Level Data MorningSun : %1f"), NewLevelData.Height);
-
 	}
 	else{
 		// 기존 레벨 데이터 업데이트
@@ -300,7 +282,7 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->OutroText = OutroStory;
 		ExistingLevelData->Height = NewSKHeight;
 
-		
+
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data Updated"));
 		UE_LOG(LogTemp, Warning, TEXT("Existing Level Data MorningSun Updated : %1f"), ExistingLevelData->Height);
 	}
@@ -324,35 +306,37 @@ void UAJH_SherlockGameInstance::SaveLevel(FString LevelName, FText IntroTitle, F
 		ExistingLevelData->SavedActors.Add(ActorData);
 		UE_LOG(LogTemp, Warning, TEXT("String Text: %s"), *ActorData.String);
 	}
-    
+
 	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MyLevelSave"), 0)){
 		UE_LOG(LogTemp, Warning, TEXT("SaveGame Successful"));
-	} else {
+	}
+	else{
 		UE_LOG(LogTemp, Error, TEXT("SaveGame Failed"));
 	}
 }
 
-void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
+void UAJH_SherlockGameInstance::LoadLevel(FString LevelName){
 	UE_LOG(LogTemp, Warning, TEXT("Load Level"));
 	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MyLevelSave"), 0));
 
-	if (!LoadGameInstance) {
+	if (!LoadGameInstance){
 		UE_LOG(LogTemp, Warning, TEXT("No Save Game Found"));
 		return;
 	}
 
-	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data) {
+	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
 		return Data.LevelName == LevelName;
 	});
-	
-	if (LevelData) {
+
+	if (LevelData){
 		// Save data in instance temporarily for later
 		CachedLevelData = *LevelData;
 		int32 ActorIndex = 0;
 		FName InteractTag = FName(TEXT("InteractObj"));
 		for (const FActorSaveData& ActorData : LevelData->SavedActors){
 			FActorSpawnParameters SpawnParams;
-			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+			AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(
+				ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
 			if (!NewActor){
 				continue;
 			}
@@ -360,23 +344,24 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			NewActor->ExplainText = ActorData.String; // 여기서 데이터 복원
 			UE_LOG(LogTemp, Warning, TEXT("Loading ExplainText: %s"), *ActorData.String);
 			NewActor->AddComponentByClass(UEvidenceActorComp::StaticClass(), false, FTransform(), false);
-			if(!ActorData.boolean){
+			if (!ActorData.boolean){
 				continue;
 			}
-			if(!NewActor->Tags.Contains(InteractTag)){
+			if (!NewActor->Tags.Contains(InteractTag)){
 				NewActor->Tags.Add(InteractTag);
-				if(ActorIndex < 10){
+				if (ActorIndex < 10){
 					NewActor->Tags.Add(FName(*FString::Printf(TEXT("0%d"), ActorIndex)));
 				}
 				else{
 					NewActor->Tags.Add(FName(*FString::Printf(TEXT("%d"), ActorIndex)));
 				}
-				UE_LOG(LogTemp, Warning, TEXT("Add Interact Tag Success Tag Number : %s"), *NewActor->Tags.Last().ToString());
+				UE_LOG(LogTemp, Warning, TEXT("Add Interact Tag Success Tag Number : %s"),
+				       *NewActor->Tags.Last().ToString());
 				ActorIndex++;
 			}
 		}
 		// Schedule UI update after delay
-		GetWorld()->GetTimerManager().SetTimerForNextTick([this]() {
+		GetWorld()->GetTimerManager().SetTimerForNextTick([this](){
 			auto* PlayerController = GetWorld()->GetFirstPlayerController();
 			if (!PlayerController) return;
 
@@ -386,13 +371,33 @@ void UAJH_SherlockGameInstance::LoadLevel(FString LevelName) {
 			Character->EditIntroUI->IntroFullText = CachedLevelData.IntroContextText.ToString();
 			Character->EditIntroUI->IntroTitleText = CachedLevelData.IntroTitleText;
 			Character->EditOutroUI->OutroContext = CachedLevelData.OutroText;
-			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"), *CachedLevelData.IntroContextText.ToString());
-			
- 			AAJH_Sun* NewSun = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
+			UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated with delay: %s"),
+			       *CachedLevelData.IntroContextText.ToString());
+
+			AAJH_Sun* NewSun = Cast<AAJH_Sun>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_Sun::StaticClass()));
 			NewSun->RefreshMateiral(CachedLevelData.Height);
+			AAJH_DirectionalLight* NewDirectional = Cast<AAJH_DirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), AAJH_DirectionalLight::StaticClass()));
+			if (CachedLevelData.Height == 0.33){
+				NewDirectional->directionalLightComp->SetIntensity(5.0f);
+				FLinearColor sunColor = FLinearColor(0.705882, 0.792157, 1.0f);
+				NewDirectional->directionalLightComp->SetLightColor(sunColor);
+				NewDirectional->SetActorRotation(FRotator(-55.0f, 0.0f, 0.0f));
+			}
+			else if (CachedLevelData.Height == 1.f){
+				NewDirectional->directionalLightComp->SetIntensity(7.0f);
+				FLinearColor sunColor = FLinearColor(1.f, 1.f, 1.0f);
+				NewDirectional->directionalLightComp->SetLightColor(sunColor);
+				NewDirectional->SetActorRotation(FRotator(-90.0f, 0.0f, 0.0f));
+			}
+			else if (CachedLevelData.Height == -1.f){
+				NewDirectional->directionalLightComp->SetIntensity(0.4f);
+				FLinearColor sunColor = FLinearColor(0.403922, 0.545098, 1.0f);
+				NewDirectional->directionalLightComp->SetLightColor(sunColor);
+				NewDirectional->SetActorRotation(FRotator(270.0f, 180.0f, 180.0f));
+			}
 		});
 	}
-	else {
+	else{
 		UE_LOG(LogTemp, Warning, TEXT("LevelData not found for level: %s"), *LevelName);
 	}
 }
@@ -401,14 +406,15 @@ void UAJH_SherlockGameInstance::SaveSimulationSlot(){
 	FString SlotName = TEXT("SimulationSlot");
 	UE_LOG(LogTemp, Warning, TEXT("Saving Simulation Data to Slot: %s"), *SlotName);
 
-	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
-	if (!SaveGameInstance) {
+	UMapSaveGame* SaveGameInstance = Cast<UMapSaveGame>(
+		UGameplayStatics::CreateSaveGameObject(UMapSaveGame::StaticClass()));
+	if (!SaveGameInstance){
 		UE_LOG(LogTemp, Error, TEXT("Failed to create SaveGame instance for simulation slot"));
 		return;
 	}
 
 	// 액터 데이터를 저장
-	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+	for (TActorIterator<AAJH_WorldActor> ActorItr(GetWorld()); ActorItr; ++ActorItr){
 		AAJH_WorldActor* Actor = *ActorItr;
 
 		FActorSaveData ActorData;
@@ -424,9 +430,10 @@ void UAJH_SherlockGameInstance::SaveSimulationSlot(){
 	}
 
 	// 슬롯에 저장
-	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotName, 0)) {
+	if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotName, 0)){
 		UE_LOG(LogTemp, Warning, TEXT("Simulation data saved successfully"));
-	} else {
+	}
+	else{
 		UE_LOG(LogTemp, Error, TEXT("Failed to save simulation data"));
 	}
 }
@@ -436,15 +443,16 @@ void UAJH_SherlockGameInstance::LoadSimulationSlot(){
 	UE_LOG(LogTemp, Warning, TEXT("Loading Simulation Data from Slot: %s"), *SlotName);
 
 	LoadGameInstance = Cast<UMapSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
-	if (!LoadGameInstance) {
+	if (!LoadGameInstance){
 		UE_LOG(LogTemp, Warning, TEXT("No simulation data found in slot: %s"), *SlotName);
 		return;
 	}
 
 	// 저장된 액터 데이터로 복원
-	for (const FActorSaveData& ActorData : LoadGameInstance->SimulationActors) {
+	for (const FActorSaveData& ActorData : LoadGameInstance->SimulationActors){
 		FActorSpawnParameters SpawnParams;
-		AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
+		AAJH_WorldActor* NewActor = GetWorld()->SpawnActor<AAJH_WorldActor>(
+			ActorData.ActorClass, ActorData.Location, ActorData.Rotation, SpawnParams);
 		if (!NewActor) continue;
 
 		NewActor->SetActorScale3D(ActorData.Scale);
@@ -459,37 +467,34 @@ void UAJH_SherlockGameInstance::LoadSimulationSlot(){
 
 void UAJH_SherlockGameInstance::OnCharacterReady(ATP_ThirdPersonCharacter* Character){
 	if (!Character || !Character->EditIntroUI) return;
-	
-	if(!LoadGameInstance){
+
+	if (!LoadGameInstance){
 		return;
 	}
-	
+
 	const FLevelSaveData* LevelData = LoadGameInstance->DataList.FindByPredicate([&](const FLevelSaveData& Data){
 		return Data.LevelName == LoadLevelName;
 	});
 
-	if (LevelData) {
+	if (LevelData){
 		Character->EditIntroUI->IntroFullText = LevelData->IntroContextText.ToString();
 		Character->EditIntroUI->IntroTitleText = LevelData->IntroTitleText;
 		Character->EditOutroUI->OutroContext = LevelData->OutroText;
-		UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated in OnCharacterReady: %s"), *LevelData->IntroContextText.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("IntroFullText updated in OnCharacterReady: %s"),
+		       *LevelData->IntroContextText.ToString());
 	}
 }
 
-void UAJH_SherlockGameInstance::CreateOrFindMySession()
-{
+void UAJH_SherlockGameInstance::CreateOrFindMySession(){
 	// 버튼클릭해서
 	// 검색한다음 없음 만들고 , 있으면 있는방으로 들어가기
 	FindMySession();
 }
 
-void UAJH_SherlockGameInstance::UserNickNameToCharacter(ACharacter* player)
-{
-	if ( player )
-	{
+void UAJH_SherlockGameInstance::UserNickNameToCharacter(ACharacter* player){
+	if (player){
 		UAJH_UserNameWidgetComponent* NameWidgetComp = player->FindComponentByClass<UAJH_UserNameWidgetComponent>();
-		if ( NameWidgetComp )
-		{
+		if (NameWidgetComp){
 			NameWidgetComp->SetUserName(UserNickName);
 			UE_LOG(LogTemp, Warning, TEXT("UserNickName set in GameInstance: %s"), *NameWidgetComp->UserName);
 		}
